@@ -1,0 +1,30 @@
+/* src/components/ProductCard.module.css */
+
+.card {
+  padding: 1rem;
+  border: 1px solid #D5BEBE;
+  border-radius: 8px;
+  text-align: center;
+  background-color: #fff;
+  width: 200px;
+}
+
+/* Classe locale per lo stile di h3 */
+.productTitle {
+  color: #404040;
+  margin-bottom: 1rem;
+}
+
+/* Classe locale per lo stile del pulsante */
+.selectButton {
+  padding: 0.5rem 1rem;
+  background-color: #D5BEBE;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.selectButton:hover {
+  background-color: #bca2a2;
+}

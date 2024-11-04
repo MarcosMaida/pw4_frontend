@@ -1,0 +1,18 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #404040;
+    color: #ffffff;
+  }
+  
+  .header a {
+    color: #ffffff;
+    text-decoration: none;
+    margin: 0 1rem;
+  }
+  
+  .header a:hover {
+    color: #D5BEBE;
+  }  
