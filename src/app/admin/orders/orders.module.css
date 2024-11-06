@@ -1,0 +1,61 @@
+.container {
+    font-family: 'Georgia', serif;
+    padding: 2rem;
+    background-color: #ffffff;
+    color: #404040;
+  }
+  
+  .heading {
+    font-size: 2.5rem;
+    color: #404040;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .orderList {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .orderItem {
+    padding: 1rem;
+    border: 1px solid #D5BEBE;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    background-color: #F8F4F4;
+  }
+  
+  .status {
+    font-weight: bold;
+    color: #D5BEBE;
+  }
+  
+  .actions {
+    margin-top: 1rem;
+  }
+  
+  .acceptButton {
+    padding: 0.5rem 1rem;
+    background-color: #4CAF50;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-right: 0.5rem;
+  }
+  
+  .rejectButton {
+    padding: 0.5rem 1rem;
+    background-color: #E74C3C;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .acceptButton:disabled,
+  .rejectButton:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
