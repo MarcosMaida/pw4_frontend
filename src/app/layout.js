@@ -1,17 +1,19 @@
 // src/app/layout.js
 
+"use client";
+
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import './globals.css'; // Assicurati di avere gli stili globali, se necessari
-
-export const metadata = {
-  title: "C'est la Vie - Pasticceria",
-  description: 'Prenota i migliori dolci a Varese',
-};
+import './globals.css';
+import Head from 'next/head';
 
 export default function RootLayout({ children }) {
   return (
     <html lang="it">
+      <Head>
+        <title>C'est la Vie - Pasticceria</title>
+        <meta name="description" content="Prenota i migliori dolci a Varese" />
+      </Head>
       <body>
         <Header />
         <main>{children}</main>

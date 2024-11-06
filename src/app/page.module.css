@@ -1,63 +1,135 @@
+/* src/app/page.module.css */
+
 .container {
-  font-family: 'Georgia', serif;
-  color: #404040;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
 }
 
-/* Hero Section */
 .hero {
-  background-image: url('/images/hero.jpg'); /* Assicurati di avere un'immagine appropriata in /public/images */
-  background-size: cover;
-  background-position: center;
-  height: 80vh;
+  position: relative;
+  width: 100%;
+  height: 100vh; /* Copre l'intera viewport */
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  color: #ffffff;
+  overflow: hidden;
+  background-image: url('/images/background.svg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-.heroContent h1 {
-  font-size: 3rem;
+.logoContainer {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 2rem;
+}
+
+.logo {
+  width: 300px;
+  height: auto;
+  animation: fadeIn 2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Call-to-Action Section con Flexbox */
+.callToAction {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem 2rem;
+  background-color: #ffffff; /* Sfondo bianco */
+  width: 100%;
+  min-height: 100vh;
+}
+
+.ctaContent {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  width: 100%;
+  gap: 2rem;
+}
+
+.ctaText {
+  flex: 1;
+  color: #333;
+  text-align: left;
+}
+
+.ctaText h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.ctaText p {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.ctaButton {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.2rem;
+  color: #fff;
+  background-color: #0070f3;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 1.5rem;
+}
+
+.ctaButton:hover {
+  background-color: #005bb5;
+}
+
+.ctaImage {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ctaImage img {
+  width: 100%;
+  height: auto;
+  max-width: 400px;
+  border-radius: 10px;
+}
+
+/* About e Featured Products */
+.about, .featuredProducts {
+  padding: 4rem 2rem;
+  background-color: #ffffff;
+  width: 100%;
+  text-align: center;
+}
+
+.about h2, .featuredProducts h2 {
+  font-size: 2rem;
   margin-bottom: 1rem;
 }
 
-.heroContent p {
-  font-size: 1.5rem;
-}
-
-/* About Section */
-.about {
-  padding: 4rem 2rem;
-  background-color: #F8F4F4;
-  text-align: center;
-}
-
-.about h2 {
-  font-size: 2.5rem;
-  color: #D5BEBE;
-}
-
-.about p {
-  max-width: 600px;
-  margin: 0 auto;
-  font-size: 1.2rem;
-  color: #404040;
-}
-
-/* Featured Products */
-.featuredProducts {
-  padding: 4rem 2rem;
-  text-align: center;
-}
-
-.featuredProducts h2 {
-  font-size: 2.5rem;
-  color: #D5BEBE;
-}
-
 .productsGrid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
 }
