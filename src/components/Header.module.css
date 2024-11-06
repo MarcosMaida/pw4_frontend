@@ -1,18 +1,35 @@
+/* src/components/Header.module.css */
+
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    background-color: #404040;
-    color: #ffffff;
-  }
-  
-  .header a {
-    color: #ffffff;
-    text-decoration: none;
-    margin: 0 1rem;
-  }
-  
-  .header a:hover {
-    color: #D5BEBE;
-  }  
+  display: flex;
+  justify-content: center;
+  padding: 2rem 2rem;
+  background: #F3BC9F;
+  color: #ffffff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1.1rem;
+}
+
+.nav {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.link {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.4rem 1rem;
+  border-radius: 8px;
+  transition: color 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+  background: none;
+  border: 1px solid transparent;
+}
+
+.link:hover {
+  color: #E67E60;
+  background-color: #ffffff;
+  border-color: #F3BC9F;
+  transform: translateY(-2px);
+}
