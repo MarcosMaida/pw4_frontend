@@ -1,69 +1,27 @@
 // src/app/dashboard/page.js
 
-"use client"; // Abilitazione del lato client
+"use client";
 
-import { useState } from 'react';
-import styles from './dashboard.module.css';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
-export default function DashboardPage() {
-    // Esempio di stato per ordini e commenti
-    const [orders, setOrders] = useState([
-        { id: 1, name: 'Torta alla crema', status: 'In Preparazione' },
-        { id: 2, name: 'Bignè alla cioccolata', status: 'Pronto per il Ritiro' },
-    ]);
+export default function DashboardRedirect() {
+    const router = useRouter();
 
-    const [orderHistory, setOrderHistory] = useState([
-        { id: 3, name: 'Millefoglie', status: 'Completato' },
-    ]);
+    useEffect(() => {
+        // Recupera il ruolo dell'utente da localStorage per determinare il tipo di dashboard
+        const userRole = localStorage.getItem('userRole');
 
-    const [comment, setComment] = useState("");
+        // Reindirizza alla dashboard corretta in base al ruolo
+        if (userRole === 'admin') {
+            router.push('/admin/dashboard'); // Reindirizzamento per l'admin
+        } else if (userRole === 'user') {
+            router.push('/user/dashboard'); // Reindirizzamento per utente normale
+        } else {
+            // Se l'utente non è loggato o il ruolo non è definito, reindirizza al login
+            router.push('/auth/login');
+        }
+    }, [router]);
 
-    const handleCommentSubmit = () => {
-        alert(`Commento inviato: ${comment}`);
-        setComment(""); // Resetta il campo dopo l’invio
-    };
-
-    return (
-        <div className={styles.container}>
-            <h1 className={styles.heading}>La Mia Dashboard</h1>
-
-            {/* Sezione Ordini Attuali */}
-            <section className={styles.section}>
-                <h2>Ordini Attivi</h2>
-                <ul className={styles.orderList}>
-                    {orders.map((order) => (
-                        <li key={order.id} className={styles.orderItem}>
-                            {order.name} - <span className={styles.status}>{order.status}</span>
-                        </li>
-                    ))}
-                </ul>
-            </section>
-
-            {/* Sezione Storico Ordini */}
-            <section className={styles.section}>
-                <h2>Storico Ordini</h2>
-                <ul className={styles.orderList}>
-                    {orderHistory.map((order) => (
-                        <li key={order.id} className={styles.orderItem}>
-                            {order.name} - <span className={styles.status}>{order.status}</span>
-                        </li>
-                    ))}
-                </ul>
-            </section>
-
-            {/* Sezione Commenti */}
-            <section className={styles.section}>
-                <h2>Lascia un Commento</h2>
-                <textarea
-                    className={styles.commentBox}
-                    value={comment}
-                    onChange={(e) => setComment(e.target.value)}
-                    placeholder="Scrivi un messaggio per il pasticcere..."
-                />
-                <button className={styles.submitButton} onClick={handleCommentSubmit}>
-                    Invia
-                </button>
-            </section>
-        </div>
-    );
+    return <p>Reindirizzamento in corso...</p>; // Messaggio temporaneo durante il reindirizzamento
 }
