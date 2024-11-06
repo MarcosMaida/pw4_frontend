@@ -33,7 +33,11 @@ export default function Header() {
         <header className={styles.header}>
             <nav className={styles.nav}>
                 <Link href="/" className={styles.link}>Home</Link>
-                <Link href="/contact" className={styles.link}>Contatti</Link> {/* Link aggiunto */}
+                <Link href="/contact" className={styles.link}>Contatti</Link>
+
+                {role && (
+                    <Link href="/reservation" className={styles.link}>Prenotare</Link>
+                )}
 
                 {role === 'admin' ? (
                     <Link href="/admin/dashboard" className={styles.link}>Dashboard Admin</Link>
@@ -42,10 +46,13 @@ export default function Header() {
                 ) : null}
 
                 {role ? (
-                    <button onClick={handleLogout} className={styles.link}>Logout</button>
+                    <Link href="#" onClick={(e) => { e.preventDefault(); handleLogout(); }} className={styles.link}>
+                        Logout
+                    </Link>
                 ) : (
                     <Link href="/auth/login" className={styles.link}>Login</Link>
                 )}
+
             </nav>
         </header>
     );
