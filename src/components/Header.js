@@ -1,3 +1,5 @@
+// src/app/Header.js
+
 "use client";
 
 import { useEffect, useState } from 'react';
@@ -45,14 +47,25 @@ export default function Header() {
                     <Link href="/user/dashboard" className={styles.link}>Dashboard Utente</Link>
                 ) : null}
 
+                {/* Mostra "Registrati" se l'utente non è loggato */}
+                {!role && (
+                    <Link href="/auth/register" className={styles.link}>Registrati</Link>
+                )}
+
                 {role ? (
-                    <Link href="#" onClick={(e) => { e.preventDefault(); handleLogout(); }} className={styles.link}>
+                    <button
+                        onClick={(e) => {
+                            e.preventDefault();
+                            handleLogout();
+                        }}
+                        className={styles.link}
+                        style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}
+                    >
                         Logout
-                    </Link>
+                    </button>
                 ) : (
                     <Link href="/auth/login" className={styles.link}>Login</Link>
                 )}
-
             </nav>
         </header>
     );
