@@ -34,6 +34,28 @@ export default function RegisterPage() {
             {message && <p className={styles.message}>{message}</p>}
             <form onSubmit={handleFormSubmit} className={styles.form}>
                 <label className={styles.formLabel}>
+                    Nome:
+                    <input
+                        type="name"
+                        name="name"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        required
+                        className={styles.formInput}
+                    />
+                </label>
+                <label className={styles.formLabel}>
+                    Cognome:
+                    <input
+                        type="surname"
+                        name="surname"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        required
+                        className={styles.formInput}
+                    />
+                </label>
+                <label className={styles.formLabel}>
                     Email:
                     <input
                         type="email"
