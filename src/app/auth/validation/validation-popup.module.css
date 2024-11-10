@@ -1,0 +1,94 @@
+/* Fullscreen overlay for modal background */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+}
+
+/* Modal container */
+.modal-container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 400px;
+    padding: 24px;
+    text-align: center;
+}
+
+/* Modal header */
+.modal-header {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 16px;
+}
+
+/* Modal content */
+.modal-content {
+    font-size: 0.875rem;
+    color: #333;
+    margin-bottom: 24px;
+}
+
+/* Input styling */
+.modal-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 16px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: center;
+}
+
+/* Buttons container */
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+/* Button styles */
+.modal-button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.modal-button.cancel {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.modal-button.cancel:hover {
+    background-color: #e0e0e0;
+}
+
+.modal-button.submit {
+    background-color: #007bff;
+    color: white;
+}
+
+.modal-button.submit:hover {
+    background-color: #0056b3;
+}
+
+/* Resend link */
+.resend-link {
+    font-size: 0.875rem;
+    color: #007bff;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.resend-link:hover {
+    color: #0056b3;
+}

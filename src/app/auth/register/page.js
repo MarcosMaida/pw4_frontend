@@ -1,55 +1,139 @@
-// src/app/register/page.js
+"use client";
 
-"use client"; // Abilitazione per l'uso degli hook lato client
-
-import { useState } from 'react';
-import styles from './register.module.css';
+import {useEffect, useState} from "react";
+import styles from "./register.module.css";
+import ValidationEmailPopup from "@/app/auth/validation/validation-popup";
 
 export default function RegisterPage() {
-    const [formData, setFormData] = useState({ email: '', password: '', confirmPassword: '' });
-    const [message, setMessage] = useState('');
+    const [formData, setFormData] = useState({
+        nomeUtente: "",
+        email: "",
+        telefono: "",
+        password: "",
+        confirmPassword: "",
+        ruolo: "utente"
+    });
+    const [message, setMessage] = useState("");
+    const [subscriptionStatus, setSubscriptionStatus] = useState("");
+    const [passwordError, setPasswordError] = useState("");
+    const [isValidationPopupOpen, setIsValidationPopupOpen] = useState(false);
+    const [utenteId, setUtenteId] = useState();
+    // const [isLoading, setIsLoading] = useState(true);
 
-    // Gestisce i cambiamenti nei campi di input del form
+
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+        const {name, value} = e.target;
+        setFormData({...formData, [name]: value});
+
+        if (name === "password") {
+            validatePassword(value);
+        }
     };
 
-    // Gestisce l'invio del form di registrazione
-    const handleFormSubmit = (e) => {
+    const validatePassword = (password) => {
+        // Add password validation logic if needed
+    };
+
+    const registerUser = async (userData) => {
+        try {
+            const response = await fetch("http://localhost:8080/api/auth/register", {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(userData),
+            });
+
+            if (response.ok) {
+                const { id } = await response.json();
+                setSubscriptionStatus(message);
+                setUtenteId(id);
+                setIsValidationPopupOpen(true);
+            } else if (response.status === 400) {
+                setSubscriptionStatus("Email già registrata.");
+            } else {
+                const errorMessage = await response.text();
+                setSubscriptionStatus(`Iscrizione fallita: ${errorMessage}`);
+            }
+        } catch (error) {
+            setSubscriptionStatus("Iscrizione fallita. Riprova.");
+            console.error("Error during registration:", error);
+        }
+    };
+
+    const handleOTPSubmit = async (otp) => {
+        try {
+            const response = await fetch("http://localhost:8080/api/auth/verify", {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id: utenteId, codiceVerifica: otp }) // Include both `id` and `codiceVerifica`
+            });
+
+            if (response.ok) {
+                setSubscriptionStatus("Email verified successfully! You can now log in.");
+                setIsValidationPopupOpen(false)
+            } else {
+                const errorMessage = await response.text();
+                setSubscriptionStatus(`OTP validation failed: ${errorMessage}`);
+            }
+        } catch (error) {
+            setSubscriptionStatus("Failed to validate OTP. Please try again.");
+            console.error("Error during OTP validation:", error);
+        }
+    };
+
+
+
+
+
+
+    const handleFormSubmit = async (e) => {
         e.preventDefault();
+
         if (formData.password !== formData.confirmPassword) {
-            setMessage('Le password non corrispondono');
+            setMessage("Le password non corrispondono");
             return;
         }
 
-        // Simulazione di registrazione (potremo sostituire con chiamata API)
-        setMessage('Registrazione completata! Ora puoi fare il login.');
-        setFormData({ email: '', password: '', confirmPassword: '' });
+        if (passwordError) {
+            setMessage(passwordError);
+            return;
+        }
+
+        const userData = {
+            nomeUtente: formData.nomeUtente,
+            email: formData.email,
+            password: formData.password,
+            telefono: formData.telefono,
+            registrazione: new Date().toISOString(),
+            ruolo: formData.ruolo,
+        };
+
+        await registerUser(userData);
+        setFormData({
+            nomeUtente: "",
+            email: "",
+            telefono: "",
+            password: "",
+            confirmPassword: "",
+            ruolo: "utente"
+        });
     };
+
+
 
     return (
         <div className={styles.container}>
             <h1 className={styles.heading}>Registrazione</h1>
             {message && <p className={styles.message}>{message}</p>}
+            {subscriptionStatus && <p className={styles.subscriptionStatus}>{subscriptionStatus}</p>}
             <form onSubmit={handleFormSubmit} className={styles.form}>
                 <label className={styles.formLabel}>
-                    Nome:
+                    Username:
                     <input
-                        type="name"
-                        name="name"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        required
-                        className={styles.formInput}
-                    />
-                </label>
-                <label className={styles.formLabel}>
-                    Cognome:
-                    <input
-                        type="surname"
-                        name="surname"
-                        value={formData.email}
+                        type="text"
+                        name="nomeUtente"
+                        value={formData.nomeUtente}
                         onChange={handleInputChange}
                         required
                         className={styles.formInput}
@@ -61,6 +145,17 @@ export default function RegisterPage() {
                         type="email"
                         name="email"
                         value={formData.email}
+                        onChange={handleInputChange}
+                        required
+                        className={styles.formInput}
+                    />
+                </label>
+                <label className={styles.formLabel}>
+                    Telefono:
+                    <input
+                        type="text"
+                        name="telefono"
+                        value={formData.telefono}
                         onChange={handleInputChange}
                         required
                         className={styles.formInput}
@@ -90,6 +185,16 @@ export default function RegisterPage() {
                 </label>
                 <button type="submit" className={styles.submitButton}>Registrati</button>
             </form>
+            {isValidationPopupOpen && (
+                <ValidationEmailPopup
+                    userId={utenteId} // Pass userId to the popup
+                    onValidateOTP={handleOTPSubmit}
+                    onClose={() => setIsValidationPopupOpen(false)}
+                    // onResendCode={handleResendCode} // You might need to define this function if you haven’t yet
+                />
+            )}
+
         </div>
     );
 }
+

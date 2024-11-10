@@ -1,76 +1,97 @@
-// src/app/auth/login/page.js
+"use client"
+import React, { useState } from 'react';
+import axios from 'axios';
+import classes from './login.module.css';
 
-"use client";
+const LoginForm = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [loginError, setLoginError] = useState('');
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import styles from './login.module.css';
-
-export default function LoginPage() {
-    const router = useRouter();
-    const [formData, setFormData] = useState({ email: '', password: '' });
-    const [message, setMessage] = useState('');
-
-    // Funzione per aggiornare i valori del form
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+    const handleEmailChange = (event) => {
+        setEmail(event.target.value);
     };
 
-    const handleFormSubmit = (e) => {
-        e.preventDefault();
+    const handlePasswordChange = (event) => {
+        const newPassword = event.target.value;
+        setPassword(newPassword);
+        validatePassword(newPassword);
+    };
 
-        // Questi blocchi if simulano il login in assenza del backend:
-        // Una volta integrato il backend, sostituiremo questo con una chiamata API
-        // Esempio: authUser(formData).then(response => {...})
-        if (formData.email === 'admin@admin.it' && formData.password === 'admin123') {
-            // Simulazione: salva ruolo come admin
-            localStorage.setItem('userRole', 'admin'); // Integrazione Backend: gestito dal server
-            sessionStorage.setItem('updateHeader', Date.now().toString()); // Trigger temporaneo per aggiornare l'header
-            setMessage('Login come admin avvenuto con successo!');
-            router.push('/admin/dashboard'); // Reindirizza alla dashboard admin
-        } else if (formData.email && formData.password) {
-            // Simulazione: salva ruolo come utente normale
-            localStorage.setItem('userRole', 'user'); // Integrazione Backend: gestito dal server
-            sessionStorage.setItem('updateHeader', Date.now().toString()); // Trigger temporaneo per aggiornare l'header
-            setMessage('Login come utente avvenuto con successo!');
-            router.push('/user/dashboard'); // Reindirizza alla dashboard utente
+    const validatePassword = (password) => {
+        // const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        // if (!passwordRegex.test(password)) {
+        //     setPasswordError('La password deve contenere almeno 8 caratteri, di cui almeno una lettera, un numero e un carattere speciale.');
+        // } else {
+        //     setPasswordError('');
+        // }
+    };
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        if (!passwordError) {
+            try {
+                const response = await axios.post('http://localhost:8080/api/auth/login', {
+                    email,
+                    password
+                }, { withCredentials: true });
+
+                if (response.status === 200) {
+                    console.log('Login effettuato!');
+                    const userData = await fetch('http://localhost:8080/api/auth/profile', { credentials: 'include' }).then(response => response.json());
+                    // Resetta il modulo
+                    setEmail('');
+                    setPassword('');
+                    setLoginError('');
+                    if (userData.ruolo === 'utente') {
+                        window.location.href = 'http://localhost:3000/user/dashboard';
+                    } else {
+                        window.location.href = 'http://localhost:3000/admin/dashboard';
+                    }
+                } else {
+                    setLoginError('Login fallito.');
+                }
+            } catch (error) {
+                setLoginError('Errore durante il login. Verifica le credenziali e riprova.');
+                console.error(error);
+            }
         } else {
-            setMessage('Credenziali non valide. Riprova.');
+            setLoginError('La password non è valida.');
         }
-
-        setFormData({ email: '', password: '' });
     };
 
     return (
-        <div className={styles.container}>
-            <h1 className={styles.heading}>Login</h1>
-            {message && <p className={styles.message}>{message}</p>}
-            <form onSubmit={handleFormSubmit} className={styles.form}>
-                <label className={styles.formLabel}>
-                    Email:
+        <div className={classes.container}>
+            <h1 className={classes.heading}>Login</h1>
+            <div className={classes.form}>
+                <form onSubmit={handleSubmit}>
+                    <label htmlFor="email" className={classes.formLabel}>E-mail</label>
                     <input
                         type="email"
+                        className={classes.formInput}
                         name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        required
-                        className={styles.formInput}
+                        value={email}
+                        onChange={handleEmailChange}
                     />
-                </label>
-                <label className={styles.formLabel}>
-                    Password:
+                    <label htmlFor="password" className={classes.formLabel}>Password</label>
                     <input
                         type="password"
+                        className={classes.formInput}
                         name="password"
-                        value={formData.password}
-                        onChange={handleInputChange}
-                        required
-                        className={styles.formInput}
+                        value={password}
+                        onChange={handlePasswordChange}
                     />
-                </label>
-                <button type="submit" className={styles.submitButton}>Accedi</button>
-            </form>
+                    {passwordError && <p className={classes.error}>{passwordError}</p>}
+                    {loginError && <p className={classes.error}>{loginError}</p>}
+                    <button type="submit" className={classes.submitButton}>Login</button>
+                </form>
+                <div className="nav-item">
+                    <a href="../../auth/register" className={classes.register}>Crea Il Tuo Account</a>
+                </div>
+            </div>
         </div>
     );
-}
+};
+
+export default LoginForm;
