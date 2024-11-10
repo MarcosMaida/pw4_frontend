@@ -1,12 +1,11 @@
 // pages/InventoryPage.js
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from './inventory.module.css';
-import { Button, Modal, Form, Table, Container } from "react-bootstrap";
+import {Button, Modal, Form, Table, Container} from "react-bootstrap";
 // Import Bootstrap CSS in your main entry file
 import 'bootstrap/dist/css/bootstrap.min.css';
-
 
 
 export default function InventoryPage() {
@@ -29,7 +28,7 @@ export default function InventoryPage() {
                 const response = await fetch('http://localhost:8080/api/prodotti', {
                     credentials: 'include',
                     method: 'GET',
-                    headers: { 'Content-Type': 'application/json' }
+                    headers: {'Content-Type': 'application/json'}
                 });
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -50,7 +49,7 @@ export default function InventoryPage() {
             const response = await fetch('http://localhost:8080/api/prodotti/add', {
                 credentials: 'include',
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(newProdotto)
             });
             if (!response.ok) {
@@ -59,7 +58,7 @@ export default function InventoryPage() {
             const addedProdotto = await response.json();
             setProducts([...products, addedProdotto]);
             setShowAddModal(false);
-            setNewProdotto({ nome: '', descrizione: '', prezzo: '', quantita: '' });
+            setNewProdotto({nome: '', descrizione: '', prezzo: '', quantita: ''});
         } catch (error) {
             console.error("Failed to add product:", error);
         }
@@ -84,7 +83,7 @@ export default function InventoryPage() {
             const response = await fetch(`http://localhost:8080/api/prodotti/update`, {
                 credentials: 'include',
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(newProdotto)  // Send the updated product data
             });
 
@@ -98,7 +97,7 @@ export default function InventoryPage() {
             ));
             setShowUpdateModal(false);
             setSelectedProduct(null);  // Clear the selected product after update
-            setNewProdotto({ nome: '', descrizione: '', prezzo: '', quantita: '' });  // Reset state after update
+            setNewProdotto({nome: '', descrizione: '', prezzo: '', quantita: ''});  // Reset state after update
         } catch (error) {
             console.error("Failed to update product:", error);
         }
@@ -114,7 +113,7 @@ export default function InventoryPage() {
             const response = await fetch(`http://localhost:8080/api/prodotti/${selectedProduct}`, {
                 credentials: 'include',
                 method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' }
+                headers: {'Content-Type': 'application/json'}
             });
             if (response.ok) {
                 setProducts(products.filter(product => product.id !== selectedProduct));
@@ -128,7 +127,7 @@ export default function InventoryPage() {
     };
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         setNewProdotto(prevState => ({
             ...prevState,
             [name]: value
@@ -136,21 +135,21 @@ export default function InventoryPage() {
     };
 
     return (
-        <Container className={`container ${styles.container}`}>
+        <Container  >
             <h1 className={styles.heading}>Gestione del Magazzino</h1>
 
             {isLoading ? (
                 <p>Caricamento prodotti...</p>
             ) : (
-                <Table striped bordered hover>
+                <Table striped bordered hover >
                     <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Nome</th>
-                        <th>Descrizione</th>
-                        <th>Prezzo</th>
-                        <th>Quantità</th>
-                        <th>Azioni</th>
+                        <th style={{width: '5%'}}>ID</th>
+                        <th style={{width: '20%'}}>Nome</th>
+                        <th style={{width: '30%'}}>Descrizione</th>
+                        <th style={{width: '15%'}}>Prezzo</th>
+                        <th style={{width: '10%'}}>Quantità</th>
+                        <th style={{width: '20%'}}>Azioni</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -161,13 +160,15 @@ export default function InventoryPage() {
                             <td>{product.descrizione}</td>
                             <td>{product.prezzo}</td>
                             <td>{product.quantita}</td>
-                            <td>
-                                <Button variant="danger" onClick={() => confirmDeleteProduct(product.id)}>
-                                    Elimina
-                                </Button>
-                                <Button variant="warning" className="ml-2" onClick={() => openUpdateModal(product)}>
-                                    Modifica
-                                </Button>
+                            <td className="text-center">
+                                    <Button variant="danger" className="mx-3" onClick={() => confirmDeleteProduct(product.id)}>
+                                        Elimina
+                                    </Button>
+                                    <Button variant="primary" className="mx-3"
+                                            onClick={() => openUpdateModal(product)}>
+                                        Modifica
+                                    </Button>
+
                             </td>
                         </tr>
                     ))}
@@ -308,9 +309,9 @@ export default function InventoryPage() {
                 </Modal.Footer>
             </Modal>
 
-            <Button className={styles.addButton} onClick={() => {
+            <Button variant="success" onClick={() => {
                 setShowAddModal(true);
-                setNewProdotto({ nome: '', descrizione: '', prezzo: '', quantita: '' }); // Reset state here
+                setNewProdotto({nome: '', descrizione: '', prezzo: '', quantita: ''}); // Reset state here
             }}>
                 Aggiungi Nuovo Prodotto
             </Button>
