@@ -74,36 +74,44 @@ export default function Header() {
     return (
         <header className={styles.header}>
             <nav className={styles.nav}>
-                <Link href="/" className={styles.link}>Home</Link>
-                <Link href="/contact" className={styles.link}>Contatti</Link>
-                <Link href="/reservation" className={styles.link}>Prenotare</Link>
-                <Link href="/auth/register" className={styles.link}>Registrazione</Link>
+
+                {!isLoggedIn && (
+                    <>
+                        <Link href="/" className={styles.link}>Home</Link>
+                        <Link href="/auth/register" className={styles.link}>Registrazione</Link>
+                        <Link href="/auth/login" className={styles.link}>Login</Link>
+                    </>
+                )}
 
                 {userRole === 'amministratore' && (
                     <>
-                        <li>
-                            <a href="/" className={styles.link}>Its Incom</a>
-                        </li>
-                        <li>
-                            <a href="/" className={styles.link}>Corsi</a>
-                        </li>
+                        <Link href="../admin/inventory" className={styles.link}>
+                            Gestione magazzino
+                        </Link>
+                        <Link href="../admin/orders" className={styles.link}>
+                            Gestione prenotazione
+                        </Link>
+                    </>
+                )}
+                {userRole === 'utente' && (
+                    <>
+                        <Link href="/contact" className={styles.link}>Contatti</Link>
+                        <Link href="/reservation" className={styles.link}>Prenotare</Link>
+                        <a onClick={handleProfileClick}
+                           className={styles.link}>Profilo
+                        </a>
+
                     </>
                 )}
                 {isLoggedIn ? (
                     <>
-                        <li>
-                            <button onClick={handleProfileClick}
-                                    className={styles.link}>PROFILO
-                            </button>
-                        </li>
-                        <li>
-                            <button onClick={handleLogout}
-                                    className={styles.link}>Logout
-                            </button>
-                        </li>
+                        <a onClick={handleLogout}
+                           className={styles.link}>Logout
+                        </a>
+
                     </>
                 ) : (
-                    <Link href="/auth/login" className={styles.link}>Login</Link>
+                    <Link href="/contact" className={styles.link}>Contatti</Link>
                 )}
             </nav>
         </header>

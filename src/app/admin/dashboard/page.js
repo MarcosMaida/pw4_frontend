@@ -10,17 +10,6 @@ export default function AdminDashboardPage() {
     const router = useRouter();
     const [role, setRole] = useState(null);
 
-    useEffect(() => {
-        // Recupera il ruolo dell'utente per verificare che sia un admin
-        const userRole = localStorage.getItem('userRole');
-        setRole(userRole);
-
-        // Se il ruolo non è admin, reindirizza al login
-        if (userRole !== 'admin') {
-            router.push('/auth/login');
-        }
-    }, [router]);
-
     return (
         <div className={styles.container}>
             <h1 className={styles.heading}>Dashboard Amministratore</h1>
