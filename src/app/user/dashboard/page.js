@@ -18,13 +18,6 @@ export default function UserDashboardPage() {
     ]);
     const [comment, setComment] = useState("");
 
-    useEffect(() => {
-        // Verifica se l'utente è loggato
-        const userRole = localStorage.getItem('userRole');
-        if (!userRole || userRole !== 'user') {
-            router.push('/auth/login'); // Reindirizza al login se l'utente non è loggato o non è un utente normale
-        }
-    }, [router]);
 
     const handleCommentSubmit = () => {
         alert(`Commento inviato: ${comment}`);
