@@ -1,0 +1,27 @@
+.corsiGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3.5rem;
+    background-color: #21b8d0;
+    padding: 60px;
+    margin-top: 20px;
+}
+
+.corsoItem {
+    padding: 1rem;
+}
+
+
+@media screen and (max-width: 480px) {
+    .corsiGrid {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .corsiGrid {
+        grid-template-columns: repeat(1, 1fr);
+        margin-top: 170px;
+    }
+}
+

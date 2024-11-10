@@ -1,22 +1,39 @@
 "use client";
 
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import styles from './inventory.module.css';
+import ProdottiGrid from "@/components/corsi/prodotti-grid";
 
 export default function InventoryPage() {
     // Stato dei prodotti. Questo sarà modificato per prelevare i dati dinamicamente dal backend.
-    const [products, setProducts] = useState([
-        { id: 1, name: 'Torta alla crema', description: 'Deliziosa torta con crema fresca', stock: 10 },
-        { id: 2, name: 'Bignè alla cioccolata', description: 'Bignè ripieni di cioccolato fondente', stock: 5 },
-    ]);
-
-    // per aggiungere o modificare un prodotto
+    const [products, setProducts] = useState([]);
     const [formData, setFormData] = useState({ id: null, name: '', description: '', stock: '' });
+    const [isLoading, setIsLoading] = useState(true);
+
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
+
+    useEffect(() => {
+        const fetchProdotti = async () => {
+            try {
+                const response = await fetch('http://localhost:8080/api/prodotti',
+                    { credentials: 'include', method: 'GET', headers: { 'Content-Type': 'application/json' } });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                setProducts(data);
+                setIsLoading(false);
+            } catch (error) {
+                console.error("Failed to fetch courses:", error);
+                setIsLoading(false);
+            }
+        };
+        fetchProdotti();
+    }, []);
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
@@ -63,19 +80,7 @@ export default function InventoryPage() {
             <h1 className={styles.heading}>Gestione del Magazzino</h1>
 
             {/* Lista dei prodotti attualmente nel magazzino */}
-            <ul className={styles.productList}>
-                {products.map((product) => (
-                    <li key={product.id} className={styles.productItem}>
-                        <h3>{product.name}</h3>
-                        <p>{product.description}</p>
-                        <p>Disponibilità: {product.stock}</p>
-                        <div className={styles.actions}>
-                            <button className={styles.editButton} onClick={() => handleEdit(product)}>Modifica</button>
-                            <button className={styles.deleteButton} onClick={() => handleDelete(product.id)}>Elimina</button>
-                        </div>
-                    </li>
-                ))}
-            </ul>
+           <ProdottiGrid prodotti={products} />
 
             {/* Form per aggiungere o modificare un prodotto */}
             <form onSubmit={handleFormSubmit} className={styles.form}>
