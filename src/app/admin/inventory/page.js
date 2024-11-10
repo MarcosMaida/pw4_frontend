@@ -13,8 +13,9 @@ export default function InventoryPage() {
     const [products, setProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [showAddModal, setShowAddModal] = useState(false);
+    const [showUpdateModal, setShowUpdateModal] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
-    const [selectedProdotto, setSelectedProdotto] = useState(null);
+    const [selectedProduct, setSelectedProduct] = useState(null);
     const [newProdotto, setNewProdotto] = useState({
         nome: '',
         descrizione: '',
@@ -64,20 +65,59 @@ export default function InventoryPage() {
         }
     };
 
+    const openUpdateModal = (product) => {
+        setSelectedProduct(product);
+        setNewProdotto({
+            id: product.id,
+            nome: product.nome,
+            descrizione: product.descrizione,
+            prezzo: product.prezzo,
+            quantita: product.quantita
+        });
+        setShowUpdateModal(true);
+    };
+
+    const handleUpdateProduct = async () => {
+        if (!selectedProduct) return;
+
+        try {
+            const response = await fetch(`http://localhost:8080/api/prodotti/update`, {
+                credentials: 'include',
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newProdotto)  // Send the updated product data
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const updatedProdotto = await response.json();
+            setProducts(products.map(product =>
+                product.id === selectedProduct.id ? updatedProdotto : product
+            ));
+            setShowUpdateModal(false);
+            setSelectedProduct(null);  // Clear the selected product after update
+            setNewProdotto({ nome: '', descrizione: '', prezzo: '', quantita: '' });  // Reset state after update
+        } catch (error) {
+            console.error("Failed to update product:", error);
+        }
+    };
+
     const confirmDeleteProduct = (productId) => {
-        setSelectedProdotto(productId);
+        setSelectedProduct(productId);
         setShowConfirmModal(true);
     };
 
     const handleDeleteProduct = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/prodotti/${selectedProdotto}`, {
+            const response = await fetch(`http://localhost:8080/api/prodotti/${selectedProduct}`, {
                 credentials: 'include',
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' }
             });
             if (response.ok) {
-                setProducts(products.filter(product => product.id !== selectedProdotto));
+                setProducts(products.filter(product => product.id !== selectedProduct));
                 setShowConfirmModal(false);
             } else {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -124,6 +164,9 @@ export default function InventoryPage() {
                             <td>
                                 <Button variant="danger" onClick={() => confirmDeleteProduct(product.id)}>
                                     Elimina
+                                </Button>
+                                <Button variant="warning" className="ml-2" onClick={() => openUpdateModal(product)}>
+                                    Modifica
                                 </Button>
                             </td>
                         </tr>
@@ -191,6 +234,64 @@ export default function InventoryPage() {
                 </Modal.Footer>
             </Modal>
 
+            {/* Update Product Modal */}
+            <Modal show={showUpdateModal} onHide={() => setShowUpdateModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Modifica Prodotto</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group controlId="formNome">
+                            <Form.Label>Nome</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="nome"
+                                value={newProdotto.nome}
+                                onChange={handleInputChange}
+                                placeholder="Inserisci il nome del prodotto"
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="formDescrizione" className="mt-3">
+                            <Form.Label>Descrizione</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="descrizione"
+                                value={newProdotto.descrizione}
+                                onChange={handleInputChange}
+                                placeholder="Inserisci la descrizione del prodotto"
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="formPrezzo" className="mt-3">
+                            <Form.Label>Prezzo</Form.Label>
+                            <Form.Control
+                                type="number"
+                                name="prezzo"
+                                value={newProdotto.prezzo}
+                                onChange={handleInputChange}
+                                placeholder="Inserisci il prezzo del prodotto"
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="formQuantita" className="mt-3">
+                            <Form.Label>Quantità</Form.Label>
+                            <Form.Control
+                                type="number"
+                                name="quantita"
+                                value={newProdotto.quantita}
+                                onChange={handleInputChange}
+                                placeholder="Inserisci la quantità"
+                            />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowUpdateModal(false)}>
+                        Annulla
+                    </Button>
+                    <Button variant="primary" onClick={handleUpdateProduct}>
+                        Modifica Prodotto
+                    </Button>
+                </Modal.Footer>
+            </Modal>
             {/* Confirm Delete Modal */}
             <Modal show={showConfirmModal} onHide={() => setShowConfirmModal(false)}>
                 <Modal.Header closeButton>
@@ -207,9 +308,13 @@ export default function InventoryPage() {
                 </Modal.Footer>
             </Modal>
 
-            <Button className={styles.addButton} onClick={() => setShowAddModal(true)}>
+            <Button className={styles.addButton} onClick={() => {
+                setShowAddModal(true);
+                setNewProdotto({ nome: '', descrizione: '', prezzo: '', quantita: '' }); // Reset state here
+            }}>
                 Aggiungi Nuovo Prodotto
             </Button>
+
         </Container>
     );
 }
