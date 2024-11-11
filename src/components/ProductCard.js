@@ -1,14 +1,12 @@
 // src/components/ProductCard.js
 
-"use client";
-
 import styles from './ProductCard.module.css';
 
-export default function ProductCard({ name, onSelect }) {
+export default function ProductCard({ product, onClick }) {
     return (
-        <div className={styles.card}>
-            <h3 className={styles.productTitle}>{name}</h3> {/* Usa la classe productTitle per h3 */}
-            <button className={styles.selectButton} onClick={onSelect}>Seleziona</button>
+        <div className={styles.card} onClick={onClick}>
+            <h3 className={styles.productName}>{product.name}</h3>
+            <p className={styles.productPrice}>€{product.price}</p>
         </div>
     );
 }
