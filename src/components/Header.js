@@ -2,25 +2,23 @@
 
 "use client";
 
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import {useRouter} from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import styles from './Header.module.css';
 import Cookies from 'js-cookie';
-
 
 export default function Header() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userRole, setUserRole] = useState(null);
+    const [isMenuOpen, setIsMenuOpen] = useState(false); // Nuovo stato per il menu
     const router = useRouter();
 
     useEffect(() => {
-        // Check if the cookie exists
         const authToken = Cookies.get('SESSION_COOKIE');
         if (authToken) {
             setIsLoggedIn(true);
-            // Fetch the user profile to get the role
-            fetch('http://localhost:8080/api/auth/profile', {credentials: 'include'})
+            fetch('http://localhost:8080/api/auth/profile', { credentials: 'include' })
                 .then(response => response.json())
                 .then(userData => {
                     setUserRole(userData.ruolo);
@@ -53,65 +51,48 @@ export default function Header() {
         }
     };
 
-    const handleProfileClick = async () => {
-        try {
-            const response = await fetch('http://localhost:8080/api/auth/profile', {credentials: 'include'});
-            if (response.status === 200) {
-                const userData = await response.json();
-                if (userData.ruolo === 'amministratore') {
-                    window.location.href = 'http://localhost:3000/dashboardAmministratore';
-                } else {
-                    window.location.href = 'http://localhost:3000/dashboard';
-                }
-            } else {
-                throw new Error('Errore durante il caricamento del profilo');
-            }
-        } catch (error) {
-            console.error('Errore durante il caricamento del profilo:', error);
-        }
+    const handleLinkClick = () => {
+        setIsMenuOpen(false); // Chiude il menu quando si clicca su un link
     };
 
     return (
         <header className={styles.header}>
-            <nav className={styles.nav}>
+            <div className={styles.menuIcon} onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
 
+            <nav className={`${styles.nav} ${isMenuOpen ? styles.showMenu : ''}`}>
                 {!isLoggedIn && (
                     <>
-                        <Link href="/" className={styles.link}>Home</Link>
-                        <Link href="/auth/register" className={styles.link}>Registrazione</Link>
-                        <Link href="/auth/login" className={styles.link}>Login</Link>
+                        <Link href="/" className={styles.link} onClick={handleLinkClick}>Home</Link>
+                        <Link href="/auth/register" className={styles.link} onClick={handleLinkClick}>Registrazione</Link>
+                        <Link href="/auth/login" className={styles.link} onClick={handleLinkClick}>Login</Link>
                     </>
                 )}
 
                 {userRole === 'amministratore' && (
                     <>
-                        <Link href="../admin/inventory" className={styles.link}>
+                        <Link href="../admin/inventory" className={styles.link} onClick={handleLinkClick}>
                             Gestione magazzino
                         </Link>
-                        <Link href="../admin/orders" className={styles.link}>
+                        <Link href="../admin/orders" className={styles.link} onClick={handleLinkClick}>
                             Gestione prenotazione
                         </Link>
                     </>
                 )}
                 {userRole === 'utente' && (
                     <>
-                        <Link href="/contact" className={styles.link}>Contatti</Link>
-                        <Link href="/reservation" className={styles.link}>Prenotare</Link>
-                        <a onClick={handleProfileClick}
-                           className={styles.link}>Profilo
-                        </a>
-
+                        <Link href="/contact" className={styles.link} onClick={handleLinkClick}>Contatti</Link>
+                        <Link href="/reservation" className={styles.link} onClick={handleLinkClick}>Prenotare</Link>
+                        <a onClick={() => { handleProfileClick(); handleLinkClick(); }} className={styles.link}>Profilo</a>
                     </>
                 )}
                 {isLoggedIn ? (
-                    <>
-                        <a onClick={handleLogout}
-                           className={styles.link}>Logout
-                        </a>
-
-                    </>
+                    <a onClick={() => { handleLogout(); handleLinkClick(); }} className={styles.link}>Logout</a>
                 ) : (
-                    <Link href="/contact" className={styles.link}>Contatti</Link>
+                    <Link href="/contact" className={styles.link} onClick={handleLinkClick}>Contatti</Link>
                 )}
             </nav>
         </header>
