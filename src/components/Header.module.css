@@ -5,7 +5,7 @@
   top: 0;
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center; /* Cambiato per centrare il contenuto */
   align-items: center;
   padding: 1.5rem 2rem;
   background: #F3BC9F;
@@ -14,6 +14,14 @@
   font-size: 1.1rem;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   z-index: 1000;
+}
+
+.navContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px; /* Larghezza massima per contenere il menu */
 }
 
 .nav {
@@ -53,6 +61,10 @@
 }
 
 @media (max-width: 768px) {
+  .navContainer {
+    width: 100%; /* Espande il contenitore a tutta la larghezza su mobile */
+  }
+
   .nav {
     display: flex;
     flex-direction: column;
@@ -76,6 +88,9 @@
 
   .menuIcon {
     display: flex;
+    position: absolute;
+    left: 20px; /* Posiziona l'icona dell'hamburger a sinistra */
+    top: 20px;
   }
 
   .link {
