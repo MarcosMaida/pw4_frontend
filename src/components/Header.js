@@ -86,7 +86,7 @@ export default function Header() {
                     <>
                         <Link href="/contact" className={styles.link} onClick={handleLinkClick}>Contatti</Link>
                         <Link href="/user/prenotazioni" className={styles.link} onClick={handleLinkClick}>Prenotare</Link>
-                        <a onClick={() => { handleProfileClick(); handleLinkClick(); }} className={styles.link}>Profilo</a>
+                        <Link href="/user/dashboard" className={styles.link} onClick= {handleLinkClick}>Profilo</Link>
                     </>
                 )}
                 {isLoggedIn ? (
