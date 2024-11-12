@@ -1,24 +1,44 @@
-'use client';
-
+'use client'
 import { useEffect, useState } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import ProdottiGrid from "@/components/prodotti/prodotti-grid";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Cookies from "js-cookie";
 
 export default function PrenotazioniPage() {
     const [products, setProducts] = useState([]);
-    const [newProdotto, setNewProdotto] = useState({
-        nome: '',
-        descrizione: '',
-        prezzo: '',
-        quantita: '',
-    });
     const [isLoading, setIsLoading] = useState(true);
     const [showAddModal, setShowAddModal] = useState(false);
+    const [showOrderSentModal, setShowOrderSentModal] = useState(false);
+    const [orderProducts, setOrderProducts] = useState({});
+    const [userEmail, setUserEmail] = useState(null);
+    const [userId, setUserId] = useState(null);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setNewProdotto({ ...newProdotto, [name]: value });
+
+    // Gestisce il cambiamento di quantità dei prodotti
+    const handleQuantityChange = (productName, quantity) => {
+        setOrderProducts(prev => ({
+            ...prev,
+            [productName]: quantity
+        }));
     };
+
+    useEffect(() => {
+        const authToken = Cookies.get('SESSION_COOKIE');
+        if (authToken) {
+            setIsLoggedIn(true);
+            fetch('http://localhost:8080/api/auth/profile', { credentials: 'include' })
+                .then(response => response.json())
+                .then(userData => {
+                    setUserEmail(userData.email);
+                    setUserId(userData.id);
+                })
+                .catch(error => {
+                    console.error('Error fetching user profile:', error);
+                });
+        }
+    }, []);
 
     useEffect(() => {
         const fetchProdotti = async () => {
@@ -42,107 +62,78 @@ export default function PrenotazioniPage() {
         fetchProdotti();
     }, []);
 
-    const handleAddFormSubmit = async (e) => {
-        e.preventDefault();
+    const handleAddOrder = async () => {
+        const filteredProducts = products
+            .filter(p => orderProducts[p.nome] > 0)
+            .map(p => ({
+                nome: p.nome,
+                quantita: orderProducts[p.nome],
+                prezzo: p.prezzo
+            }));
+
+        const orderRequest = {
+            idUtente: userId,
+            email: userEmail,
+            prodotti: filteredProducts
+        };
 
         try {
-            const response = await fetch('http://localhost:8080/api/prodotti/add', {
+            const response = await fetch('http://localhost:8080/api/ordini', {
                 credentials: 'include',
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newProdotto)
+                body: JSON.stringify(orderRequest)
             });
 
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            const addedProdotto = await response.json();
-            setProducts([...products, addedProdotto]);
+            setShowAddModal(false);
+            setShowOrderSentModal(true) ;
 
-            setNewProdotto({
-                nome: '',
-                descrizione: '',
-                prezzo: '',
-                quantita: ''
-            });
-
-            setShowAddModal(false); // Close the modal after adding the product
         } catch (error) {
-            console.error("Failed to add product:", error);
+            console.error("Failed to add order:", error);
+            alert("Errore nella creazione dell'ordine");
         }
     };
 
     return (
-        <div >
+        <div>
             <h1>Gestione del Magazzino</h1>
+            <ProdottiGrid prodotti={products} onQuantityChange={handleQuantityChange} />
 
-            <ProdottiGrid prodotti={products} />
-
-            {/* Button to open the "Add Product" modal */}
             <Button variant="primary" onClick={() => setShowAddModal(true)}>
-                Aggiungi Nuovo Prodotto
+                Conferma Ordine
             </Button>
 
-            {/* Add Product Modal */}
             <Modal show={showAddModal} onHide={() => setShowAddModal(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Aggiungi Nuovo Prodotto</Modal.Title>
+                    <Modal.Title>Conferma Ordine</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form onSubmit={handleAddFormSubmit}>
-                        <Form.Group controlId="formNome">
-                            <Form.Label>Nome</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="nome"
-                                value={newProdotto.nome}
-                                onChange={handleInputChange}
-                                placeholder="Inserisci il nome del prodotto"
-                                required
-                            />
-                        </Form.Group>
-                        <Form.Group controlId="formDescrizione" className="mt-3">
-                            <Form.Label>Descrizione</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="descrizione"
-                                value={newProdotto.descrizione}
-                                onChange={handleInputChange}
-                                placeholder="Inserisci la descrizione"
-                                required
-                            />
-                        </Form.Group>
-                        <Form.Group controlId="formPrezzo" className="mt-3">
-                            <Form.Label>Prezzo</Form.Label>
-                            <Form.Control
-                                type="number"
-                                name="prezzo"
-                                value={newProdotto.prezzo}
-                                onChange={handleInputChange}
-                                placeholder="Inserisci il prezzo"
-                                required
-                            />
-                        </Form.Group>
-                        <Form.Group controlId="formQuantita" className="mt-3">
-                            <Form.Label>Quantità</Form.Label>
-                            <Form.Control
-                                type="number"
-                                name="quantita"
-                                value={newProdotto.quantita}
-                                onChange={handleInputChange}
-                                placeholder="Inserisci la quantità"
-                                required
-                            />
-                        </Form.Group>
-                    </Form>
+                    Sei sicuro di voler creare un ordine con i prodotti selezionati?
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowAddModal(false)}>
                         Annulla
                     </Button>
-                    <Button variant="primary" onClick={handleAddFormSubmit}>
-                        Aggiungi Prodotto
+                    <Button variant="success" onClick={handleAddOrder}>
+                        Conferma
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+            <Modal show={showOrderSentModal} onHide={() => setShowOrderSentModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Ordine Inviato</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Il tuo ordine è stato inviato con successo!
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="danger" onClick={() => setShowOrderSentModal(false)}>
+                        Chiudi
                     </Button>
                 </Modal.Footer>
             </Modal>
