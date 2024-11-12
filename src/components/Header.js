@@ -85,7 +85,7 @@ export default function Header() {
                 {userRole === 'utente' && (
                     <>
                         <Link href="/contact" className={styles.link} onClick={handleLinkClick}>Contatti</Link>
-                        <Link href="/reservation" className={styles.link} onClick={handleLinkClick}>Prenotare</Link>
+                        <Link href="/user/prenotazioni" className={styles.link} onClick={handleLinkClick}>Prenotare</Link>
                         <a onClick={() => { handleProfileClick(); handleLinkClick(); }} className={styles.link}>Profilo</a>
                     </>
                 )}

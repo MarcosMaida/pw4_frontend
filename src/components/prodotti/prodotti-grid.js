@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './prodotti-grid.module.css';
-import ProdottiItem from "@/components/corsi/prodotti-item";
+import ProdottiItem from "@/components/prodotti/prodotti-item";
 
 const ProdottiGrid = ({ prodotti }) => {
     return (
