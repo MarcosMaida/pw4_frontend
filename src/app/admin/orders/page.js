@@ -1,16 +1,17 @@
 // src/app/admin/orders/page.js
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from './orders.module.css';
-import { Button, Modal, Table, Container } from "react-bootstrap";
+import {Button, Modal, Table, Container} from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function OrdersPage() {
     const [ordini, setOrdini] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [selectedOrdine, setSelectedOrdine] = useState(null);
-    const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [showConfirmAcceptModal, setShowConfirmAcceptModal] = useState(false);
+    const [showConfirmRejectModal, setShowRejectConfirmModal] = useState(false);
 
     useEffect(() => {
         const fetchOrdini = async () => {
@@ -18,7 +19,7 @@ export default function OrdersPage() {
                 const response = await fetch('http://localhost:8080/api/ordini', {
                     credentials: 'include',
                     method: 'GET',
-                    headers: { 'Content-Type': 'application/json' }
+                    headers: {'Content-Type': 'application/json'}
                 });
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -39,11 +40,28 @@ export default function OrdersPage() {
             const response = await fetch(`http://localhost:8080/api/ordini/${selectedOrdine}/status`, {
                 credentials: 'include',
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' }
+                headers: {'Content-Type': 'application/json'}
             });
             if (response.ok) {
                 setOrdini(ordini.filter(order => order.id !== selectedOrdine));
-                setShowConfirmModal(false);
+                setShowConfirmAcceptModal(false);
+            } else {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+        } catch (error) {
+            console.error("Failed to accept order:", error);
+        }
+    };
+    const handleRejectOrdine = async () => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/ordini/${selectedOrdine}`, {
+                credentials: 'include',
+                method: 'DELETE',
+                headers: {'Content-Type': 'application/json'}
+            });
+            if (response.ok) {
+                setOrdini(ordini.filter(order => order.id !== selectedOrdine));
+                setShowRejectConfirmModal(false);
             } else {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -52,9 +70,14 @@ export default function OrdersPage() {
         }
     };
 
-    const openConfirmModal = (orderId) => {
+    const openAcceptConfirmModal = (orderId) => {
         setSelectedOrdine(orderId);
-        setShowConfirmModal(true);
+        setShowConfirmAcceptModal(true);
+    };
+
+    const openRejectConfirmModal = (orderId) => {
+        setSelectedOrdine(orderId);
+        setShowRejectConfirmModal(true);
     };
 
     return (
@@ -67,10 +90,10 @@ export default function OrdersPage() {
                 <Table striped bordered hover>
                     <thead>
                     <tr>
-                        <th style={{ width: '30%' }}>Descrizione</th>
-                        <th style={{ width: '10%' }}>Stato Ordine</th>
-                        <th style={{ width: '15%' }}>Totale</th>
-                        <th style={{ width: '10%' }}>Azioni</th>
+                        <th style={{width: '30%'}}>Descrizione</th>
+                        <th style={{width: '10%'}}>Stato Ordine</th>
+                        <th style={{width: '15%'}}>Totale</th>
+                        <th style={{width: '10%'}}>Azioni</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -90,10 +113,10 @@ export default function OrdersPage() {
                             <td>{order.stato}</td>
                             <td>{order.totale}</td>
                             <td className="text-center">
-                                <Button variant="success" className="me-2" onClick={() => openConfirmModal(order.id)}>
+                                <Button variant="success" className="me-2" onClick={() => openAcceptConfirmModal(order.id)}>
                                     Accetta
                                 </Button>
-                                <Button variant="danger" onClick={() => openConfirmModal(order.id)}>
+                                <Button variant="danger" onClick={() => openRejectConfirmModal(order.id)}>
                                     Rifiuta
                                 </Button>
                             </td>
@@ -103,16 +126,31 @@ export default function OrdersPage() {
                 </Table>
             )}
 
-            <Modal show={showConfirmModal} onHide={() => setShowConfirmModal(false)}>
+            <Modal show={showConfirmAcceptModal} onHide={() => setShowConfirmAcceptModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Conferma Accettazione</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>Sei sicuro di voler accettare l'ordine?</Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowConfirmModal(false)}>
+                    <Button variant="secondary" onClick={() => setShowConfirmAcceptModal(false)}>
                         Annulla
                     </Button>
                     <Button variant="success" onClick={handleAcceptOrdine}>
+                        Conferma
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+            <Modal show={showConfirmRejectModal} onHide={() => setShowRejectConfirmModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Conferma Eliminazione</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Sei sicuro di voler rifiutare l'ordine?</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowRejectConfirmModal(false)}>
+                        Annulla
+                    </Button>
+                    <Button variant="success" onClick={handleRejectOrdine}>
                         Conferma
                     </Button>
                 </Modal.Footer>
