@@ -10,32 +10,40 @@
     align-items: center;
 }
 
-/* Card styling */
+/* Stile per la Card */
 .card {
-    background: #F3BC9F;
-    border-radius: 8px;
+    background: linear-gradient(135deg, #F3BC9F 0%, #F7D9C4 100%);
+    border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    max-width: 100%;
+    width: 300px;
 }
 
 .card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* Immagine nella card */
+/* Immagine della Card */
 .cardImage {
-    margin-top: 50px;
     display: flex;
     justify-content: center;
+    align-items: center;
     width: 100%;
-    height: 300px;
+    height: auto;
+    background-color: #f4e1d2;
     overflow: hidden;
-    margin-bottom: 20px;
 }
 
-/* Contenuto della card */
+.cardImage img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+/* Contenuto della Card */
 .cardContent {
     padding: 1.5rem;
     text-align: center;
@@ -44,60 +52,92 @@
 .cardTitle {
     font-size: 1.5rem;
     font-weight: 700;
-    margin-bottom: 0.75rem;
-    color: #56607d;
+    margin-bottom: 0.5rem;
+    color: #3a405a;
 }
 
 .cardText {
     font-size: 1rem;
     margin-bottom: 1rem;
-    text-transform: uppercase;
-    color: #ffffff;
+    color: #56607d;
+    line-height: 1.4;
 }
 
 /* Categoria del prodotto */
 .category {
-    display: inline-block;
-    font-size: 1.2rem; /* Aumenta la dimensione del testo */
+    font-size: 1.2rem;
     color: #ffffff;
-    font-weight: 700; /* Aggiunge maggiore peso per evidenziare il prezzo */
+    font-weight: 700;
+    background-color: #21b8d0;
+    padding: 0.25rem 0.75rem;
+    border-radius: 6px;
+    display: inline-block;
+    margin-bottom: 1rem;
 }
 
-
-/* Bottone iscrizione */
+/* Bottone Azione */
 .iscrivitiButton {
     display: inline-block;
-    text-decoration: none;
     text-transform: uppercase;
     font-weight: bold;
-    font-size: 0.95rem;
-    padding: 0.75rem 2rem;
-    margin-top: 20px;
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+    margin-top: 15px;
     background-color: #fd0a7a;
     color: #ffffff;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .iscrivitiButton:hover {
     background-color: #e3096e;
-    transform: scale(1.05);
+    transform: translateY(-3px) scale(1.05);
 }
 
+/* Input Quantità */
 .quantityInput {
-    margin-top: 1rem; /* Distanza sopra il campo quantità */
+    margin-top: 1rem;
     width: 100%;
-    padding: 0.2rem;
+    padding: 0.5rem;
     font-size: 1rem;
-    border: 1px solid #cccccc;
+    border: 1px solid #de9067;
+    border-radius: 4px;
     text-align: center;
     color: #333;
     outline: none;
-    transition: border-color 0.3s ease;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .quantityInput:focus {
-    border-color: #de9067;
+    border-color: #21b8d0;
+    box-shadow: 0 0 5px rgba(33, 184, 208, 0.4);
+}
+
+/* Responsività */
+@media (max-width: 768px) {
+    .card {
+        width: 100%;
+        margin-bottom: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .cardContent {
+        padding: 1rem;
+    }
+
+    .cardTitle {
+        font-size: 1.25rem;
+    }
+
+    .cardText {
+        font-size: 0.9rem;
+    }
+
+    .iscrivitiButton {
+        font-size: 0.9rem;
+        padding: 0.5rem 1.25rem;
+    }
 }
