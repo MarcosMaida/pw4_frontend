@@ -52,13 +52,13 @@
   padding: 1rem;
   text-align: center;
   font-size: 0.9rem;
-  margin: 0; /* Rimuove margine extra */
+  margin: 0;
   width: 100%;
 }
 
 /* Rimuove margine tra infoContainer e piva */
 .infoContainer + .piva {
-  margin-top: 0; /* Assicura che non ci sia spazio sopra P.IVA */
+  margin-top: 0;
 }
 
 /* Stile per il div Informazioni Legali in fondo */
@@ -69,5 +69,31 @@
   text-align: center;
   font-size: 0.9rem;
   width: 100%;
-  margin-top: 0; /* Rimuove eventuale margine in cima */
+  margin-top: 0;
+}
+
+/* Media queries per schermi piccoli */
+@media (max-width: 768px) {
+  /* Imposta i blocchi in colonna */
+  .infoContainer {
+    flex-direction: column;
+    padding: 2rem 1rem;
+  }
+
+  /* Centra il testo nei blocchi interni e regola le dimensioni */
+  .contact, .hours {
+    text-align: center;
+    padding: 1rem 0;
+  }
+
+  /* Imposta i giorni e gli orari in blocchi verticali */
+  .schedule {
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+
+  /* Ridimensiona i titoli per una visualizzazione migliore */
+  .contact h3, .hours h3 {
+    font-size: 1.1rem;
+  }
 }

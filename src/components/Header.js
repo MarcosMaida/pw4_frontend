@@ -76,7 +76,7 @@ export default function Header() {
                     <>
                         <Link href="../admin/inventory" className={styles.link} onClick={handleLinkClick}>Gestione magazzino</Link>
                         <Link href="../admin/orders" className={styles.link} onClick={handleLinkClick}>Gestione prenotazione</Link>
-                        <Link href="/admin/dashboard" className={styles.link} onClick= {handleLinkClick}>Profilo</Link>
+                        <Link href="/admin/dashboard" className={styles.link} onClick={handleLinkClick}>Profilo</Link>
                     </>
                 )}
                 {userRole === 'utente' && (

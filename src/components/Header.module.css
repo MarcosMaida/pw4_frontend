@@ -88,9 +88,32 @@
 
   .menuIcon {
     display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    cursor: pointer;
     position: absolute;
-    left: 20px; /* Posiziona l'icona dell'hamburger a sinistra */
+    left: 20px;
     top: 20px;
+    z-index: 1001; /* Per sovrapporlo al menu */
+  }
+  
+  .menuIcon div {
+    width: 25px;
+    height: 3px;
+    background-color: #ffffff;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  
+  .menuOpen .menuIcon div:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+  
+  .menuOpen .menuIcon div:nth-child(2) {
+    opacity: 0;
+  }
+  
+  .menuOpen .menuIcon div:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
   }
 
   .link {

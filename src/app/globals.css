@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap');
+
 :root {
   --background: #ffffff; /* Sfondo bianco */
   --foreground: #000000; /* Testo nero */
@@ -16,7 +18,7 @@ body {
   min-height: 100vh;
   color: var(--foreground); /* Usa il colore del testo nero */
   background: var(--background); /* Usa lo sfondo bianco */
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Montserrat', sans-serif; /* Cambia font a Montserrat */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

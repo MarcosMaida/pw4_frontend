@@ -1,11 +1,14 @@
 .container {
     font-family: 'Georgia', serif;
     padding: 2rem;
+    margin-top: 80px; /* Sposta tutto verso il basso di 80px, regola in base all'altezza dell'header */
     background-color: #ffffff;
     color: #404040;
     width: 100%;
     height: 100vh;
+    box-sizing: border-box;
 }
+
 
 .orderContainer{
     display: flex;
