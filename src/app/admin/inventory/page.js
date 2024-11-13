@@ -1,12 +1,9 @@
-// pages/InventoryPage.js
 "use client";
 
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './inventory.module.css';
-import {Button, Modal, Form, Table, Container} from "react-bootstrap";
-// Import Bootstrap CSS in your main entry file
+import { Button, Modal, Form, Table, Container } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
-
 
 export default function InventoryPage() {
     const [products, setProducts] = useState([]);
@@ -22,13 +19,18 @@ export default function InventoryPage() {
         quantita: '',
     });
 
+    // Loading states for different actions
+    const [isAdding, setIsAdding] = useState(false);
+    const [isUpdating, setIsUpdating] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+
     useEffect(() => {
         const fetchProdotti = async () => {
             try {
                 const response = await fetch('http://localhost:8080/api/prodotti', {
                     credentials: 'include',
                     method: 'GET',
-                    headers: {'Content-Type': 'application/json'}
+                    headers: { 'Content-Type': 'application/json' }
                 });
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -45,11 +47,12 @@ export default function InventoryPage() {
     }, []);
 
     const handleAddProduct = async () => {
+        setIsAdding(true); // Start adding
         try {
             const response = await fetch('http://localhost:8080/api/prodotti/add', {
                 credentials: 'include',
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newProdotto)
             });
             if (!response.ok) {
@@ -58,9 +61,11 @@ export default function InventoryPage() {
             const addedProdotto = await response.json();
             setProducts([...products, addedProdotto]);
             setShowAddModal(false);
-            setNewProdotto({nome: '', descrizione: '', prezzo: '', quantita: ''});
+            setNewProdotto({ nome: '', descrizione: '', prezzo: '', quantita: '' });
         } catch (error) {
             console.error("Failed to add product:", error);
+        } finally {
+            setIsAdding(false);
         }
     };
 
@@ -79,11 +84,12 @@ export default function InventoryPage() {
     const handleUpdateProduct = async () => {
         if (!selectedProduct) return;
 
+        setIsUpdating(true);
         try {
             const response = await fetch(`http://localhost:8080/api/prodotti/update`, {
                 credentials: 'include',
                 method: 'PUT',
-                headers: {'Content-Type': 'application/json'},
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newProdotto)
             });
 
@@ -97,9 +103,11 @@ export default function InventoryPage() {
             ));
             setShowUpdateModal(false);
             setSelectedProduct(null);
-            setNewProdotto({nome: '', descrizione: '', prezzo: '', quantita: ''});
+            setNewProdotto({ nome: '', descrizione: '', prezzo: '', quantita: '' });
         } catch (error) {
             console.error("Failed to update product:", error);
+        } finally {
+            setIsUpdating(false);
         }
     };
 
@@ -109,11 +117,12 @@ export default function InventoryPage() {
     };
 
     const handleDeleteProduct = async () => {
+        setIsDeleting(true); // Start deleting
         try {
             const response = await fetch(`http://localhost:8080/api/prodotti/${selectedProduct}`, {
                 credentials: 'include',
                 method: 'DELETE',
-                headers: {'Content-Type': 'application/json'}
+                headers: { 'Content-Type': 'application/json' }
             });
             if (response.ok) {
                 setProducts(products.filter(product => product.id !== selectedProduct));
@@ -123,11 +132,13 @@ export default function InventoryPage() {
             }
         } catch (error) {
             console.error("Failed to delete product:", error);
+        } finally {
+            setIsDeleting(false);
         }
     };
 
     const handleInputChange = (e) => {
-        const {name, value} = e.target;
+        const { name, value } = e.target;
         setNewProdotto(prevState => ({
             ...prevState,
             [name]: value
@@ -135,21 +146,21 @@ export default function InventoryPage() {
     };
 
     return (
-        <Container  >
+        <Container>
             <h1 className={styles.heading}>Gestione del Magazzino</h1>
 
             {isLoading ? (
                 <p>Caricamento prodotti...</p>
             ) : (
-                <Table striped bordered hover >
+                <Table striped bordered hover>
                     <thead>
                     <tr>
-                        <th style={{width: '5%'}}>ID</th>
-                        <th style={{width: '20%'}}>Nome</th>
-                        <th style={{width: '30%'}}>Descrizione</th>
-                        <th style={{width: '15%'}}>Prezzo</th>
-                        <th style={{width: '10%'}}>Quantità</th>
-                        <th style={{width: '20%'}}>Azioni</th>
+                        <th style={{ width: '5%' }}>ID</th>
+                        <th style={{ width: '20%' }}>Nome</th>
+                        <th style={{ width: '30%' }}>Descrizione</th>
+                        <th style={{ width: '15%' }}>Prezzo</th>
+                        <th style={{ width: '10%' }}>Quantità</th>
+                        <th style={{ width: '20%' }}>Azioni</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -161,13 +172,22 @@ export default function InventoryPage() {
                             <td>{product.prezzo}</td>
                             <td>{product.quantita}</td>
                             <td className="text-center">
-                                    <Button variant="danger" className="mx-3" onClick={() => confirmDeleteProduct(product.id)}>
-                                        Elimina
-                                    </Button>
-                                    <Button variant="primary" className="mx-3"
-                                            onClick={() => openUpdateModal(product)}>
-                                        Modifica
-                                    </Button>
+                                <Button
+                                    variant="danger"
+                                    className="mx-3"
+                                    onClick={() => confirmDeleteProduct(product.id)}
+                                    disabled={isDeleting}
+                                >
+                                    {isDeleting ? "Eliminando..." : "Elimina"}
+                                </Button>
+                                <Button
+                                    variant="primary"
+                                    className="mx-3"
+                                    onClick={() => openUpdateModal(product)}
+                                    disabled={isUpdating}
+                                >
+                                    {isUpdating ? "Modificando..." : "Modifica"}
+                                </Button>
                             </td>
                         </tr>
                     ))}
@@ -228,13 +248,16 @@ export default function InventoryPage() {
                     <Button variant="secondary" onClick={() => setShowAddModal(false)}>
                         Annulla
                     </Button>
-                    <Button variant="primary" onClick={handleAddProduct}>
-                        Aggiungi Prodotto
+                    <Button
+                        variant="primary"
+                        onClick={handleAddProduct}
+                        disabled={isAdding}
+                    >
+                        {isAdding ? "Aggiungendo..." : "Aggiungi Prodotto"}
                     </Button>
                 </Modal.Footer>
             </Modal>
 
-            {/* Update Product Modal */}
             <Modal show={showUpdateModal} onHide={() => setShowUpdateModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Modifica Prodotto</Modal.Title>
@@ -287,12 +310,16 @@ export default function InventoryPage() {
                     <Button variant="secondary" onClick={() => setShowUpdateModal(false)}>
                         Annulla
                     </Button>
-                    <Button variant="primary" onClick={handleUpdateProduct}>
-                        Modifica Prodotto
+                    <Button
+                        variant="primary"
+                        onClick={handleUpdateProduct}
+                        disabled={isUpdating}
+                    >
+                        {isUpdating ? "Modificando..." : "Modifica Prodotto"}
                     </Button>
                 </Modal.Footer>
             </Modal>
-            {/* Confirm Delete Modal */}
+
             <Modal show={showConfirmModal} onHide={() => setShowConfirmModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Conferma Eliminazione</Modal.Title>
@@ -302,19 +329,22 @@ export default function InventoryPage() {
                     <Button variant="secondary" onClick={() => setShowConfirmModal(false)}>
                         Annulla
                     </Button>
-                    <Button variant="danger" onClick={handleDeleteProduct}>
-                        Elimina
+                    <Button
+                        variant="danger"
+                        onClick={handleDeleteProduct}
+                        disabled={isDeleting}
+                    >
+                        {isDeleting ? "Eliminando..." : "Elimina"}
                     </Button>
                 </Modal.Footer>
             </Modal>
 
             <Button variant="success" onClick={() => {
                 setShowAddModal(true);
-                setNewProdotto({nome: '', descrizione: '', prezzo: '', quantita: ''}); // Reset state here
+                setNewProdotto({ nome: '', descrizione: '', prezzo: '', quantita: '' });
             }}>
                 Aggiungi Nuovo Prodotto
             </Button>
-
         </Container>
     );
 }

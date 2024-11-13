@@ -1,9 +1,9 @@
-'use client'
+'use client';
 import React, { useState, useEffect } from "react";
 
 export default function ValidationEmailPopup({ userId, onClose, onValidateOTP, onResendCode }) {
     const [otp, setOtp] = useState("");
-
+    const [isSubmittingOTP, setIsSubmittingOTP] = useState(false); // New loading state
 
     useEffect(() => {
         const handleKeyDown = (e) => {
@@ -15,8 +15,10 @@ export default function ValidationEmailPopup({ userId, onClose, onValidateOTP, o
         return () => document.removeEventListener("keydown", handleKeyDown);
     }, [onClose]);
 
-    const handleOTPSubmit = () => {
-        onValidateOTP(otp, userId);
+    const handleOTPSubmit = async () => {
+        setIsSubmittingOTP(true); // Start submitting
+        await onValidateOTP(otp, userId); // Call validation function
+        setIsSubmittingOTP(false); // Stop submitting once done
     };
 
     return (
@@ -108,8 +110,9 @@ export default function ValidationEmailPopup({ userId, onClose, onValidateOTP, o
                             borderRadius: "4px",
                             cursor: "pointer",
                         }}
+                        disabled={isSubmittingOTP} // Disable the button while submitting
                     >
-                        SUBMIT
+                        {isSubmittingOTP ? "Submitting..." : "SUBMIT"} {/* Change button text */}
                     </button>
                 </div>
             </div>

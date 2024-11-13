@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { useEffect, useState } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import ProdottiGrid from "@/components/prodotti/prodotti-grid";
@@ -14,9 +14,8 @@ export default function PrenotazioniPage() {
     const [userEmail, setUserEmail] = useState(null);
     const [userId, setUserId] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isOrderLoading, setIsOrderLoading] = useState(false);
 
-
-    // Gestisce il cambiamento di quantità dei prodotti
     const handleQuantityChange = (productName, quantity) => {
         setOrderProducts(prev => ({
             ...prev,
@@ -77,6 +76,8 @@ export default function PrenotazioniPage() {
             prodotti: filteredProducts
         };
 
+        setIsOrderLoading(true);
+
         try {
             const response = await fetch('http://localhost:8080/api/ordini', {
                 credentials: 'include',
@@ -90,11 +91,13 @@ export default function PrenotazioniPage() {
             }
 
             setShowAddModal(false);
-            setShowOrderSentModal(true) ;
+            setShowOrderSentModal(true);
 
         } catch (error) {
             console.error("Failed to add order:", error);
             alert("Errore nella creazione dell'ordine");
+        } finally {
+            setIsOrderLoading(false);
         }
     };
 
@@ -103,8 +106,12 @@ export default function PrenotazioniPage() {
             <h1>Gestione del Magazzino</h1>
             <ProdottiGrid prodotti={products} onQuantityChange={handleQuantityChange} />
 
-            <Button variant="primary" onClick={() => setShowAddModal(true)}>
-                Conferma Ordine
+            <Button
+                variant="primary"
+                onClick={() => setShowAddModal(true)}
+                disabled={isLoading}
+            >
+                {isLoading ? "Caricamento..." : "Conferma Ordine"}
             </Button>
 
             <Modal show={showAddModal} onHide={() => setShowAddModal(false)}>
@@ -118,8 +125,12 @@ export default function PrenotazioniPage() {
                     <Button variant="secondary" onClick={() => setShowAddModal(false)}>
                         Annulla
                     </Button>
-                    <Button variant="success" onClick={handleAddOrder}>
-                        Conferma
+                    <Button
+                        variant="success"
+                        onClick={handleAddOrder}
+                        disabled={isOrderLoading}
+                    >
+                        {isOrderLoading ? "Invio in corso..." : "Conferma"}
                     </Button>
                 </Modal.Footer>
             </Modal>

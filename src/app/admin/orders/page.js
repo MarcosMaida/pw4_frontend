@@ -1,4 +1,3 @@
-// src/app/admin/orders/page.js
 "use client";
 
 import React, {useEffect, useState} from 'react';
@@ -12,61 +11,72 @@ export default function OrdersPage() {
     const [selectedOrdine, setSelectedOrdine] = useState(null);
     const [showConfirmAcceptModal, setShowConfirmAcceptModal] = useState(false);
     const [showConfirmRejectModal, setShowRejectConfirmModal] = useState(false);
+    const [isAccepting, setIsAccepting] = useState(false);
+    const [isRejecting, setIsRejecting] = useState(false);
+
+    const fetchOrdini = async () => {
+        try {
+            setIsLoading(true);
+            const response = await fetch('http://localhost:8080/api/ordini', {
+                credentials: 'include',
+                method: 'GET',
+                headers: {'Content-Type': 'application/json'}
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            setOrdini(data);
+        } catch (error) {
+            console.error("Failed to fetch orders:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchOrdini = async () => {
-            try {
-                const response = await fetch('http://localhost:8080/api/ordini', {
-                    credentials: 'include',
-                    method: 'GET',
-                    headers: {'Content-Type': 'application/json'}
-                });
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const data = await response.json();
-                setOrdini(data);
-            } catch (error) {
-                console.error("Failed to fetch orders:", error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
         fetchOrdini();
     }, []);
 
     const handleAcceptOrdine = async () => {
+        setIsAccepting(true);
         try {
-            const response = await fetch(`http://localhost:8080/api/ordini/${selectedOrdine}/status`, {
+            const response = await fetch(`http://localhost:8080/api/ordini/${selectedOrdine}/accept`, {
                 credentials: 'include',
                 method: 'PUT',
                 headers: {'Content-Type': 'application/json'}
             });
             if (response.ok) {
-                setOrdini(ordini.filter(order => order.id !== selectedOrdine));
                 setShowConfirmAcceptModal(false);
+                await fetchOrdini();
             } else {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
         } catch (error) {
             console.error("Failed to accept order:", error);
+        } finally {
+            setIsAccepting(false);
         }
     };
+
     const handleRejectOrdine = async () => {
+        setIsRejecting(true);
         try {
-            const response = await fetch(`http://localhost:8080/api/ordini/${selectedOrdine}`, {
+            const response = await fetch(`http://localhost:8080/api/ordini/${selectedOrdine}/cancel`, {
                 credentials: 'include',
-                method: 'DELETE',
+                method: 'PUT',
                 headers: {'Content-Type': 'application/json'}
             });
             if (response.ok) {
-                setOrdini(ordini.filter(order => order.id !== selectedOrdine));
                 setShowRejectConfirmModal(false);
+                await fetchOrdini();
             } else {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
         } catch (error) {
-            console.error("Failed to accept order:", error);
+            console.error("Failed to reject order:", error);
+        } finally {
+            setIsRejecting(false);
         }
     };
 
@@ -90,7 +100,7 @@ export default function OrdersPage() {
                 <Table striped bordered hover>
                     <thead>
                     <tr>
-                        <th style={{width: '30%'}}>Descrizione</th>
+                        <th style={{width: '25%'}}>Descrizione</th>
                         <th style={{width: '10%'}}>Stato Ordine</th>
                         <th style={{width: '15%'}}>Totale</th>
                         <th style={{width: '10%'}}>Azioni</th>
@@ -135,8 +145,12 @@ export default function OrdersPage() {
                     <Button variant="secondary" onClick={() => setShowConfirmAcceptModal(false)}>
                         Annulla
                     </Button>
-                    <Button variant="success" onClick={handleAcceptOrdine}>
-                        Conferma
+                    <Button
+                        variant="success"
+                        onClick={handleAcceptOrdine}
+                        disabled={isAccepting}
+                    >
+                        {isAccepting ? "Conferma in corso" : "Conferma"}
                     </Button>
                 </Modal.Footer>
             </Modal>
@@ -150,8 +164,12 @@ export default function OrdersPage() {
                     <Button variant="secondary" onClick={() => setShowRejectConfirmModal(false)}>
                         Annulla
                     </Button>
-                    <Button variant="success" onClick={handleRejectOrdine}>
-                        Conferma
+                    <Button
+                        variant="danger"
+                        onClick={handleRejectOrdine}
+                        disabled={isRejecting}
+                    >
+                        {isRejecting ? "Conferma in corso" : "Conferma"}
                     </Button>
                 </Modal.Footer>
             </Modal>
