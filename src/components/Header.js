@@ -84,9 +84,10 @@ export default function Header() {
                 )}
                 {userRole === 'utente' && (
                     <>
+                        <Link href="/" className={styles.link} onClick={handleLinkClick}>Home</Link>
                         <Link href="/contact" className={styles.link} onClick={handleLinkClick}>Contatti</Link>
                         <Link href="/user/prenotazioni" className={styles.link} onClick={handleLinkClick}>Prenotare</Link>
-                        <Link href="/user/dashboard" className={styles.link} onClick= {handleLinkClick}>Profilo</Link>
+                        <Link href="/user/dashboard" className={styles.link} onClick={handleLinkClick}>Profilo</Link>
                     </>
                 )}
                 {isLoggedIn ? (
