@@ -1,85 +1,160 @@
 // src/app/admin/orders/page.js
-
 "use client";
 
-import { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from './orders.module.css';
+import {Button, Modal, Table, Container} from "react-bootstrap";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function OrdersPage() {
-    // Questo sarà sostituito per prelevare i dati dinamicamente dal backend.
-    const [orders, setOrders] = useState([
-        {
-            id: 1,
-            customer: 'Mario Rossi',
-            products: ['Torta alla crema', 'Bignè alla cioccolata'],
-            pickupDate: '2024-11-10',
-            status: 'In attesa',
-        },
-        {
-            id: 2,
-            customer: 'Luca Bianchi',
-            products: ['Millefoglie'],
-            pickupDate: '2024-11-11',
-            status: 'In attesa',
-        },
-    ]);
+    const [ordini, setOrdini] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [selectedOrdine, setSelectedOrdine] = useState(null);
+    const [showConfirmAcceptModal, setShowConfirmAcceptModal] = useState(false);
+    const [showConfirmRejectModal, setShowRejectConfirmModal] = useState(false);
 
-    // Funzione per accettare un ordine
-    const handleAccept = (id) => {
-        // Aggiorna localmente lo stato dell'ordine come "Accettato"
-        setOrders((prevOrders) =>
-            prevOrders.map((order) =>
-                order.id === id ? { ...order, status: 'Accettato' } : order
-            )
-        );
-        // Questo dovrà poi essere modificato per aggiungere il backend:
-        // da fare la chiamata API per aggiornare lo stato dell'ordine nel database
-        // esempio: updateOrderStatus(id, 'Accettato').then(() => {...});
+    useEffect(() => {
+        const fetchOrdini = async () => {
+            try {
+                const response = await fetch('http://localhost:8080/api/ordini', {
+                    credentials: 'include',
+                    method: 'GET',
+                    headers: {'Content-Type': 'application/json'}
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                setOrdini(data);
+            } catch (error) {
+                console.error("Failed to fetch orders:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchOrdini();
+    }, []);
+
+    const handleAcceptOrdine = async () => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/ordini/${selectedOrdine}/status`, {
+                credentials: 'include',
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'}
+            });
+            if (response.ok) {
+                setOrdini(ordini.filter(order => order.id !== selectedOrdine));
+                setShowConfirmAcceptModal(false);
+            } else {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+        } catch (error) {
+            console.error("Failed to accept order:", error);
+        }
+    };
+    const handleRejectOrdine = async () => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/ordini/${selectedOrdine}`, {
+                credentials: 'include',
+                method: 'DELETE',
+                headers: {'Content-Type': 'application/json'}
+            });
+            if (response.ok) {
+                setOrdini(ordini.filter(order => order.id !== selectedOrdine));
+                setShowRejectConfirmModal(false);
+            } else {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+        } catch (error) {
+            console.error("Failed to accept order:", error);
+        }
     };
 
-    // Funzione per rifiutare un ordine
-    const handleReject = (id) => {
-        // Aggiorna localmente lo stato dell'ordine come "Rifiutato"
-        setOrders((prevOrders) =>
-            prevOrders.map((order) =>
-                order.id === id ? { ...order, status: 'Rifiutato' } : order
-            )
-        );
-        // Questo dovrà poi essere modificato per aggiungere il backend:
-        // da fare la chiamata API per aggiornare lo stato dell'ordine nel database
-        // esempio: updateOrderStatus(id, 'Rifiutato').then(() => {...});
+    const openAcceptConfirmModal = (orderId) => {
+        setSelectedOrdine(orderId);
+        setShowConfirmAcceptModal(true);
+    };
+
+    const openRejectConfirmModal = (orderId) => {
+        setSelectedOrdine(orderId);
+        setShowRejectConfirmModal(true);
     };
 
     return (
-        <div className={styles.container}>
+        <Container>
             <h1 className={styles.heading}>Gestione Ordini</h1>
 
-            <ul className={styles.orderList}>
-                {orders.map((order) => (
-                    <li key={order.id} className={styles.orderItem}>
-                        <h3>Cliente: {order.customer}</h3>
-                        <p>Prodotti: {order.products.join(', ')}</p>
-                        <p>Data di Ritiro: {order.pickupDate}</p>
-                        <p className={styles.status}>Stato: {order.status}</p>
-                        <div className={styles.actions}>
-                            <button
-                                className={styles.acceptButton}
-                                onClick={() => handleAccept(order.id)}
-                                disabled={order.status !== 'In attesa'}
-                            >
-                                Accetta
-                            </button>
-                            <button
-                                className={styles.rejectButton}
-                                onClick={() => handleReject(order.id)}
-                                disabled={order.status !== 'In attesa'}
-                            >
-                                Rifiuta
-                            </button>
-                        </div>
-                    </li>
-                ))}
-            </ul>
-        </div>
+            {isLoading ? (
+                <p>Caricamento ordini...</p>
+            ) : (
+                <Table striped bordered hover>
+                    <thead>
+                    <tr>
+                        <th style={{width: '30%'}}>Descrizione</th>
+                        <th style={{width: '10%'}}>Stato Ordine</th>
+                        <th style={{width: '15%'}}>Totale</th>
+                        <th style={{width: '10%'}}>Azioni</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {ordini.map((order) => (
+                        <tr key={order.id}>
+                            <td>
+                                {Array.isArray(order.prodotti) ? (
+                                    order.prodotti.map((prodotto, index) => (
+                                        <div key={index}>
+                                            <strong>{prodotto.nome}</strong>: {prodotto.descrizione} - {prodotto.quantita} pcs
+                                        </div>
+                                    ))
+                                ) : (
+                                    <span>{order.prodotti}</span>
+                                )}
+                            </td>
+                            <td>{order.stato}</td>
+                            <td>{order.totale}</td>
+                            <td className="text-center">
+                                <Button variant="success" className="me-2" onClick={() => openAcceptConfirmModal(order.id)}>
+                                    Accetta
+                                </Button>
+                                <Button variant="danger" onClick={() => openRejectConfirmModal(order.id)}>
+                                    Rifiuta
+                                </Button>
+                            </td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </Table>
+            )}
+
+            <Modal show={showConfirmAcceptModal} onHide={() => setShowConfirmAcceptModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Conferma Accettazione</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Sei sicuro di voler accettare l'ordine?</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowConfirmAcceptModal(false)}>
+                        Annulla
+                    </Button>
+                    <Button variant="success" onClick={handleAcceptOrdine}>
+                        Conferma
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+            <Modal show={showConfirmRejectModal} onHide={() => setShowRejectConfirmModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Conferma Eliminazione</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Sei sicuro di voler rifiutare l'ordine?</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowRejectConfirmModal(false)}>
+                        Annulla
+                    </Button>
+                    <Button variant="success" onClick={handleRejectOrdine}>
+                        Conferma
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </Container>
     );
 }
