@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState } from 'react';
 import axios from 'axios';
 import classes from './login.module.css';
@@ -8,6 +8,7 @@ const LoginForm = () => {
     const [password, setPassword] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [loginError, setLoginError] = useState('');
+    const [isLoggingIn, setIsLoggingIn] = useState(false); // New loading state
 
     const handleEmailChange = (event) => {
         setEmail(event.target.value);
@@ -20,17 +21,13 @@ const LoginForm = () => {
     };
 
     const validatePassword = (password) => {
-        // const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-        // if (!passwordRegex.test(password)) {
-        //     setPasswordError('La password deve contenere almeno 8 caratteri, di cui almeno una lettera, un numero e un carattere speciale.');
-        // } else {
-        //     setPasswordError('');
-        // }
+        // Password validation logic can be added here
     };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (!passwordError) {
+            setIsLoggingIn(true);
             try {
                 const response = await axios.post('http://localhost:8080/api/auth/login', {
                     email,
@@ -55,6 +52,8 @@ const LoginForm = () => {
             } catch (error) {
                 setLoginError('Errore durante il login. Verifica le credenziali e riprova.');
                 console.error(error);
+            } finally {
+                setIsLoggingIn(false);
             }
         } else {
             setLoginError('La password non è valida.');
@@ -84,7 +83,9 @@ const LoginForm = () => {
                     />
                     {passwordError && <p className={classes.error}>{passwordError}</p>}
                     {loginError && <p className={classes.error}>{loginError}</p>}
-                    <button type="submit" className={classes.submitButton}>Login</button>
+                    <button type="submit" className={classes.submitButton} disabled={isLoggingIn}>
+                        {isLoggingIn ? "Login in corso..." : "Login"}
+                    </button>
                 </form>
                 <div className="nav-item">
                     <a href="../../auth/register" className={classes.register}>Crea Il Tuo Account</a>

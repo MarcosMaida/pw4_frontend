@@ -1,6 +1,6 @@
 "use client";
 
-import {useEffect, useState} from "react";
+import { useState } from "react";
 import styles from "./register.module.css";
 import ValidationEmailPopup from "@/app/auth/validation/validation-popup";
 
@@ -18,12 +18,11 @@ export default function RegisterPage() {
     const [passwordError, setPasswordError] = useState("");
     const [isValidationPopupOpen, setIsValidationPopupOpen] = useState(false);
     const [utenteId, setUtenteId] = useState();
-    // const [isLoading, setIsLoading] = useState(true);
-
+    const [isRegistering, setIsRegistering] = useState(false); // New loading state
 
     const handleInputChange = (e) => {
-        const {name, value} = e.target;
-        setFormData({...formData, [name]: value});
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
 
         if (name === "password") {
             validatePassword(value);
@@ -35,6 +34,7 @@ export default function RegisterPage() {
     };
 
     const registerUser = async (userData) => {
+        setIsRegistering(true); // Start loading
         try {
             const response = await fetch("http://localhost:8080/api/auth/register", {
                 method: "POST",
@@ -57,6 +57,8 @@ export default function RegisterPage() {
         } catch (error) {
             setSubscriptionStatus("Iscrizione fallita. Riprova.");
             console.error("Error during registration:", error);
+        } finally {
+            setIsRegistering(false); // Stop loading
         }
     };
 
@@ -66,12 +68,12 @@ export default function RegisterPage() {
                 method: "POST",
                 credentials: "include",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id: utenteId, codiceVerifica: otp }) // Include both `id` and `codiceVerifica`
+                body: JSON.stringify({ id: utenteId, codiceVerifica: otp })
             });
 
             if (response.ok) {
                 setSubscriptionStatus("Email verified successfully! You can now log in.");
-                setIsValidationPopupOpen(false)
+                setIsValidationPopupOpen(false);
             } else {
                 const errorMessage = await response.text();
                 setSubscriptionStatus(`OTP validation failed: ${errorMessage}`);
@@ -81,11 +83,6 @@ export default function RegisterPage() {
             console.error("Error during OTP validation:", error);
         }
     };
-
-
-
-
-
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
@@ -119,8 +116,6 @@ export default function RegisterPage() {
             ruolo: "utente"
         });
     };
-
-
 
     return (
         <div className={styles.container}>
@@ -183,18 +178,17 @@ export default function RegisterPage() {
                         className={styles.formInput}
                     />
                 </label>
-                <button type="submit" className={styles.submitButton}>Registrati</button>
+                <button type="submit" className={styles.submitButton} disabled={isRegistering}>
+                    {isRegistering ? "Registrazione in corso..." : "Registrati"}
+                </button>
             </form>
             {isValidationPopupOpen && (
                 <ValidationEmailPopup
                     userId={utenteId} // Pass userId to the popup
                     onValidateOTP={handleOTPSubmit}
                     onClose={() => setIsValidationPopupOpen(false)}
-                    // onResendCode={handleResendCode} // You might need to define this function if you haven’t yet
                 />
             )}
-
         </div>
     );
 }
-
