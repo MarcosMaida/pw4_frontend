@@ -1,8 +1,73 @@
-.footer {
-    padding: 2rem;
-    background-color: #404040;
-    color: #ffffff;
-    text-align: center;
-    font-size: 0.9rem;
-  }
-  
+/* Contenitore principale delle informazioni con l'immagine di sfondo */
+.infoContainer {
+  display: flex;
+  justify-content: space-between;
+  background-image: url('/images/11.webp');
+  background-size: cover;
+  background-position: center;
+  padding: 3rem 2rem;
+  color: #ffffff;
+  position: relative;
+  z-index: 0;
+}
+
+/* Stili per i blocchi interni */
+.contact, .hours {
+  flex: 1;
+  text-align: center;
+  padding: 0 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Stile per il titolo delle sezioni */
+.contact h3, .hours h3 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+/* Stile per la sezione dei giorni e orari */
+.schedule {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  font-size: 0.9rem;
+}
+
+/* Colonna di giorni */
+.schedule div:first-child {
+  text-align: right;
+}
+
+/* Colonna di orari */
+.schedule div:last-child {
+  text-align: left;
+}
+
+/* Stile per il div Partita IVA */
+.piva {
+  background-color: #e6b8c3;
+  color: #000000;
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  margin: 0; /* Rimuove margine extra */
+  width: 100%;
+}
+
+/* Rimuove margine tra infoContainer e piva */
+.infoContainer + .piva {
+  margin-top: 0; /* Assicura che non ci sia spazio sopra P.IVA */
+}
+
+/* Stile per il div Informazioni Legali in fondo */
+.legal {
+  background-color: #404040;
+  color: #ffffff;
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  width: 100%;
+  margin-top: 0; /* Rimuove eventuale margine in cima */
+}
