@@ -84,7 +84,7 @@ export default function InventoryPage() {
                 credentials: 'include',
                 method: 'PUT',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(newProdotto)  // Send the updated product data
+                body: JSON.stringify(newProdotto)
             });
 
             if (!response.ok) {
@@ -96,8 +96,8 @@ export default function InventoryPage() {
                 product.id === selectedProduct.id ? updatedProdotto : product
             ));
             setShowUpdateModal(false);
-            setSelectedProduct(null);  // Clear the selected product after update
-            setNewProdotto({nome: '', descrizione: '', prezzo: '', quantita: ''});  // Reset state after update
+            setSelectedProduct(null);
+            setNewProdotto({nome: '', descrizione: '', prezzo: '', quantita: ''});
         } catch (error) {
             console.error("Failed to update product:", error);
         }
@@ -168,7 +168,6 @@ export default function InventoryPage() {
                                             onClick={() => openUpdateModal(product)}>
                                         Modifica
                                     </Button>
-
                             </td>
                         </tr>
                     ))}
