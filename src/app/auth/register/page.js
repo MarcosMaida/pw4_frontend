@@ -119,6 +119,9 @@ export default function RegisterPage() {
 
     return (
         <div className={styles.container}>
+            <div className={styles.logoContainer}> {/* Cambiado a `styles.logoContainer` */}
+                <img src="/images/logo.webp" alt="Logo C'est la Vie" className={styles.logo} /> {/* Cambiado a `styles.logo` */}
+            </div>
             <h1 className={styles.heading}>Registrazione</h1>
             {message && <p className={styles.message}>{message}</p>}
             {subscriptionStatus && <p className={styles.subscriptionStatus}>{subscriptionStatus}</p>}
