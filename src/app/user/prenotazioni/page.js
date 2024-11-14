@@ -109,11 +109,9 @@ export default function PrenotazioniPage() {
     const handleCommentSubmit = async (e) => {
         e.preventDefault();
 
-        // Logica di invio del commento (opzionale: puoi anche mandarlo a un'API)
         console.log("Commento inviato:", commento);
         alert("Commento inviato correttamente!");
 
-        // Ripulisci il commento dopo l'invio
         setCommento('');
     };
 
@@ -145,7 +143,6 @@ export default function PrenotazioniPage() {
                                 onChange={(e) => setCommento(e.target.value)} // Gestore di aggiornamento stato
                                 required
                             ></textarea>
-                            <button type="submit">Invia Commento</button>
                         </form>
                     </div>
                 </div>
