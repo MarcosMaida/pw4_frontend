@@ -1,9 +1,10 @@
 'use client';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import ProdottiGrid from "@/components/prodotti/prodotti-grid";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Cookies from "js-cookie";
+import styles from "@/app/user/prenotazioni/prenotazioni.module.css";
 
 export default function PrenotazioniPage() {
     const [products, setProducts] = useState([]);
@@ -13,6 +14,7 @@ export default function PrenotazioniPage() {
     const [orderProducts, setOrderProducts] = useState({});
     const [userEmail, setUserEmail] = useState(null);
     const [userId, setUserId] = useState(null);
+    const [commento, setCommento] = useState(''); // Modificato a stringa vuota
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isOrderLoading, setIsOrderLoading] = useState(false);
     const [pickupDate, setPickupDate] = useState('');
@@ -76,7 +78,8 @@ export default function PrenotazioniPage() {
             idUtente: userId,
             email: userEmail,
             prodotti: filteredProducts,
-            dataRitiro: `${pickupDate}T${pickupTime}:00`
+            dataRitiro: `${pickupDate}T${pickupTime}:00`,
+            commento: commento
         };
 
         setIsOrderLoading(true);
@@ -95,13 +98,23 @@ export default function PrenotazioniPage() {
 
             setShowAddModal(false);
             setShowOrderSentModal(true);
-
         } catch (error) {
             console.error("Failed to add order:", error);
             alert("Errore nella creazione dell'ordine");
         } finally {
             setIsOrderLoading(false);
         }
+    };
+
+    const handleCommentSubmit = async (e) => {
+        e.preventDefault();
+
+        // Logica di invio del commento (opzionale: puoi anche mandarlo a un'API)
+        console.log("Commento inviato:", commento);
+        alert("Commento inviato correttamente!");
+
+        // Ripulisci il commento dopo l'invio
+        setCommento('');
     };
 
     return (
@@ -116,6 +129,26 @@ export default function PrenotazioniPage() {
                 >
                     {isLoading ? "Caricamento..." : "Conferma Ordine"}
                 </Button>
+            </div>
+
+            <div className={styles.subContainer2}>
+                <div className={styles.box3}>
+                    <div className={styles.comment_box}>
+                        <h2>Lascia un commento</h2>
+                        <form onSubmit={handleCommentSubmit}>
+                            <label htmlFor="comment">Commento:</label>
+                            <textarea
+                                id="comment"
+                                name="comment"
+                                placeholder="Scrivi qui il tuo commento..."
+                                value={commento} // Collegato allo stato
+                                onChange={(e) => setCommento(e.target.value)} // Gestore di aggiornamento stato
+                                required
+                            ></textarea>
+                            <button type="submit">Invia Commento</button>
+                        </form>
+                    </div>
+                </div>
             </div>
 
             <Modal show={showAddModal} onHide={() => setShowAddModal(false)}>

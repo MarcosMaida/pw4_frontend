@@ -1,96 +1,93 @@
-// src/app/user/dashboard/page.js
-
-"use client";
-
-import { useState, useEffect } from 'react';
+'use client';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './dashboard.module.css';
+import { Button, Table } from "react-bootstrap";
 
 export default function UserDashboardPage() {
     const router = useRouter();
-    const [orders, setOrders] = useState([
-        // Questi ordini saranno sostituiti da dati dinamici recuperati dal backend
-        { id: 1, name: 'Torta alla crema', status: 'In Preparazione' },
-        { id: 2, name: 'Bignè alla cioccolata', status: 'Pronto per il Ritiro' },
-    ]);
-    const [orderHistory, setOrderHistory] = useState([
-        { id: 3, name: 'Millefoglie', status: 'Completato' },
-    ]);
-    const [comment, setComment] = useState("");
+    const [isLoading, setIsLoading] = useState(true);
+    const [ordini, setOrdini] = useState([]);
+    const [ordiniStorico, setOrdiniStorico] = useState([]);
 
+    useEffect(() => {
+        const fetchOrdini = async () => {
+            try {
+                const response = await fetch('http://localhost:8080/api/ordini', {
+                    credentials: 'include',
+                    method: 'GET',
+                    headers: {'Content-Type': 'application/json'}
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                const ordiniAttivi = data.filter(order => order.stato !== 'accettato' && order.stato !== 'rifiutato');
+                const ordiniStorico = data.filter(order => order.stato === 'accettato' || order.stato === 'rifiutato');
 
-    const handleCommentSubmit = () => {
-        alert(`Commento inviato: ${comment}`);
-        setComment(""); // Reset del commento dopo l'invio
-
-        // Questo dovrà poi essere modificato per aggiungere il backend:
-        // Integrazione Backend: invia il commento al server per salvarlo
-        // esempio: saveComment(comment).then(() => {...});
-    };
+                setOrdini(ordiniAttivi);
+                setOrdiniStorico(ordiniStorico);
+            } catch (error) {
+                console.error("Failed to fetch ordini:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchOrdini();
+    }, []);
 
     return (
-<div class={styles.sfondo}>
-<div class={styles.mainContainer}>  
-    <h1 class={styles.tittle}>Ciao Utente</h1>  
-        <div class={styles.subContainer1}>    
-            <div class={styles.box1}>      
-                <h2 class={styles.h2}>Cronologia degli Ordini</h2>      
-                <ul class={styles.order_list}>          
-                    <li>Ordine #12345 - 12/11/2023</li>        
-                    <li>Ordine #12346 - 13/11/2023</li>        
-                    <li>Ordine #12347 - 14/11/2023</li>        
-                    <li>Ordine #12348 - 15/11/2023</li>        
-                    <li>Ordine #12345 - 12/11/2023</li>        
-                    <li>Ordine #12346 - 13/11/2023</li>     
-                    <li>Ordine #12347 - 14/11/2023</li>        
-                    <li>Ordine #12348 - 15/11/2023</li>      
-                </ul>    
-            </div>    
-        <div class={styles.box2}>      
-                        <h2 class={styles.h2} >Storico Ordini e Stato</h2>      
-            <ul class={styles.order_list}>        
-                <li>          
-                    <div class={styles.order_list}>            
-                        <span>Ordine #12345 - 12/11/2023</span>
-                        <span class={styles.status_processing}>In elaborazione</span>          
-                    </div>        
-                </li>        
-                <li>          
-                    <div class={styles.order_list}>            
-                        <span>Ordine #12346 - 13/11/2023</span>            
-                        <span class={styles.status_shipped}>Spedito</span>          
-                    </div>        
-                </li>        
-                <li>          
-                    <div class={styles.order_list}>            
-                        <span class={styles.order_details_intern}>Ordine #12347 - 14/11/2023</span>            
-                        <span class={styles.status_delivered}>Consegnato</span>          
-                    </div>        
-                </li>        
-                <li>          
-                    <div class={styles.order_list}>            
-                        <span>Ordine #12348 - 15/11/2023</span>            
-                        <span class={styles.status_cancelled}>Annullato</span>          
-                    </div>        
-                </li>      
-            </ul>   
-        </div>  
-        
-    </div>  
-    <div class={styles.subContainer2}>    
-        <div class={styles.box3}>      
-            <div class={styles.comment_box}>      
-                <h2>Lascia un commento</h2>      
-                <form action="/submit_comment" method="POST">        
-                    <label for="comment">Commento:</label>        
-                    <textarea id="comment" name="comment" placeholder="Scrivi qui il tuo commento..." required></textarea>        
-                    <button type="submit">Invia Commento</button>      
-                </form>    
-            </div>    
-        </div>  
-      </div>
-</div>
-</div>
+        <div className={styles.sfondo}>
+            <div className={styles.mainContainer}>
+                <h1 className={styles.title}>Ciao Utente</h1>
+                <div className={styles.subContainer1}>
+                    <div className={styles.box1}>
+                        <h2 className={styles.h2}>Cronologia degli Ordini</h2>
+                        <ul className={styles.order_list}>
+                            {ordiniStorico.map(order => (
+                                <li key={order.id}>Ordine #{order.id} - {order.stato} - {order.totale}</li>
+                            ))}
+                        </ul>
+                    </div>
+                    <div className={styles.box2}>
+                        <div className={styles.orderItem}>
+                            {isLoading ? (
+                                <p>Caricamento prodotti...</p>
+                            ) : (
+                                <Table>
+                                    <thead>
+                                    <tr>
+                                        <th style={{ width: '30%' }}>Descrizione</th>
+                                        <th style={{ width: '30%' }}>Stato Ordine</th>
+                                        <th style={{ width: '20%' }}>Totale</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {ordini.map((order) => (
+                                        <tr key={order.id}>
+                                            <td>
+                                                {Array.isArray(order.prodotti) ? (
+                                                    order.prodotti.map((prodotto, index) => (
+                                                        <div key={index}>
+                                                            <strong>{prodotto.nome}</strong>:
+                                                            {prodotto.descrizione} - {prodotto.quantita} pcs
+                                                        </div>
+                                                    ))
+                                                ) : (
+                                                    <span>{order.prodotti}</span>
+                                                )}
+                                            </td>
+                                            <td>{order.stato}</td>
+                                            <td>{order.totale}</td>
+                                        </tr>
+                                    ))}
+                                    </tbody>
+                                </Table>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     );
-
 }
