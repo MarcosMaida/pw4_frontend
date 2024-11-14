@@ -1,6 +1,6 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { Button, Modal, Form } from 'react-bootstrap';
+import {useEffect, useState} from 'react';
+import {Button, Modal, Form} from 'react-bootstrap';
 import ProdottiGrid from "@/components/prodotti/prodotti-grid";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Cookies from "js-cookie";
@@ -15,6 +15,8 @@ export default function PrenotazioniPage() {
     const [userId, setUserId] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isOrderLoading, setIsOrderLoading] = useState(false);
+    const [pickupDate, setPickupDate] = useState('');
+    const [pickupTime, setPickupTime] = useState('');
 
     const handleQuantityChange = (productName, quantity) => {
         setOrderProducts(prev => ({
@@ -27,7 +29,7 @@ export default function PrenotazioniPage() {
         const authToken = Cookies.get('SESSION_COOKIE');
         if (authToken) {
             setIsLoggedIn(true);
-            fetch('http://localhost:8080/api/auth/profile', { credentials: 'include' })
+            fetch('http://localhost:8080/api/auth/profile', {credentials: 'include'})
                 .then(response => response.json())
                 .then(userData => {
                     setUserEmail(userData.email);
@@ -45,7 +47,7 @@ export default function PrenotazioniPage() {
                 const response = await fetch('http://localhost:8080/api/prodotti', {
                     credentials: 'include',
                     method: 'GET',
-                    headers: { 'Content-Type': 'application/json' }
+                    headers: {'Content-Type': 'application/json'}
                 });
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -73,7 +75,8 @@ export default function PrenotazioniPage() {
         const orderRequest = {
             idUtente: userId,
             email: userEmail,
-            prodotti: filteredProducts
+            prodotti: filteredProducts,
+            dataRitiro: `${pickupDate}T${pickupTime}:00`
         };
 
         setIsOrderLoading(true);
@@ -82,7 +85,7 @@ export default function PrenotazioniPage() {
             const response = await fetch('http://localhost:8080/api/ordini', {
                 credentials: 'include',
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(orderRequest)
             });
 
@@ -120,7 +123,25 @@ export default function PrenotazioniPage() {
                     <Modal.Title>Conferma Ordine</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    Sei sicuro di voler creare un ordine con i prodotti selezionati?
+                    <p>Sei sicuro di voler creare un ordine con i prodotti selezionati?</p>
+                    <Form.Group>
+                        <Form.Label>Data di Ritiro</Form.Label>
+                        <Form.Control
+                            type="date"
+                            value={pickupDate}
+                            onChange={(e) => setPickupDate(e.target.value)}
+                            required
+                        />
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Label>Ora di Ritiro</Form.Label>
+                        <Form.Control
+                            type="time"
+                            value={pickupTime}
+                            onChange={(e) => setPickupTime(e.target.value)}
+                            required
+                        />
+                    </Form.Group>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowAddModal(false)}>
@@ -129,7 +150,7 @@ export default function PrenotazioniPage() {
                     <Button
                         variant="success"
                         onClick={handleAddOrder}
-                        disabled={isOrderLoading}
+                        disabled={isOrderLoading || !pickupDate || !pickupTime}
                     >
                         {isOrderLoading ? "Invio in corso..." : "Conferma"}
                     </Button>
