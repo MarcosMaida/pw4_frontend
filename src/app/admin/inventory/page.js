@@ -19,6 +19,7 @@ export default function InventoryPage() {
         nome: '',
         descrizione: '',
         prezzo: '',
+        immagine: '',
         quantita: '',
     });
 
@@ -52,12 +53,12 @@ export default function InventoryPage() {
         fetchProdotti();
     }, []);
 
-    // Funzione per gestire la barra di ricerca
+
     const handleSearch = (event) => {
         setSearchTerm(event.target.value);
     };
 
-    // Funzione di filtro per i prodotti
+
     const filteredProducts = products.filter((product) =>
         product.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
         product.id.toString().includes(searchTerm)
@@ -78,7 +79,7 @@ export default function InventoryPage() {
             const addedProdotto = await response.json();
             setProducts([...products, addedProdotto]);
             setShowAddModal(false);
-            setNewProdotto({ nome: '', descrizione: '', prezzo: '', quantita: '' });
+            setNewProdotto({ nome: '', descrizione: '', prezzo: '', immagine: '', quantita: '' });
         } catch (error) {
             console.error("Failed to add product:", error);
         } finally {
@@ -93,6 +94,7 @@ export default function InventoryPage() {
             nome: product.nome,
             descrizione: product.descrizione,
             prezzo: product.prezzo,
+            immagine: product.immagine,
             quantita: product.quantita
         });
         setShowUpdateModal(true);
@@ -120,7 +122,7 @@ export default function InventoryPage() {
             ));
             setShowUpdateModal(false);
             setSelectedProduct(null);
-            setNewProdotto({ nome: '', descrizione: '', prezzo: '', quantita: '' });
+            setNewProdotto({ nome: '', descrizione: '', prezzo: '', immagine: '', quantita: '' });
         } catch (error) {
             console.error("Failed to update product:", error);
         } finally {
@@ -163,213 +165,239 @@ export default function InventoryPage() {
     };
 
     return (
-        <div className={styles.container}>
-            <Container>
-                <h1 className={styles.heading}>Gestione del Magazzino</h1>
+        <Container>
+            <h1 className={styles.heading}>Gestione del Magazzino</h1>
 
-                {/* Barra di ricerca */}
-                <Form.Group controlId="searchBar" className="mb-4">
-                    <Form.Control
-                        type="text"
-                        placeholder="Cerca prodotto per nome o ID"
-                        value={searchTerm}
-                        onChange={handleSearch}
-                    />
-                </Form.Group>
+            {/* Barra di ricerca */}
+            <Form.Group controlId="searchBar" className="mb-4">
+                <Form.Control
+                    type="text"
+                    placeholder="Cerca prodotto per nome o ID"
+                    value={searchTerm}
+                    onChange={handleSearch}
+                />
+            </Form.Group>
 
-                <div className="text-center mb-4">
-                    <Button variant="success" onClick={() => {
-                        setShowAddModal(true);
-                        setNewProdotto({ nome: '', descrizione: '', prezzo: '', quantita: '' });
-                    }}>
-                        Aggiungi Nuovo Prodotto
-                    </Button>
-                </div>
+            <div className="text-center mb-4">
+                <Button variant="success" onClick={() => {
+                    setShowAddModal(true);
+                    setNewProdotto({ nome: '', descrizione: '', prezzo: '', quantita: '' });
+                }}>
+                    Aggiungi Nuovo Prodotto
+                </Button>
+            </div>
 
-                {isLoading ? (
-                    <p>Caricamento prodotti...</p>
-                ) : (
-                    <Table striped bordered hover responsive>
-                        <thead>
-                            <tr>
-                                <th style={{ width: '5%' }}>ID</th>
-                                <th style={{ width: '20%' }}>Nome</th>
-                                <th className="d-none d-md-table-cell">Descrizione</th>
-                                <th className="d-none d-md-table-cell">Prezzo</th>
-                                <th className="d-none d-md-table-cell">Quantità</th>
-                                <th style={{ width: '20%' }}>Azioni</th>
+            {isLoading ? (
+                <p>Caricamento prodotti...</p>
+            ) : (
+                <Table striped bordered hover responsive>
+                    <thead>
+                        <tr>
+                            <th style={{ width: '5%' }}>ID</th>
+                            <th style={{ width: '20%' }}>Nome</th>
+                            <th className="d-none d-md-table-cell">Descrizione</th>
+                            <th className="d-none d-md-table-cell">Prezzo</th>
+                            <th className="d-none d-md-table-cell">Quantità</th>
+                            <th style={{ width: '20%' }}>Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filteredProducts.map((product) => (
+                            <tr key={product.id}>
+                                <td>{product.id}</td>
+                                <td>{product.nome}</td>
+                                <td className="d-none d-md-table-cell">{product.descrizione}</td>
+                                <td className="d-none d-md-table-cell">{product.prezzo}</td>
+                                <td className="d-none d-md-table-cell">{product.quantita}</td>
+                                <td className="text-center">
+                                    <div className="d-flex justify-content-center">
+                                        <Button
+                                            variant="danger"
+                                            className="mx-2"
+                                            onClick={() => confirmDeleteProduct(product.id)}
+                                            disabled={isDeleting}
+                                        >
+                                            <FontAwesomeIcon icon={faTrash} /> {/* Icona Elimina */}
+                                        </Button>
+                                        <Button
+                                            variant="primary"
+                                            className="mx-2"
+                                            onClick={() => openUpdateModal(product)}
+                                            disabled={isUpdating}
+                                        >
+                                            <FontAwesomeIcon icon={faEdit} /> {/* Icona Modifica */}
+                                        </Button>
+                                    </div>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            {filteredProducts.map((product) => (
-                                <tr key={product.id}>
-                                    <td>{product.id}</td>
-                                    <td>{product.nome}</td>
-                                    <td className="d-none d-md-table-cell">{product.descrizione}</td>
-                                    <td className="d-none d-md-table-cell">{product.prezzo}</td>
-                                    <td className="d-none d-md-table-cell">{product.quantita}</td>
-                                    <td className="text-center">
-                                        <div className="d-flex justify-content-center">
-                                            <Button
-                                                variant="danger"
-                                                className="mx-2"
-                                                onClick={() => confirmDeleteProduct(product.id)}
-                                                disabled={isDeleting}
-                                            >
-                                                <FontAwesomeIcon icon={faTrash} /> {/* Icona Elimina */}
-                                            </Button>
-                                            <Button
-                                                variant="primary"
-                                                className="mx-2"
-                                                onClick={() => openUpdateModal(product)}
-                                                disabled={isUpdating}
-                                            >
-                                                <FontAwesomeIcon icon={faEdit} /> {/* Icona Modifica */}
-                                            </Button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </Table>
-                )}
+                        ))}
+                    </tbody>
+                </Table>
+            )}
 
-                {/* Add Product Modal */}
-                <Modal show={showAddModal} onHide={() => setShowAddModal(false)}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Aggiungi Nuovo Prodotto</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <Form>
-                            <Form.Group controlId="formNome">
-                                <Form.Label>Nome</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="nome"
-                                    value={newProdotto.nome}
-                                    onChange={handleInputChange}
-                                    placeholder="Inserisci il nome del prodotto"
-                                />
-                            </Form.Group>
-                            <Form.Group controlId="formDescrizione" className="mt-3">
-                                <Form.Label>Descrizione</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="descrizione"
-                                    value={newProdotto.descrizione}
-                                    onChange={handleInputChange}
-                                    placeholder="Inserisci la descrizione del prodotto"
-                                />
-                            </Form.Group>
-                            <Form.Group controlId="formPrezzo" className="mt-3">
-                                <Form.Label>Prezzo</Form.Label>
-                                <Form.Control
-                                    type="number"
-                                    name="prezzo"
-                                    value={newProdotto.prezzo}
-                                    onChange={handleInputChange}
-                                    placeholder="Inserisci il prezzo del prodotto"
-                                />
-                            </Form.Group>
-                            <Form.Group controlId="formQuantita" className="mt-3">
-                                <Form.Label>Quantità</Form.Label>
-                                <Form.Control
-                                    type="number"
-                                    name="quantita"
-                                    value={newProdotto.quantita}
-                                    onChange={handleInputChange}
-                                    placeholder="Inserisci la quantità"
-                                />
-                            </Form.Group>
-                        </Form>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={() => setShowAddModal(false)}>
-                            Annulla
-                        </Button>
-                        <Button variant="primary" onClick={handleAddProduct} disabled={isAdding}>
-                            {isAdding ? "Aggiungendo..." : "Aggiungi Prodotto"}
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
+            {/* Add Product Modal */}
+            <Modal show={showAddModal} onHide={() => setShowAddModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Aggiungi Nuovo Prodotto</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group controlId="formNome">
+                            <Form.Label>Nome</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="nome"
+                                value={newProdotto.nome}
+                                onChange={handleInputChange}
+                                placeholder="Inserisci il nome del prodotto"
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="formDescrizione" className="mt-3">
+                            <Form.Label>Descrizione</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="descrizione"
+                                value={newProdotto.descrizione}
+                                onChange={handleInputChange}
+                                placeholder="Inserisci la descrizione del prodotto"
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="formPrezzo" className="mt-3">
+                            <Form.Label>Prezzo</Form.Label>
+                            <Form.Control
+                                type="number"
+                                name="prezzo"
+                                value={newProdotto.prezzo}
+                                onChange={handleInputChange}
+                                placeholder="Inserisci il prezzo del prodotto"
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="formImmagine" className="mt-3">
+                            <Form.Label>Immagine</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="immagine"
+                                value={newProdotto.immagine}
+                                onChange={handleInputChange}
+                                placeholder="Inserisci il prezzo del prodotto"
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="formQuantita" className="mt-3">
+                            <Form.Label>Quantità</Form.Label>
+                            <Form.Control
+                                type="number"
+                                name="quantita"
+                                value={newProdotto.quantita}
+                                onChange={handleInputChange}
+                                placeholder="Inserisci la quantità"
+                            />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowAddModal(false)}>
+                        Annulla
+                    </Button>
+                    <Button variant="primary" onClick={handleAddProduct} disabled={isAdding}>
+                        {isAdding ? "Aggiungendo..." : "Aggiungi Prodotto"}
+                    </Button>
+                </Modal.Footer>
+            </Modal>
 
-                {/* Update Product Modal */}
-                <Modal show={showUpdateModal} onHide={() => setShowUpdateModal(false)}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Modifica Prodotto</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <Form>
-                            <Form.Group controlId="formNome">
-                                <Form.Label>Nome</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="nome"
-                                    value={newProdotto.nome}
-                                    onChange={handleInputChange}
-                                    placeholder="Inserisci il nome del prodotto"
-                                />
-                            </Form.Group>
-                            <Form.Group controlId="formDescrizione" className="mt-3">
-                                <Form.Label>Descrizione</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="descrizione"
-                                    value={newProdotto.descrizione}
-                                    onChange={handleInputChange}
-                                    placeholder="Inserisci la descrizione del prodotto"
-                                />
-                            </Form.Group>
-                            <Form.Group controlId="formPrezzo" className="mt-3">
-                                <Form.Label>Prezzo</Form.Label>
-                                <Form.Control
-                                    type="number"
-                                    name="prezzo"
-                                    value={newProdotto.prezzo}
-                                    onChange={handleInputChange}
-                                    placeholder="Inserisci il prezzo del prodotto"
-                                />
-                            </Form.Group>
-                            <Form.Group controlId="formQuantita" className="mt-3">
-                                <Form.Label>Quantità</Form.Label>
-                                <Form.Control
-                                    type="number"
-                                    name="quantita"
-                                    value={newProdotto.quantita}
-                                    onChange={handleInputChange}
-                                    placeholder="Inserisci la quantità"
-                                />
-                            </Form.Group>
-                        </Form>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={() => setShowUpdateModal(false)}>
-                            Annulla
-                        </Button>
-                        <Button variant="primary" onClick={handleUpdateProduct} disabled={isUpdating}>
-                            {isUpdating ? "Modificando..." : "Modifica Prodotto"}
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
+            <Modal show={showUpdateModal} onHide={() => setShowUpdateModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Modifica Prodotto</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group controlId="formNome">
+                            <Form.Label>Nome</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="nome"
+                                value={newProdotto.nome}
+                                onChange={handleInputChange}
+                                placeholder="Inserisci il nome del prodotto"
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="formDescrizione" className="mt-3">
+                            <Form.Label>Descrizione</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="descrizione"
+                                value={newProdotto.descrizione}
+                                onChange={handleInputChange}
+                                placeholder="Inserisci la descrizione del prodotto"
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="formPrezzo" className="mt-3">
+                            <Form.Label>Prezzo</Form.Label>
+                            <Form.Control
+                                type="number"
+                                name="prezzo"
+                                value={newProdotto.prezzo}
+                                onChange={handleInputChange}
+                                placeholder="Inserisci il prezzo del prodotto"
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="formImmagine" className="mt-3">
+                            <Form.Label>Immagine</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="immagine"
+                                value={newProdotto.immagine}
+                                onChange={handleInputChange}
+                                placeholder="Inserisci il prezzo del prodotto"
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="formQuantita" className="mt-3">
+                            <Form.Label>Quantità</Form.Label>
+                            <Form.Control
+                                type="number"
+                                name="quantita"
+                                value={newProdotto.quantita}
+                                onChange={handleInputChange}
+                                placeholder="Inserisci la quantità"
+                            />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowUpdateModal(false)}>
+                        Annulla
+                    </Button>
+                    <Button
+                        variant="primary"
+                        onClick={handleUpdateProduct}
+                        disabled={isUpdating}
+                    >
+                        {isUpdating ? "Modificando..." : "Modifica Prodotto"}
+                    </Button>
+                </Modal.Footer>
+            </Modal>
 
-                {/* Delete Confirmation Modal */}
-                <Modal show={showConfirmModal} onHide={() => setShowConfirmModal(false)}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Conferma Eliminazione</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>Sei sicuro di voler eliminare il prodotto selezionato?</Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={() => setShowConfirmModal(false)}>
-                            Annulla
-                        </Button>
-                        <Button variant="danger" onClick={handleDeleteProduct} disabled={isDeleting}>
-                            {isDeleting ? "Eliminando..." : "Elimina"}
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
+            {/* Delete Confirmation Modal */}
+            <Modal show={showConfirmModal} onHide={() => setShowConfirmModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Conferma Eliminazione</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Sei sicuro di voler eliminare il prodotto selezionato?</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowConfirmModal(false)}>
+                        Annulla
+                    </Button>
+                    <Button variant="danger" onClick={handleDeleteProduct} disabled={isDeleting}>
+                        {isDeleting ? "Eliminando..." : "Elimina"}
+                    </Button>
+                </Modal.Footer>
+            </Modal>
 
-
-            </Container>
-        </div>
+            <Button variant="success" onClick={() => {
+                setShowAddModal(true);
+                setNewProdotto({ nome: '', descrizione: '', prezzo: '', immagine: '', quantita: '' });
+            }}>
+                Aggiungi Nuovo Prodotto
+            </Button>
+        </Container>
     );
 }
