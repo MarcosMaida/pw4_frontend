@@ -4,6 +4,9 @@ import React, { useEffect, useState } from 'react';
 import styles from './inventory.module.css';
 import { Button, Modal, Form, Table, Container } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
+
 
 export default function InventoryPage() {
     const [products, setProducts] = useState([]);
@@ -16,7 +19,7 @@ export default function InventoryPage() {
         nome: '',
         descrizione: '',
         prezzo: '',
-        immagine:'',
+        immagine: '',
         quantita: '',
     });
 
@@ -24,6 +27,9 @@ export default function InventoryPage() {
     const [isAdding, setIsAdding] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
+
+    // Stato per la barra di ricerca
+    const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
         const fetchProdotti = async () => {
@@ -47,8 +53,19 @@ export default function InventoryPage() {
         fetchProdotti();
     }, []);
 
+
+    const handleSearch = (event) => {
+        setSearchTerm(event.target.value);
+    };
+
+
+    const filteredProducts = products.filter((product) =>
+        product.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.id.toString().includes(searchTerm)
+    );
+
     const handleAddProduct = async () => {
-        setIsAdding(true); // Start adding
+        setIsAdding(true);
         try {
             const response = await fetch('http://localhost:8080/api/prodotti/add', {
                 credentials: 'include',
@@ -62,7 +79,7 @@ export default function InventoryPage() {
             const addedProdotto = await response.json();
             setProducts([...products, addedProdotto]);
             setShowAddModal(false);
-            setNewProdotto({ nome: '', descrizione: '', prezzo: '', immagine:'', quantita: '' });
+            setNewProdotto({ nome: '', descrizione: '', prezzo: '', immagine: '', quantita: '' });
         } catch (error) {
             console.error("Failed to add product:", error);
         } finally {
@@ -77,7 +94,7 @@ export default function InventoryPage() {
             nome: product.nome,
             descrizione: product.descrizione,
             prezzo: product.prezzo,
-            immagine:product.immagine,
+            immagine: product.immagine,
             quantita: product.quantita
         });
         setShowUpdateModal(true);
@@ -105,7 +122,7 @@ export default function InventoryPage() {
             ));
             setShowUpdateModal(false);
             setSelectedProduct(null);
-            setNewProdotto({ nome: '', descrizione: '', prezzo: '', immagine:'', quantita: '' });
+            setNewProdotto({ nome: '', descrizione: '', prezzo: '', immagine: '', quantita: '' });
         } catch (error) {
             console.error("Failed to update product:", error);
         } finally {
@@ -119,7 +136,7 @@ export default function InventoryPage() {
     };
 
     const handleDeleteProduct = async () => {
-        setIsDeleting(true); // Start deleting
+        setIsDeleting(true);
         try {
             const response = await fetch(`http://localhost:8080/api/prodotti/${selectedProduct}`, {
                 credentials: 'include',
@@ -151,48 +168,69 @@ export default function InventoryPage() {
         <Container>
             <h1 className={styles.heading}>Gestione del Magazzino</h1>
 
+            {/* Barra di ricerca */}
+            <Form.Group controlId="searchBar" className="mb-4">
+                <Form.Control
+                    type="text"
+                    placeholder="Cerca prodotto per nome o ID"
+                    value={searchTerm}
+                    onChange={handleSearch}
+                />
+            </Form.Group>
+
+            <div className="text-center mb-4">
+                <Button variant="success" onClick={() => {
+                    setShowAddModal(true);
+                    setNewProdotto({ nome: '', descrizione: '', prezzo: '', quantita: '' });
+                }}>
+                    Aggiungi Nuovo Prodotto
+                </Button>
+            </div>
+
             {isLoading ? (
                 <p>Caricamento prodotti...</p>
             ) : (
-                <Table striped bordered hover>
+                <Table striped bordered hover responsive>
                     <thead>
-                    <tr>
-                        <th style={{ width: '5%' }}>ID</th>
-                        <th style={{ width: '20%' }}>Nome</th>
-                        <th style={{ width: '30%' }}>Descrizione</th>
-                        <th style={{ width: '15%' }}>Prezzo</th>
-                        <th style={{ width: '10%' }}>Quantità</th>
-                        <th style={{ width: '20%' }}>Azioni</th>
-                    </tr>
+                        <tr>
+                            <th style={{ width: '5%' }}>ID</th>
+                            <th style={{ width: '20%' }}>Nome</th>
+                            <th className="d-none d-md-table-cell">Descrizione</th>
+                            <th className="d-none d-md-table-cell">Prezzo</th>
+                            <th className="d-none d-md-table-cell">Quantità</th>
+                            <th style={{ width: '20%' }}>Azioni</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {products.map((product) => (
-                        <tr key={product.id}>
-                            <td>{product.id}</td>
-                            <td>{product.nome}</td>
-                            <td>{product.descrizione}</td>
-                            <td>{product.prezzo}</td>
-                            <td>{product.quantita}</td>
-                            <td className="text-center">
-                                <Button
-                                    variant="danger"
-                                    className="mx-3"
-                                    onClick={() => confirmDeleteProduct(product.id)}
-                                    disabled={isDeleting}
-                                >
-                                    {isDeleting ? "Eliminando..." : "Elimina"}
-                                </Button>
-                                <Button
-                                    variant="primary"
-                                    className="mx-3"
-                                    onClick={() => openUpdateModal(product)}
-                                    disabled={isUpdating}
-                                >
-                                    {isUpdating ? "Modificando..." : "Modifica"}
-                                </Button>
-                            </td>
-                        </tr>
-                    ))}
+                        {filteredProducts.map((product) => (
+                            <tr key={product.id}>
+                                <td>{product.id}</td>
+                                <td>{product.nome}</td>
+                                <td className="d-none d-md-table-cell">{product.descrizione}</td>
+                                <td className="d-none d-md-table-cell">{product.prezzo}</td>
+                                <td className="d-none d-md-table-cell">{product.quantita}</td>
+                                <td className="text-center">
+                                    <div className="d-flex justify-content-center">
+                                        <Button
+                                            variant="danger"
+                                            className="mx-2"
+                                            onClick={() => confirmDeleteProduct(product.id)}
+                                            disabled={isDeleting}
+                                        >
+                                            <FontAwesomeIcon icon={faTrash} /> {/* Icona Elimina */}
+                                        </Button>
+                                        <Button
+                                            variant="primary"
+                                            className="mx-2"
+                                            onClick={() => openUpdateModal(product)}
+                                            disabled={isUpdating}
+                                        >
+                                            <FontAwesomeIcon icon={faEdit} /> {/* Icona Modifica */}
+                                        </Button>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </Table>
             )}
@@ -260,11 +298,7 @@ export default function InventoryPage() {
                     <Button variant="secondary" onClick={() => setShowAddModal(false)}>
                         Annulla
                     </Button>
-                    <Button
-                        variant="primary"
-                        onClick={handleAddProduct}
-                        disabled={isAdding}
-                    >
+                    <Button variant="primary" onClick={handleAddProduct} disabled={isAdding}>
                         {isAdding ? "Aggiungendo..." : "Aggiungi Prodotto"}
                     </Button>
                 </Modal.Footer>
@@ -342,6 +376,7 @@ export default function InventoryPage() {
                 </Modal.Footer>
             </Modal>
 
+            {/* Delete Confirmation Modal */}
             <Modal show={showConfirmModal} onHide={() => setShowConfirmModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Conferma Eliminazione</Modal.Title>
@@ -351,11 +386,7 @@ export default function InventoryPage() {
                     <Button variant="secondary" onClick={() => setShowConfirmModal(false)}>
                         Annulla
                     </Button>
-                    <Button
-                        variant="danger"
-                        onClick={handleDeleteProduct}
-                        disabled={isDeleting}
-                    >
+                    <Button variant="danger" onClick={handleDeleteProduct} disabled={isDeleting}>
                         {isDeleting ? "Eliminando..." : "Elimina"}
                     </Button>
                 </Modal.Footer>
@@ -363,7 +394,7 @@ export default function InventoryPage() {
 
             <Button variant="success" onClick={() => {
                 setShowAddModal(true);
-                setNewProdotto({ nome: '', descrizione: '', prezzo: '', immagine:'', quantita: '' });
+                setNewProdotto({ nome: '', descrizione: '', prezzo: '', immagine: '', quantita: '' });
             }}>
                 Aggiungi Nuovo Prodotto
             </Button>

@@ -1,14 +1,15 @@
 /*!* prenotazioni.module.css *!*/
 
 /*!* Container styling *!*/
-/*.container {*/
-/*    max-width: 1200px;*/
-/*    margin: 0 auto;*/
-/*    padding: 20px;*/
-/*    background-color: #f9f9f9;*/
-/*    border-radius: 8px;*/
-/*    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);*/
-/*}*/
+.container {
+    margin-top: 80px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
 /*!* Heading styling *!*/
 /*.heading {*/
