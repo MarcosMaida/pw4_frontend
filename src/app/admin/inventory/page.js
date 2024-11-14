@@ -166,7 +166,7 @@ export default function InventoryPage() {
 
     return (
         <Container>
-            <h1 className={styles.heading}>Gestione del Magazzino</h1>
+            <h1 className={styles.container}>Gestione del Magazzino</h1>
 
             {/* Barra di ricerca */}
             <Form.Group controlId="searchBar" className="mb-4">
@@ -391,13 +391,6 @@ export default function InventoryPage() {
                     </Button>
                 </Modal.Footer>
             </Modal>
-
-            <Button variant="success" onClick={() => {
-                setShowAddModal(true);
-                setNewProdotto({ nome: '', descrizione: '', prezzo: '', immagine: '', quantita: '' });
-            }}>
-                Aggiungi Nuovo Prodotto
-            </Button>
         </Container>
     );
 }

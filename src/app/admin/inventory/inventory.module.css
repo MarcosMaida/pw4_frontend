@@ -1,8 +1,8 @@
 .container {
-    margin-top: 80px;
+    margin-top: 8vh;
     padding: var(--container-padding);
     width: 100%;
-    min-height: 100vh;
+    min-height: 30vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -19,4 +19,14 @@
     margin-bottom: 2rem;
 }
 
-
+/* Stili responsivi */
+@media (max-width: 768px) {
+    .container {
+        font-size: 50px;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        padding: calc(var(--container-padding) / 2); /* Riduce il padding su schermi piccoli */
+        gap: 10px; /* Riduce il gap tra gli elementi */
+    }
+}
