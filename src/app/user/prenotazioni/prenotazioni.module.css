@@ -96,6 +96,7 @@
 .status_shipped { background-color: #007bff; }
 .status_cancelled { background-color: #dc3545; }
 
+
 /* Stile per comment box */
 .comment_box {
     width: 100%;
@@ -134,18 +135,6 @@
     outline: none;
 }
 
-.comment_box button {
-    width: 100%;
-    padding: 12px;
-    background-color: #f3bc9f;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    margin-top: 15px;
-    font-weight: bold;
-}
 
 /* Responsive styles */
 @media (max-width: 768px) {

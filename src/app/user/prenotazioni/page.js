@@ -145,7 +145,6 @@ export default function PrenotazioniPage() {
                                 onChange={(e) => setCommento(e.target.value)} // Gestore di aggiornamento stato
                                 required
                             ></textarea>
-                            <button type="submit">Invia Commento</button>
                         </form>
                     </div>
                 </div>
