@@ -1,58 +1,179 @@
-.container {
-  margin-top: 80px;
-    font-family: 'Georgia', serif;
-    padding: 2rem;
-    background-color: #ffffff;
-    color: #404040;
-  }
-  
-  .heading {
-    font-size: 2.5rem;
-    color: #404040;
-    text-align: center;
-  }
-  
-  .section {
-    margin-bottom: 2rem;
-    padding: 1rem;
-    background-color: #F8F4F4;
-    border-radius: 8px;
-  }
-  
-  .orderList {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  .orderItem {
-    padding: 0.5rem 0;
-    border-bottom: 1px solid #D5BEBE;
-  }
-  
-  .status {
-    font-weight: bold;
-    color: #D5BEBE;
-  }
-  
-  .commentBox {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #D5BEBE;
-    border-radius: 4px;
-    margin-top: 1rem;
-  }
-  
-  .submitButton {
-    padding: 0.5rem 1rem;
-    background-color: #D5BEBE;
-    border: none;
-    color: #fff;
-    cursor: pointer;
-    border-radius: 4px;
-    margin-top: 0.5rem;
-  }
-  
-  .submitButton:hover {
-    background-color: #bca2a2;
-  }
-  
+.mainContainer{  
+  display: flex;  
+  justify-content: center;  
+  align-content: center;  
+  flex-direction: column;  
+  height: 100vh;  
+ 
+
+}
+.subContainer1{  
+  width: 1000px;
+  display: flex;  
+  justify-content: space-between;  
+  flex-direction: row;  
+  height: 400px;
+}
+.subContainer2{  
+  margin-top: 20px;  
+  height: 200px;  ;
+}
+.box1{    
+  width: 100%;    
+  max-width: 45%;    
+  max-height: 100%;    
+  overflow-y: auto;    
+  padding-bottom: 20px;    
+  padding-left: 20px;    
+  padding-right: 20px;    
+  background-color: #fff;    
+  border: 1px solid #ddd;    
+  border-radius: 8px;    
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.box1 h2 {  
+  position: sticky;  
+  top: 0;  
+  background-color: #fff;  
+  margin: 0;  
+  text-align: center;  
+  color: #333;  
+  border-bottom: 1px solid #ddd;  
+  z-index: 1;
+}
+.h2{  
+  padding-top: 20px;  
+  height: 60px;  
+  background: #fff;  
+  width: 100%;  
+  text-align:  center;
+}
+.box2 h2 {  
+  position: sticky;  
+  top: 0;  
+  background-color: #fff;  
+  margin: 0;  
+  text-align: center;  
+  color: #333;  
+  border-bottom: 1px solid #ddd;  
+  z-index: 1;
+}
+.box2{  
+  width: 100%;  
+  max-width: 45%;  
+  max-height: 100%;          
+  overflow-y: auto;          
+  padding-bottom: 20px;  
+  padding-left: 20px;  
+  padding-right: 20px;  
+  background-color: #ffffff;  
+  border: 1px solid #c5c3c1;  
+  border-radius: 8px;  
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.box3{  
+  height: 100%;
+}
+.tittle{  
+  text-align: center;  
+  margin-bottom: 50px;
+}
+.comment_box button {  
+  display: block;  
+  width: 100%;  
+  padding: 12px;  
+  background-color: #f3bc9f;  
+  color: white;  
+  border: none;  
+  border-radius: 4px;  
+  font-size: 16px;  
+  cursor: pointer;  
+  margin-top: 15px;
+}/* Hover del pulsante */
+.comment_box button:hover {  
+  background-color: #e9ab8a;
+}
+.comment_box {  
+  max-width: 100%;  
+  margin: 20px auto;  
+  padding: 20px;  
+  border: 1px solid #bbb8b8;  
+  border-radius: 8px;  
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  
+  background-color: #f9f9f9;  
+}
+.comment_box h2 {  
+  text-align: center;  
+  margin-bottom: 20px;  
+  font-family: Arial, sans-serif;
+}
+.comment_box textarea {  
+  width: 100%;  
+  height: 80px;  
+  padding: 10px;  
+  border-radius: 4px;  
+  border: 1px solid #ccc;  
+  resize: vertical;  
+  font-size: 16px;  
+  font-family: Arial, sans-serif;
+}
+.order_list {  
+  list-style-type: none;  
+  padding: 0;
+}
+.order_list li {  
+  padding: 15px;  
+  border-bottom: 1px solid #eee;  
+  display: flex;  
+  justify-content: space-between;  
+  align-items: center;
+}
+.order_list li:last-child {  
+  border-bottom: none;
+}
+.order_details {  
+  display: flex;  
+  justify-content: space-between;  
+  padding: 10px 0;  
+  align-items: center;
+}
+.status_delivered {  
+  background-color: #28a745;  
+  margin-left: 20px;
+  padding: 5px 10px; 
+  border-radius: 4px;  
+  font-weight: bold;  
+  text-align: center;
+}
+.status_processing {  
+  background-color: #ffa500;  
+  margin-left: 20px;
+  padding: 5px 10px; 
+  border-radius: 4px;  
+  font-weight: bold;  
+  text-align: center;
+}
+.status_shipped {  
+  background-color: #007bff;  
+  margin-left: 20px;
+  padding: 5px 10px; 
+  border-radius: 4px;  
+  font-weight: bold;  
+  text-align: center;
+}
+.status_cancelled {  
+  background-color: #dc3545;  
+  margin-left: 20px;
+  padding: 5px 10px; 
+  border-radius: 4px;  
+  font-weight: bold;  
+  text-align: center;
+}
+.sfondo{
+  background-image: url('C:\Users\NicholasOliverio\pw4_frontend\pw4_frontend\public\images\background.svg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+}

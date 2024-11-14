@@ -29,46 +29,68 @@ export default function UserDashboardPage() {
     };
 
     return (
-        <div className={styles.container}>
-            <h1 className={styles.heading}>Dashboard Utente</h1>
-
-            {/* Sezione Ordini Attuali */}
-            <section className={styles.section}>
-                <h2>Ordini Attivi</h2>
-                <ul className={styles.orderList}>
-                    {orders.map((order) => (
-                        <li key={order.id} className={styles.orderItem}>
-                            {order.name} - <span className={styles.status}>{order.status}</span>
-                        </li>
-                    ))}
-                </ul>
-            </section>
-
-            {/* Sezione Storico Ordini */}
-            <section className={styles.section}>
-                <h2>Storico Ordini</h2>
-                <ul className={styles.orderList}>
-                    {orderHistory.map((order) => (
-                        <li key={order.id} className={styles.orderItem}>
-                            {order.name} - <span className={styles.status}>{order.status}</span>
-                        </li>
-                    ))}
-                </ul>
-            </section>
-
-            {/* Sezione Commenti */}
-            <section className={styles.section}>
-                <h2>Lascia un Commento</h2>
-                <textarea
-                    className={styles.commentBox}
-                    value={comment}
-                    onChange={(e) => setComment(e.target.value)}
-                    placeholder="Scrivi un messaggio per il pasticcere..."
-                />
-                <button className={styles.submitButton} onClick={handleCommentSubmit}>
-                    Invia
-                </button>
-            </section>
-        </div>
+<div class={styles.sfondo}>
+<div class={styles.mainContainer}>  
+    <h1 class={styles.tittle}>Ciao Utente</h1>  
+        <div class={styles.subContainer1}>    
+            <div class={styles.box1}>      
+                <h2 class={styles.h2}>Cronologia degli Ordini</h2>      
+                <ul class={styles.order_list}>          
+                    <li>Ordine #12345 - 12/11/2023</li>        
+                    <li>Ordine #12346 - 13/11/2023</li>        
+                    <li>Ordine #12347 - 14/11/2023</li>        
+                    <li>Ordine #12348 - 15/11/2023</li>        
+                    <li>Ordine #12345 - 12/11/2023</li>        
+                    <li>Ordine #12346 - 13/11/2023</li>     
+                    <li>Ordine #12347 - 14/11/2023</li>        
+                    <li>Ordine #12348 - 15/11/2023</li>      
+                </ul>    
+            </div>    
+        <div class={styles.box2}>      
+                        <h2 class={styles.h2} >Storico Ordini e Stato</h2>      
+            <ul class={styles.order_list}>        
+                <li>          
+                    <div class={styles.order_list}>            
+                        <span>Ordine #12345 - 12/11/2023</span>
+                        <span class={styles.status_processing}>In elaborazione</span>          
+                    </div>        
+                </li>        
+                <li>          
+                    <div class={styles.order_list}>            
+                        <span>Ordine #12346 - 13/11/2023</span>            
+                        <span class={styles.status_shipped}>Spedito</span>          
+                    </div>        
+                </li>        
+                <li>          
+                    <div class={styles.order_list}>            
+                        <span class={styles.order_details_intern}>Ordine #12347 - 14/11/2023</span>            
+                        <span class={styles.status_delivered}>Consegnato</span>          
+                    </div>        
+                </li>        
+                <li>          
+                    <div class={styles.order_list}>            
+                        <span>Ordine #12348 - 15/11/2023</span>            
+                        <span class={styles.status_cancelled}>Annullato</span>          
+                    </div>        
+                </li>      
+            </ul>   
+        </div>  
+        
+    </div>  
+    <div class={styles.subContainer2}>    
+        <div class={styles.box3}>      
+            <div class={styles.comment_box}>      
+                <h2>Lascia un commento</h2>      
+                <form action="/submit_comment" method="POST">        
+                    <label for="comment">Commento:</label>        
+                    <textarea id="comment" name="comment" placeholder="Scrivi qui il tuo commento..." required></textarea>        
+                    <button type="submit">Invia Commento</button>      
+                </form>    
+            </div>    
+        </div>  
+      </div>
+</div>
+</div>
     );
+
 }
