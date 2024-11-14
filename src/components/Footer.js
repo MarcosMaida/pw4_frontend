@@ -1,9 +1,32 @@
 // src/components/Footer.js
 
 "use client";
+import { useEffect, useState } from 'react';
 import styles from './Footer.module.css';
+import Cookies from 'js-cookie';
 
 export default function Footer() {
+    const [userRole, setUserRole] = useState(null);
+
+    useEffect(() => {
+        const authToken = Cookies.get('SESSION_COOKIE');
+        if (authToken) {
+            fetch('http://localhost:8080/api/auth/profile', { credentials: 'include' })
+                .then(response => response.json())
+                .then(userData => {
+                    setUserRole(userData.ruolo);
+                })
+                .catch(error => {
+                    console.error('Error fetching user profile:', error);
+                });
+        }
+    }, []);
+
+
+    if (userRole === 'amministratore') {
+        return null;
+    }
+
     return (
         <footer className={styles.footer}>
             <div className={styles.infoContainer}>
