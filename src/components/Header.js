@@ -3,16 +3,13 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import styles from './Header.module.css';
+import styles from './header.module.css';
 import Cookies from 'js-cookie';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBell } from '@fortawesome/free-solid-svg-icons';
 
 export default function Header() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [notifications, setNotifications] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
-    const [showNotifications, setShowNotifications] = useState(false);
     const [userRole, setUserRole] = useState(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const router = useRouter();
@@ -31,11 +28,6 @@ export default function Header() {
         } catch (error) {
             console.error('Error fetching orders:', error);
         }
-    };
-
-    const handleNotificationClick = () => {
-        setShowNotifications(!showNotifications);
-        setUnreadCount(0); // Reset count when notifications are opened
     };
 
     useEffect(() => {
@@ -125,6 +117,11 @@ export default function Header() {
                     <Link href="/contact" className={styles.link} onClick={handleLinkClick}>Contatti</Link>
                 )}
             </nav>
+
+
         </header>
+
+
     );
+
 }
