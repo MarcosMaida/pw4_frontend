@@ -1,18 +1,18 @@
 .container {
-    font-family: 'Georgia', serif;
     padding: 2rem;
-    margin-top: 80px; /* Sposta tutto verso il basso di 80px, regola in base all'altezza dell'header */
+    margin-top: 80px;
     background-color: #ffffff;
     color: #404040;
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
     box-sizing: border-box;
 }
 
-
-.orderContainer{
+.orderContainer {
     display: flex;
     justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 .heading {
@@ -37,7 +37,8 @@
     height: 70%;
 }
 
-.orderButtons{
+
+.orderButtons {
     display: flex;
     justify-content: space-around;
 }
@@ -49,25 +50,36 @@
 
 .actions {
     margin-top: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.acceptButton, .rejectButton {
+    padding: 0.5rem 1rem;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .acceptButton {
-    padding: 0.5rem 1rem;
     background-color: #4CAF50;
     border: none;
-    color: #fff;
-    cursor: pointer;
-    border-radius: 4px;
-    margin-right: 0.5rem;
+    transition: transform 0.3s ease;
 }
 
 .rejectButton {
-    padding: 0.5rem 1rem;
     background-color: #E74C3C;
     border: none;
-    color: #fff;
-    cursor: pointer;
-    border-radius: 4px;
+    transition: transform 0.3s ease;
+}
+
+.acceptButton:hover,
+.rejectButton:hover {
+    transform: scale(1.1);
 }
 
 .acceptButton:disabled,
@@ -75,4 +87,57 @@
     background-color: #cccccc;
     cursor: not-allowed;
 }
-  
+
+
+.icon {
+    font-size: 1.2rem;
+}
+
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+        margin-top: 60px;
+    }
+
+    .heading {
+        font-size: 2rem;
+    }
+
+    .orderContainer {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .orderItem {
+        width: 100%;
+        max-width: 450px;
+        margin-bottom: 1rem;
+    }
+
+    .acceptButton,
+    .rejectButton {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+    }
+    
+    .icon {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .heading {
+        font-size: 1.8rem;
+    }
+
+    .orderItem {
+        width: 90%;
+    }
+
+    .acceptButton,
+    .rejectButton {
+        padding: 1rem 2rem;
+        font-size: 1.2rem;
+    }
+}

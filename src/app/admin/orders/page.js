@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import styles from './orders.module.css';
 import { Button, Modal, Table, Container, Form } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 export default function OrdersPage() {
     const [ordini, setOrdini] = useState([]);
@@ -17,7 +19,7 @@ export default function OrdersPage() {
     // Search term and pagination states
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
-    const ORDERS_PER_PAGE = 5; // Display 5 orders per page
+    const ORDERS_PER_PAGE = 5;
 
     const fetchOrdini = async () => {
         try {
@@ -43,10 +45,9 @@ export default function OrdersPage() {
         fetchOrdini();
     }, []);
 
-    // Search handling
     const handleSearch = (event) => {
         setSearchTerm(event.target.value);
-        setCurrentPage(1); // Reset to page 1 when search changes
+        setCurrentPage(1);
     };
 
     const filteredOrdini = ordini.filter((order) =>
@@ -107,7 +108,6 @@ export default function OrdersPage() {
         setShowRejectConfirmModal(true);
     };
 
-    // Pagination calculations
     const totalOrders = filteredOrdini.length;
     const totalPages = Math.ceil(totalOrders / ORDERS_PER_PAGE);
     const startIndex = (currentPage - 1) * ORDERS_PER_PAGE;
@@ -121,7 +121,6 @@ export default function OrdersPage() {
             <Container>
                 <h1 className={styles.heading}>Gestione Ordini</h1>
 
-                {/* Search Bar */}
                 <Form.Group controlId="searchBar" className="mb-4">
                     <Form.Control
                         type="text"
@@ -137,47 +136,46 @@ export default function OrdersPage() {
                     <>
                         <Table striped bordered hover responsive>
                             <thead>
-                            <tr>
-                                <th style={{ width: '25%' }}>Descrizione</th>
-                                <th style={{ width: '10%' }}>Stato Ordine</th>
-                                <th style={{ width: '15%' }}>Totale</th>
-                                <th style={{ width: '10%' }}>Data Ritiro</th>
-                                <th style={{ width: '10%' }}>Commento</th>
-                                <th style={{ width: '10%' }}>Azioni</th>
-                            </tr>
+                                <tr>
+                                    <th style={{ width: '25%' }}>Descrizione</th>
+                                    <th style={{ width: '10%' }}>Stato Ordine</th>
+                                    <th style={{ width: '15%' }}>Totale</th>
+                                    <th style={{ width: '10%' }}>Data Ritiro</th>
+                                    <th style={{ width: '10%' }}>Commento</th>
+                                    <th style={{ width: '10%' }}>Azioni</th>
+                                </tr>
                             </thead>
                             <tbody>
-                            {currentOrders.map((order) => (
-                                <tr key={order.id}>
-                                    <td>
-                                        {Array.isArray(order.prodotti) ? (
-                                            order.prodotti.map((prodotto, index) => (
-                                                <div key={index}>
-                                                    <strong>{prodotto.nome}</strong>: {prodotto.descrizione} - {prodotto.quantita} pcs
-                                                </div>
-                                            ))
-                                        ) : (
-                                            <span>{order.prodotti}</span>
-                                        )}
-                                    </td>
-                                    <td>{order.stato}</td>
-                                    <td>{order.totale}</td>
-                                    <td>{order.dataRitiro}</td>
-                                    <td>{order.commento}</td>
-                                    <td className="text-center">
-                                        <Button variant="success" className="me-2" onClick={() => openAcceptConfirmModal(order.id)}>
-                                            Accetta
-                                        </Button>
-                                        <Button variant="danger" onClick={() => openRejectConfirmModal(order.id)}>
-                                            Rifiuta
-                                        </Button>
-                                    </td>
-                                </tr>
-                            ))}
+                                {currentOrders.map((order) => (
+                                    <tr key={order.id}>
+                                        <td>
+                                            {Array.isArray(order.prodotti) ? (
+                                                order.prodotti.map((prodotto, index) => (
+                                                    <div key={index}>
+                                                        <strong>{prodotto.nome}</strong>: {prodotto.descrizione} - {prodotto.quantita} pcs
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <span>{order.prodotti}</span>
+                                            )}
+                                        </td>
+                                        <td>{order.stato}</td>
+                                        <td>{order.totale}</td>
+                                        <td>{order.dataRitiro}</td>
+                                        <td>{order.commento}</td>
+                                        <td className="text-center">
+                                            <Button variant="success" className="mx-2" onClick={() => openAcceptConfirmModal(order.id)}>
+                                                <FontAwesomeIcon icon={faCheck} />
+                                            </Button>
+                                            <Button variant="danger" onClick={() => openRejectConfirmModal(order.id)}>
+                                                <FontAwesomeIcon icon={faTimes} />
+                                            </Button>
+                                        </td>
+                                    </tr>
+                                ))}
                             </tbody>
                         </Table>
 
-                        {/* Pagination Controls */}
                         <div className="d-flex justify-content-between">
                             <Button variant="secondary" onClick={goToPreviousPage} disabled={currentPage === 1}>
                                 Precedente
