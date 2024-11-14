@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { Button, Modal, Form } from 'react-bootstrap';
+import React, {useEffect, useState} from 'react';
+import {Button, Modal, Form} from 'react-bootstrap';
 import ProdottiGrid from "@/components/prodotti/prodotti-grid";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Cookies from "js-cookie";
@@ -42,7 +42,7 @@ export default function PrenotazioniPage() {
         const authToken = Cookies.get('SESSION_COOKIE');
         if (authToken) {
             setIsLoggedIn(true);
-            fetch('http://localhost:8080/api/auth/profile', { credentials: 'include' })
+            fetch('http://localhost:8080/api/auth/profile', {credentials: 'include'})
                 .then(response => response.json())
                 .then(userData => {
                     setUserEmail(userData.email);
@@ -61,7 +61,7 @@ export default function PrenotazioniPage() {
                 const response = await fetch('http://localhost:8080/api/prodotti', {
                     credentials: 'include',
                     method: 'GET',
-                    headers: { 'Content-Type': 'application/json' }
+                    headers: {'Content-Type': 'application/json'}
                 });
                 const data = await response.json();
                 setProducts(data);
@@ -108,7 +108,7 @@ export default function PrenotazioniPage() {
             const response = await fetch('http://localhost:8080/api/ordini', {
                 credentials: 'include',
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(orderRequest)
             });
 
@@ -140,11 +140,19 @@ export default function PrenotazioniPage() {
     return (
         <div className={styles.prenotazionePage}>
             <h1>Prenotazione</h1>
-
+            <div className="d-flex justify-content-center mb-5">
+                <Button
+                    variant="primary"
+                    onClick={() => setShowAddModal(true)}
+                    disabled={isLoading}
+                >
+                    {isLoading ? "Caricamento..." : "Conferma Ordine"}
+                </Button>
+            </div>
             {isLoading ? (
                 <p>Caricamento...</p>
             ) : (
-                <ProdottiGrid prodotti={currentProducts} onQuantityChange={handleQuantityChange} />
+                <ProdottiGrid prodotti={currentProducts} onQuantityChange={handleQuantityChange}/>
             )}
 
             <div className="d-flex justify-content-between mt-3 mb-5">
