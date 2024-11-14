@@ -1,12 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from './inventory.module.css';
-import { Button, Modal, Form, Table, Container } from "react-bootstrap";
+import {Button, Modal, Form, Table, Container, Pagination} from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
-
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faTrash, faEdit} from '@fortawesome/free-solid-svg-icons';
 
 export default function InventoryPage() {
     const [products, setProducts] = useState([]);
@@ -22,14 +21,14 @@ export default function InventoryPage() {
         immagine: '',
         quantita: '',
     });
-
-    // Loading states for different actions
     const [isAdding, setIsAdding] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
-
-    // Stato per la barra di ricerca
     const [searchTerm, setSearchTerm] = useState("");
+
+    // Stato per la paginazione
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
 
     useEffect(() => {
         const fetchProdotti = async () => {
@@ -37,7 +36,7 @@ export default function InventoryPage() {
                 const response = await fetch('http://localhost:8080/api/prodotti', {
                     credentials: 'include',
                     method: 'GET',
-                    headers: { 'Content-Type': 'application/json' }
+                    headers: {'Content-Type': 'application/json'}
                 });
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -53,11 +52,10 @@ export default function InventoryPage() {
         fetchProdotti();
     }, []);
 
-
     const handleSearch = (event) => {
         setSearchTerm(event.target.value);
+        setCurrentPage(1); // Reset the page when searching
     };
-
 
     const filteredProducts = products.filter((product) =>
         product.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -70,7 +68,7 @@ export default function InventoryPage() {
             const response = await fetch('http://localhost:8080/api/prodotti/add', {
                 credentials: 'include',
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(newProdotto)
             });
             if (!response.ok) {
@@ -79,7 +77,7 @@ export default function InventoryPage() {
             const addedProdotto = await response.json();
             setProducts([...products, addedProdotto]);
             setShowAddModal(false);
-            setNewProdotto({ nome: '', descrizione: '', prezzo: '', immagine: '', quantita: '' });
+            setNewProdotto({nome: '', descrizione: '', prezzo: '', immagine: '', quantita: ''});
         } catch (error) {
             console.error("Failed to add product:", error);
         } finally {
@@ -108,7 +106,7 @@ export default function InventoryPage() {
             const response = await fetch(`http://localhost:8080/api/prodotti/update`, {
                 credentials: 'include',
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(newProdotto)
             });
 
@@ -122,7 +120,7 @@ export default function InventoryPage() {
             ));
             setShowUpdateModal(false);
             setSelectedProduct(null);
-            setNewProdotto({ nome: '', descrizione: '', prezzo: '', immagine: '', quantita: '' });
+            setNewProdotto({nome: '', descrizione: '', prezzo: '', immagine: '', quantita: ''});
         } catch (error) {
             console.error("Failed to update product:", error);
         } finally {
@@ -141,7 +139,7 @@ export default function InventoryPage() {
             const response = await fetch(`http://localhost:8080/api/prodotti/${selectedProduct}`, {
                 credentials: 'include',
                 method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' }
+                headers: {'Content-Type': 'application/json'}
             });
             if (response.ok) {
                 setProducts(products.filter(product => product.id !== selectedProduct));
@@ -157,18 +155,27 @@ export default function InventoryPage() {
     };
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         setNewProdotto(prevState => ({
             ...prevState,
             [name]: value
         }));
     };
 
+    // Logica per il rendering della paginazione
+    const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+    const indexOfLastProduct = currentPage * itemsPerPage;
+    const indexOfFirstProduct = indexOfLastProduct - itemsPerPage;
+    const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
     return (
         <Container>
             <h1 className={styles.container}>Gestione del Magazzino</h1>
 
-            {/* Barra di ricerca */}
             <Form.Group controlId="searchBar" className="mb-4">
                 <Form.Control
                     type="text"
@@ -181,7 +188,7 @@ export default function InventoryPage() {
             <div className="text-center mb-4">
                 <Button variant="success" onClick={() => {
                     setShowAddModal(true);
-                    setNewProdotto({ nome: '', descrizione: '', prezzo: '', quantita: '' });
+                    setNewProdotto({nome: '', descrizione: '', prezzo: '', quantita: ''});
                 }}>
                     Aggiungi Nuovo Prodotto
                 </Button>
@@ -190,26 +197,27 @@ export default function InventoryPage() {
             {isLoading ? (
                 <p>Caricamento prodotti...</p>
             ) : (
-                <Table striped bordered hover responsive>
-                    <thead>
+                <>
+                    <Table striped bordered hover responsive>
+                        <thead>
                         <tr>
-                            <th style={{ width: '5%' }}>ID</th>
-                            <th style={{ width: '20%' }}>Nome</th>
+                            <th>ID</th>
+                            <th>Nome</th>
                             <th className="d-none d-md-table-cell">Descrizione</th>
                             <th className="d-none d-md-table-cell">Prezzo</th>
                             <th className="d-none d-md-table-cell">Quantità</th>
-                            <th style={{ width: '20%' }}>Azioni</th>
+                            <th>Azioni</th>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {filteredProducts.map((product) => (
+                        </thead>
+                        <tbody>
+                        {currentProducts.map((product) => (
                             <tr key={product.id}>
                                 <td>{product.id}</td>
                                 <td>{product.nome}</td>
                                 <td className="d-none d-md-table-cell">{product.descrizione}</td>
                                 <td className="d-none d-md-table-cell">{product.prezzo}</td>
                                 <td className="d-none d-md-table-cell">{product.quantita}</td>
-                                <td className="text-center">
+                                <td>
                                     <div className="d-flex justify-content-center">
                                         <Button
                                             variant="danger"
@@ -217,7 +225,7 @@ export default function InventoryPage() {
                                             onClick={() => confirmDeleteProduct(product.id)}
                                             disabled={isDeleting}
                                         >
-                                            <FontAwesomeIcon icon={faTrash} /> {/* Icona Elimina */}
+                                            <FontAwesomeIcon icon={faTrash}/>
                                         </Button>
                                         <Button
                                             variant="primary"
@@ -225,17 +233,29 @@ export default function InventoryPage() {
                                             onClick={() => openUpdateModal(product)}
                                             disabled={isUpdating}
                                         >
-                                            <FontAwesomeIcon icon={faEdit} /> {/* Icona Modifica */}
+                                            <FontAwesomeIcon icon={faEdit}/>
                                         </Button>
                                     </div>
                                 </td>
                             </tr>
                         ))}
-                    </tbody>
-                </Table>
+                        </tbody>
+                    </Table>
+
+                    <Pagination className="justify-content-center">
+                        {[...Array(totalPages).keys()].map(pageNumber => (
+                            <Pagination.Item
+                                key={pageNumber + 1}
+                                active={pageNumber + 1 === currentPage}
+                                onClick={() => handlePageChange(pageNumber + 1)}
+                            >
+                                {pageNumber + 1}
+                            </Pagination.Item>
+                        ))}
+                    </Pagination>
+                </>
             )}
 
-            {/* Add Product Modal */}
             <Modal show={showAddModal} onHide={() => setShowAddModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Aggiungi Nuovo Prodotto</Modal.Title>
@@ -376,7 +396,6 @@ export default function InventoryPage() {
                 </Modal.Footer>
             </Modal>
 
-            {/* Delete Confirmation Modal */}
             <Modal show={showConfirmModal} onHide={() => setShowConfirmModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Conferma Eliminazione</Modal.Title>
@@ -391,6 +410,7 @@ export default function InventoryPage() {
                     </Button>
                 </Modal.Footer>
             </Modal>
+
         </Container>
     );
 }

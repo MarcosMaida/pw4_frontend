@@ -1,6 +1,7 @@
 'use client';
-import React, { useEffect, useState } from 'react';
-import { Button, Modal, Form } from 'react-bootstrap';
+
+import React, {useEffect, useState} from 'react';
+import {Button, Modal, Form} from 'react-bootstrap';
 import ProdottiGrid from "@/components/prodotti/prodotti-grid";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Cookies from "js-cookie";
@@ -19,6 +20,16 @@ export default function PrenotazioniPage() {
     const [isOrderLoading, setIsOrderLoading] = useState(false);
     const [pickupDate, setPickupDate] = useState('');
     const [pickupTime, setPickupTime] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 6;
+
+    // Aggiungere stato per monitorare se il componente è stato montato
+    const [isClient, setIsClient] = useState(false);
+
+    // Si esegue una sola volta nel client dopo il montaggio
+    useEffect(() => {
+        setIsClient(true);  // Imposta isClient su true solo dopo il montaggio del componente
+    }, []);
 
     const handleQuantityChange = (productName, quantity) => {
         setOrderProducts(prev => ({
@@ -31,7 +42,7 @@ export default function PrenotazioniPage() {
         const authToken = Cookies.get('SESSION_COOKIE');
         if (authToken) {
             setIsLoggedIn(true);
-            fetch('http://localhost:8080/api/auth/profile', { credentials: 'include' })
+            fetch('http://localhost:8080/api/auth/profile', {credentials: 'include'})
                 .then(response => response.json())
                 .then(userData => {
                     setUserEmail(userData.email);
@@ -46,24 +57,33 @@ export default function PrenotazioniPage() {
     useEffect(() => {
         const fetchProdotti = async () => {
             try {
+                setIsLoading(true);
                 const response = await fetch('http://localhost:8080/api/prodotti', {
                     credentials: 'include',
                     method: 'GET',
-                    headers: { 'Content-Type': 'application/json' }
+                    headers: {'Content-Type': 'application/json'}
                 });
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
                 const data = await response.json();
                 setProducts(data);
-                setIsLoading(false);
             } catch (error) {
                 console.error("Failed to fetch products:", error);
+            } finally {
                 setIsLoading(false);
             }
         };
         fetchProdotti();
     }, []);
+
+    const totalPages = Math.ceil(products.length / itemsPerPage);
+    const currentProducts = products.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+    const goToPreviousPage = () => {
+        setCurrentPage(prevPage => Math.max(prevPage - 1, 1));
+    };
+
+    const goToNextPage = () => {
+        setCurrentPage(prevPage => Math.min(prevPage + 1, totalPages));
+    };
 
     const handleAddOrder = async () => {
         const filteredProducts = products
@@ -88,16 +108,16 @@ export default function PrenotazioniPage() {
             const response = await fetch('http://localhost:8080/api/ordini', {
                 credentials: 'include',
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(orderRequest)
             });
 
-            if (!response.ok) {
+            if (response.ok) {
+                setShowAddModal(false);
+                setShowOrderSentModal(true);
+            } else {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-
-            setShowAddModal(false);
-            setShowOrderSentModal(true);
         } catch (error) {
             console.error("Failed to add order:", error);
             alert("Errore nella creazione dell'ordine");
@@ -108,19 +128,18 @@ export default function PrenotazioniPage() {
 
     const handleCommentSubmit = async (e) => {
         e.preventDefault();
-
-        // Logica di invio del commento (opzionale: puoi anche mandarlo a un'API)
-        console.log("Commento inviato:", commento);
         alert("Commento inviato correttamente!");
-
-        // Ripulisci il commento dopo l'invio
         setCommento('');
     };
+
+    // Mostra il contenuto solo se il componente è montato nel client (previene discrepanze SSR)
+    if (!isClient) {
+        return <p>Loading...</p>;
+    }
 
     return (
         <div className={styles.prenotazionePage}>
             <h1>Prenotazione</h1>
-            <ProdottiGrid prodotti={products} onQuantityChange={handleQuantityChange} />
             <div className="d-flex justify-content-center mb-5">
                 <Button
                     variant="primary"
@@ -128,6 +147,29 @@ export default function PrenotazioniPage() {
                     disabled={isLoading}
                 >
                     {isLoading ? "Caricamento..." : "Conferma Ordine"}
+                </Button>
+            </div>
+            {isLoading ? (
+                <p>Caricamento...</p>
+            ) : (
+                <ProdottiGrid prodotti={currentProducts} onQuantityChange={handleQuantityChange}/>
+            )}
+
+            <div className="d-flex justify-content-between mt-3 mb-5">
+                <Button
+                    variant="secondary"
+                    onClick={goToPreviousPage}
+                    disabled={currentPage === 1}
+                >
+                    Precedente
+                </Button>
+                <span>Pagina {currentPage} di {totalPages}</span>
+                <Button
+                    variant="secondary"
+                    onClick={goToNextPage}
+                    disabled={currentPage === totalPages}
+                >
+                    Successiva
                 </Button>
             </div>
 
@@ -141,8 +183,8 @@ export default function PrenotazioniPage() {
                                 id="comment"
                                 name="comment"
                                 placeholder="Scrivi qui il tuo commento..."
-                                value={commento} // Collegato allo stato
-                                onChange={(e) => setCommento(e.target.value)} // Gestore di aggiornamento stato
+                                value={commento}
+                                onChange={(e) => setCommento(e.target.value)}
                                 required
                             ></textarea>
                         </form>
