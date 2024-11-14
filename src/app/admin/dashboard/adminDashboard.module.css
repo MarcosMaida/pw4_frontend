@@ -1,6 +1,3 @@
-/* src/app/admin/dashboard/adminDashboard.module.css */
-
-/* Container Principale */
 .container {
     font-family: 'Roboto', sans-serif;
     padding: 2rem;
@@ -13,7 +10,6 @@
     justify-content: center;
 }
 
-/* Titolo della Pagina */
 .heading {
     font-size: 2.5rem;
     color: #8a6d3b;
@@ -22,7 +18,6 @@
     font-weight: bold;
 }
 
-/* Descrizione */
 .description {
     font-size: 1.2rem;
     color: #666666;
@@ -31,7 +26,6 @@
     margin-bottom: 3rem;
 }
 
-/* Contenitore delle Card */
 .cardContainer {
     display: flex;
     flex-wrap: wrap;
@@ -40,16 +34,15 @@
     margin-top: 1rem;
 }
 
-/* Stile per le Card */
 .card {
     background-color: #F3BC9F;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 1.5rem;
     width: 200px;
-    min-height: 250px;
+    height: 270px;
     text-align: center;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: box-shadow 0.2s ease;
     cursor: pointer;
     display: flex;
     flex-direction: column;
@@ -57,29 +50,29 @@
     justify-content: space-around;
 }
 
-/* Icona all'interno della Card */
 .cardIcon {
     width: 50px;
     height: 50px;
     margin-bottom: 1rem;
 }
 
-/* Effetto Hover per la Card */
 .card:hover {
     transform: scale(1.05);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Titolo delle Card */
 .cardTitle {
+    flex-shrink: 0;
     font-size: 1.4rem;
     color: #000000;
     font-weight: bold;
     margin-bottom: 1rem;
 }
 
-/* Link della Card */
+
 .cardLink {
+    flex-grow: 1;
+    align-self: center;
     color: inherit;
     font-weight: bold;
     text-decoration: none;
@@ -87,12 +80,10 @@
     transition: color 0.2s ease;
 }
 
-/* Effetto Hover per il Link della Card */
 .cardLink:hover {
     color: #ffffff;
 }
 
-/* Media Query per Tablet */
 @media (max-width: 768px) {
     .heading {
         font-size: 2rem;
@@ -113,7 +104,6 @@
     }
 }
 
-/* Media Query per Smartphone */
 @media (max-width: 480px) {
     .container {
         padding: 1rem;
