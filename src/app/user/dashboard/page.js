@@ -16,7 +16,7 @@ export default function UserDashboardPage() {
                 const response = await fetch('http://localhost:8080/api/ordini', {
                     credentials: 'include',
                     method: 'GET',
-                    headers: {'Content-Type': 'application/json'}
+                    headers: { 'Content-Type': 'application/json' }
                 });
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -56,31 +56,31 @@ export default function UserDashboardPage() {
                             ) : (
                                 <Table>
                                     <thead>
-                                    <tr>
-                                        <th style={{ width: '30%' }}>Descrizione</th>
-                                        <th style={{ width: '30%' }}>Stato Ordine</th>
-                                        <th style={{ width: '20%' }}>Totale</th>
-                                    </tr>
+                                        <tr>
+                                            <th style={{ width: '30%' }}>Descrizione</th>
+                                            <th style={{ width: '30%' }}>Stato Ordine</th>
+                                            <th style={{ width: '20%' }}>Totale</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                    {ordini.map((order) => (
-                                        <tr key={order.id}>
-                                            <td>
-                                                {Array.isArray(order.prodotti) ? (
-                                                    order.prodotti.map((prodotto, index) => (
-                                                        <div key={index}>
-                                                            <strong>{prodotto.nome}</strong>:
-                                                            {prodotto.descrizione} - {prodotto.quantita} pcs
-                                                        </div>
-                                                    ))
-                                                ) : (
-                                                    <span>{order.prodotti}</span>
-                                                )}
-                                            </td>
-                                            <td>{order.stato}</td>
-                                            <td>{order.totale}</td>
-                                        </tr>
-                                    ))}
+                                        {ordini.map((order) => (
+                                            <tr key={order.id}>
+                                                <td>
+                                                    {Array.isArray(order.prodotti) ? (
+                                                        order.prodotti.map((prodotto, index) => (
+                                                            <div key={index} className="d-flex flex-column" style={{ maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                                <strong>{prodotto.nome}</strong>:
+                                                                {prodotto.descrizione} - {prodotto.quantita} pcs
+                                                            </div>
+                                                        ))
+                                                    ) : (
+                                                        <span>{order.prodotti}</span>
+                                                    )}
+                                                </td>
+                                                <td>{order.stato}</td>
+                                                <td>{order.totale}</td>
+                                            </tr>
+                                        ))}
                                     </tbody>
                                 </Table>
                             )}

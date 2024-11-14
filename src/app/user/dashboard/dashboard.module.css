@@ -7,11 +7,11 @@
 }
 
 .subContainer1{
-  width: 100%;
+  width: 90%;
   display: flex;
   justify-content: space-between;
   flex-direction: row;
-  height: 40%;
+  height: 50%;
   gap: 20px;
 }
 
@@ -33,11 +33,6 @@
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.box1:hover, .box2:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
 }
 
 .box1 h2, .box2 h2 {
