@@ -1,15 +1,143 @@
 /* src/app/admin/dashboard/adminDashboard.module.css */
 
+/* Container Principale */
 .container {
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     padding: 2rem;
     background-color: #ffffff;
-    color: #404040;
+    color: #333333;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
+/* Titolo della Pagina */
 .heading {
     font-size: 2.5rem;
-    color: #333333;
+    color: #8a6d3b;
     text-align: center;
     margin-bottom: 2rem;
+    font-weight: bold;
+}
+
+/* Descrizione */
+.description {
+    font-size: 1.2rem;
+    color: #666666;
+    text-align: center;
+    max-width: 600px;
+    margin-bottom: 3rem;
+}
+
+/* Contenitore delle Card */
+.cardContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+/* Stile per le Card */
+.card {
+    background-color: #F3BC9F;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    width: 200px;
+    min-height: 250px;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+/* Icona all'interno della Card */
+.cardIcon {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 1rem;
+}
+
+/* Effetto Hover per la Card */
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Titolo delle Card */
+.cardTitle {
+    font-size: 1.4rem;
+    color: #000000;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+/* Link della Card */
+.cardLink {
+    color: inherit;
+    font-weight: bold;
+    text-decoration: none;
+    display: block;
+    transition: color 0.2s ease;
+}
+
+/* Effetto Hover per il Link della Card */
+.cardLink:hover {
+    color: #ffffff;
+}
+
+/* Media Query per Tablet */
+@media (max-width: 768px) {
+    .heading {
+        font-size: 2rem;
+    }
+
+    .description {
+        font-size: 1.1rem;
+        padding: 0 1rem;
+    }
+
+    .cardContainer {
+        gap: 1.5rem;
+    }
+
+    .card {
+        width: 180px;
+        padding: 1.2rem;
+    }
+}
+
+/* Media Query per Smartphone */
+@media (max-width: 480px) {
+    .container {
+        padding: 1rem;
+    }
+
+    .heading {
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .description {
+        font-size: 1rem;
+        padding: 0 0.5rem;
+    }
+
+    .cardContainer {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .card {
+        width: 100%;
+        max-width: 300px;
+        padding: 1rem;
+    }
 }
