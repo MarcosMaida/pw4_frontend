@@ -1,112 +1,206 @@
-/*!* prenotazioni.module.css *!*/
-
-/*!* Container styling *!*/
-.container {
-    margin-top: 80px;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.mainContainer {
+    margin-top: 10vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
 }
 
-/*!* Heading styling *!*/
-/*.heading {*/
-/*    text-align: center;*/
-/*    font-size: 2rem;*/
-/*    color: #333;*/
-/*    font-weight: bold;*/
-/*    margin-bottom: 30px;*/
-/*}*/
+.subContainer1 {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    height: 40%;
+    gap: 20px;
+}
 
-/*!* Grid styling *!*/
-/*.prodottiGrid {*/
-/*    display: grid;*/
-/*    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));*/
-/*    gap: 20px;*/
-/*}*/
+.subContainer2 {
+    height: 200px;
+}
 
-/*!* Product card styling *!*/
-/*.prodottoCard {*/
-/*    background-color: #fff;*/
-/*    border: 1px solid #ddd;*/
-/*    border-radius: 8px;*/
-/*    padding: 16px;*/
-/*    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);*/
-/*    text-align: center;*/
-/*}*/
+.box1, .box2 {
+    margin-top: 10vh;
+    width: 100%;
+    max-width: 48%;
+    max-height: 100%;
+    overflow-y: auto;
+    padding-bottom: 20vh;
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
 
-/*.prodottoTitle {*/
-/*    font-size: 1.2rem;*/
-/*    margin: 0;*/
-/*    color: #333;*/
-/*}*/
+.box1:hover, .box2:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
 
-/*.prodottoDescription {*/
-/*    font-size: 0.9rem;*/
-/*    color: #666;*/
-/*    margin: 5px 0;*/
-/*}*/
+.box1 h2, .box2 h2 {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    margin: 0;
+    text-align: center;
+    color: #333;
+    border-bottom: 1px solid #ddd;
+    z-index: 1;
+    font-size: 18px;
+    padding: 10px;
+    font-weight: bold;
+}
 
-/*!* Button styling *!*/
-/*.addButton {*/
-/*    background-color: #007bff;*/
-/*    border: none;*/
-/*    color: #fff;*/
-/*    padding: 10px 20px;*/
-/*    font-size: 1rem;*/
-/*    border-radius: 4px;*/
-/*    cursor: pointer;*/
-/*    transition: background-color 0.2s;*/
-/*    margin-top: 20px;*/
-/*    display: inline-block;*/
-/*}*/
+.h2 {
+    padding-top: 20px;
+    height: 60px;
+    background: #fff;
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+}
 
-/*.addButton:hover {*/
-/*    background-color: #0056b3;*/
-/*}*/
+.order_list {
+    list-style-type: none;
+    padding: 0;
+}
 
-/*!* Modal styling *!*/
-/*.modalContent {*/
-/*    padding: 20px;*/
-/*    border-radius: 8px;*/
-/*}*/
+.order_list li {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-/*.modalHeader,*/
-/*.modalFooter {*/
-/*    border: none;*/
-/*}*/
+.order_list li:last-child {
+    border-bottom: none;
+}
 
-/*.modalTitle {*/
-/*    font-size: 1.5rem;*/
-/*    color: #333;*/
-/*}*/
+.order_details {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    align-items: center;
+}
 
-/*.formControl {*/
-/*    font-size: 1rem;*/
-/*    padding: 10px;*/
-/*    border-radius: 4px;*/
-/*    border: 1px solid #ddd;*/
-/*}*/
+.status_delivered {
+    background-color: #28a745;
+    margin-left: 20px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+    text-align: center;
+}
 
-/*.formLabel {*/
-/*    font-weight: bold;*/
-/*    color: #333;*/
-/*}*/
+.status_processing {
+    background-color: #ffa500;
+    margin-left: 20px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+    text-align: center;
+}
 
-/*!* Spacing for form groups *!*/
-/*.formGroup + .formGroup {*/
-/*    margin-top: 1rem;*/
-/*}*/
+.status_shipped {
+    background-color: #007bff;
+    margin-left: 20px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+    text-align: center;
+}
 
-/*!* Responsive adjustments *!*/
-/*@media (max-width: 768px) {*/
-/*    .heading {*/
-/*        font-size: 1.5rem;*/
-/*    }*/
+.status_cancelled {
+    background-color: #dc3545;
+    margin-left: 20px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+    text-align: center;
+}
 
-/*    .container {*/
-/*        padding: 15px;*/
-/*    }*/
-/*}*/
+.sfondo {
+    /*background-image: url('C:\Users\NicholasOliverio\pw4_frontend\pw4_frontend\public\images\background.svg');*/
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+}
+
+
+.comment_box {
+    max-width: 100%;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+.comment_box h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: Arial, sans-serif;
+    color: #333;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.comment_box textarea {
+    width: 100%;
+    height: 100px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    resize: vertical;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease;
+}
+
+.comment_box textarea:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.comment_box button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: #f3bc9f;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+
+
+.comment_box button:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+@media (max-width: 768px) {
+    .subContainer1 {
+        flex-direction: column;
+        align-items: center;
+    }
+    .box1, .box2 {
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
+}
