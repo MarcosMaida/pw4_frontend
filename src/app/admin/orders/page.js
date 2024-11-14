@@ -129,6 +129,8 @@ export default function OrdersPage() {
                                 <th style={{ width: '25%' }}>Descrizione</th>
                                 <th style={{ width: '10%' }}>Stato Ordine</th>
                                 <th style={{ width: '15%' }}>Totale</th>
+                                <th style={{ width: '10%' }}>Data Ritiro</th>
+                                <th style={{ width: '10%' }}>Commento</th>
                                 <th style={{ width: '10%' }}>Azioni</th>
                             </tr>
                         </thead>
@@ -148,6 +150,8 @@ export default function OrdersPage() {
                                     </td>
                                     <td>{order.stato}</td>
                                     <td>{order.totale}</td>
+                                    <td>{order.dataRitiro}</td>
+                                    <td>{order.commento}</td>
                                     <td className="text-center">
                                         <Button variant="success" className="me-2" onClick={() => openAcceptConfirmModal(order.id)}>
                                             Accetta

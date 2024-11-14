@@ -1,5 +1,3 @@
-// src/app/Header.js
-
 "use client";
 
 import { useEffect, useState } from 'react';
@@ -15,12 +13,10 @@ export default function Header() {
     const [notifications, setNotifications] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
     const [showNotifications, setShowNotifications] = useState(false);
-
     const [userRole, setUserRole] = useState(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const router = useRouter();
 
-    {/* PER LE NOTIFICHE */ }
     const fetchUnreadOrders = async () => {
         try {
             const response = await fetch('http://localhost:8080/api/ordini', { credentials: 'include' });
@@ -37,10 +33,9 @@ export default function Header() {
         }
     };
 
-    {/* PER LE NOTIFICHE */ }
     const handleNotificationClick = () => {
         setShowNotifications(!showNotifications);
-        setUnreadCount(0);
+        setUnreadCount(0); // Reset count when notifications are opened
     };
 
     useEffect(() => {
@@ -51,12 +46,16 @@ export default function Header() {
                 .then(response => response.json())
                 .then(userData => {
                     setUserRole(userData.ruolo);
+                    if (userData.ruolo === 'amministratore') {
+                        fetchUnreadOrders();
+                        // Set up a polling interval for new orders if the user is an admin
+                        const intervalId = setInterval(fetchUnreadOrders, 15000); // Every 15 seconds
+                        return () => clearInterval(intervalId); // Clear interval on component unmount
+                    }
                 })
                 .catch(error => {
                     console.error('Error fetching user profile:', error);
                 });
-
-            fetchUnreadOrders();
         }
     }, []);
 
@@ -82,21 +81,18 @@ export default function Header() {
         }
     };
 
-    {/* PER LE NOTIFICHE */ }
     const handleLinkClick = () => {
         setIsMenuOpen(false);
     };
 
     return (
         <header className={styles.header}>
-            {/* MENU HAMBURGER */}
             <div className={styles.menuIcon} onClick={() => setIsMenuOpen(!isMenuOpen)}>
                 <div></div>
                 <div></div>
                 <div></div>
             </div>
 
-            {/* Menu principale */}
             <nav className={`${styles.nav} ${isMenuOpen ? styles.showMenu : ''}`}>
                 {!isLoggedIn && (
                     <>
@@ -121,32 +117,14 @@ export default function Header() {
                     </>
                 )}
                 {isLoggedIn ? (
-                    <a onClick={() => { handleLogout(); handleLinkClick(); }} className={styles.link}>Logout</a>
+                    <a onClick={() => {
+                        handleLogout();
+                        handleLinkClick();
+                    }} className={styles.link}>Logout</a>
                 ) : (
                     <Link href="/contact" className={styles.link} onClick={handleLinkClick}>Contatti</Link>
                 )}
             </nav>
-
-            {/* NOTIFICHE */}
-            {isLoggedIn && (
-                <div className={styles.notificationIcon} onClick={handleNotificationClick}>
-                    <FontAwesomeIcon icon={faBell} />
-                    {unreadCount > 0 && <span className={styles.badge}>{unreadCount}</span>}
-                    {showNotifications && (
-                        <div className={styles.notificationDropdown}>
-                            {notifications.length > 0 ? (
-                                notifications.map(order => (
-                                    <div key={order.id} className={styles.notificationItem} onClick={() => router.push('/admin/orders')}>
-                                        <p>Nuovo ordine: {order.id}</p>
-                                    </div>
-                                ))
-                            ) : (
-                                <p className={styles.noNotifications}>No new orders</p>
-                            )}
-                        </div>
-                    )}
-                </div>
-            )}
         </header>
     );
 }

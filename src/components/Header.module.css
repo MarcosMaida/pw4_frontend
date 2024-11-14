@@ -53,6 +53,7 @@
 /* Campanella */
 .notificationIcon {
   position: relative;
+  margin-top: 0.25rem;
   left: 20px; /* Distanza dal bordo destro, aumenta per spostarla più a sinistra */
   cursor: pointer;
   font-size: 1.5rem;

@@ -118,7 +118,7 @@ export default function PrenotazioniPage() {
     };
 
     return (
-        <div class="d-flex flex-column align-items-center justify-content-center p-3 mb-4">
+        <div className="d-flex flex-column align-items-center justify-content-center p-3 mb-4">
             <h1>Prenota</h1>
             <ProdottiGrid prodotti={products} onQuantityChange={handleQuantityChange} />
             <div className="d-flex justify-content-center mb-5">
