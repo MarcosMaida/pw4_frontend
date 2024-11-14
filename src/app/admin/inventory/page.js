@@ -16,6 +16,7 @@ export default function InventoryPage() {
         nome: '',
         descrizione: '',
         prezzo: '',
+        immagine:'',
         quantita: '',
     });
 
@@ -61,7 +62,7 @@ export default function InventoryPage() {
             const addedProdotto = await response.json();
             setProducts([...products, addedProdotto]);
             setShowAddModal(false);
-            setNewProdotto({ nome: '', descrizione: '', prezzo: '', quantita: '' });
+            setNewProdotto({ nome: '', descrizione: '', prezzo: '', immagine:'', quantita: '' });
         } catch (error) {
             console.error("Failed to add product:", error);
         } finally {
@@ -76,6 +77,7 @@ export default function InventoryPage() {
             nome: product.nome,
             descrizione: product.descrizione,
             prezzo: product.prezzo,
+            immagine:product.immagine,
             quantita: product.quantita
         });
         setShowUpdateModal(true);
@@ -103,7 +105,7 @@ export default function InventoryPage() {
             ));
             setShowUpdateModal(false);
             setSelectedProduct(null);
-            setNewProdotto({ nome: '', descrizione: '', prezzo: '', quantita: '' });
+            setNewProdotto({ nome: '', descrizione: '', prezzo: '', immagine:'', quantita: '' });
         } catch (error) {
             console.error("Failed to update product:", error);
         } finally {
@@ -232,6 +234,16 @@ export default function InventoryPage() {
                                 placeholder="Inserisci il prezzo del prodotto"
                             />
                         </Form.Group>
+                        <Form.Group controlId="formImmagine" className="mt-3">
+                            <Form.Label>Immagine</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="immagine"
+                                value={newProdotto.immagine}
+                                onChange={handleInputChange}
+                                placeholder="Inserisci il prezzo del prodotto"
+                            />
+                        </Form.Group>
                         <Form.Group controlId="formQuantita" className="mt-3">
                             <Form.Label>Quantità</Form.Label>
                             <Form.Control
@@ -294,6 +306,16 @@ export default function InventoryPage() {
                                 placeholder="Inserisci il prezzo del prodotto"
                             />
                         </Form.Group>
+                        <Form.Group controlId="formImmagine" className="mt-3">
+                            <Form.Label>Immagine</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="immagine"
+                                value={newProdotto.immagine}
+                                onChange={handleInputChange}
+                                placeholder="Inserisci il prezzo del prodotto"
+                            />
+                        </Form.Group>
                         <Form.Group controlId="formQuantita" className="mt-3">
                             <Form.Label>Quantità</Form.Label>
                             <Form.Control
@@ -341,7 +363,7 @@ export default function InventoryPage() {
 
             <Button variant="success" onClick={() => {
                 setShowAddModal(true);
-                setNewProdotto({ nome: '', descrizione: '', prezzo: '', quantita: '' });
+                setNewProdotto({ nome: '', descrizione: '', prezzo: '', immagine:'', quantita: '' });
             }}>
                 Aggiungi Nuovo Prodotto
             </Button>
