@@ -14,7 +14,7 @@ export default function PrenotazioniPage() {
     const [orderProducts, setOrderProducts] = useState({});
     const [userEmail, setUserEmail] = useState(null);
     const [userId, setUserId] = useState(null);
-    const [commento, setCommento] = useState(''); // Modificato a stringa vuota
+    const [commento, setCommento] = useState('');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isOrderLoading, setIsOrderLoading] = useState(false);
     const [pickupDate, setPickupDate] = useState('');
@@ -118,8 +118,8 @@ export default function PrenotazioniPage() {
     };
 
     return (
-        <div class="d-flex flex-column align-items-center justify-content-center p-3 mb-4">
-            <h1>Prenota</h1>
+        <div className={styles.prenotazionePage}>
+            <h1>Prenotazione</h1>
             <ProdottiGrid prodotti={products} onQuantityChange={handleQuantityChange} />
             <div className="d-flex justify-content-center mb-5">
                 <Button

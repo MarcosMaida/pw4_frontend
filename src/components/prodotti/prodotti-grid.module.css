@@ -14,12 +14,14 @@
 
 @media screen and (max-width: 480px) {
     .corsiGrid {
+       
         grid-template-columns: repeat(1, 1fr);
     }
 }
 
 @media screen and (max-width: 992px) {
     .corsiGrid {
+        margin-top: 0px;
         grid-template-columns: repeat(1, 1fr);
         margin-top: 170px;
     }

@@ -18,7 +18,7 @@ body {
   min-height: 100vh;
   color: var(--foreground); /* Usa il colore del testo nero */
   background: var(--background); /* Usa lo sfondo bianco */
-  font-family: 'Montserrat', sans-serif; /* Cambia font a Montserrat */
+  font-family: 'Montserrat'; /* Cambia font a Montserrat */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
