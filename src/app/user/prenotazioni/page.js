@@ -105,14 +105,15 @@ export default function PrenotazioniPage() {
         <div>
             <h1>Gestione del Magazzino</h1>
             <ProdottiGrid prodotti={products} onQuantityChange={handleQuantityChange} />
-
-            <Button
-                variant="primary"
-                onClick={() => setShowAddModal(true)}
-                disabled={isLoading}
-            >
-                {isLoading ? "Caricamento..." : "Conferma Ordine"}
-            </Button>
+            <div className="d-flex justify-content-center mb-5">
+                <Button
+                    variant="primary"
+                    onClick={() => setShowAddModal(true)}
+                    disabled={isLoading}
+                >
+                    {isLoading ? "Caricamento..." : "Conferma Ordine"}
+                </Button>
+            </div>
 
             <Modal show={showAddModal} onHide={() => setShowAddModal(false)}>
                 <Modal.Header closeButton>
