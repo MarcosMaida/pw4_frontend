@@ -1,0 +1,27 @@
+/* src/components/loader/loader.module.css */
+
+.loaderContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(255, 255, 255); /* Fondo semitrasparente */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+  }
+  
+  .logo {
+    width: 200px; /* Dimensione del logo */
+    height: auto;
+    margin-bottom: 20px;
+  }
+  
+  .spinner {
+    width: 50px; /* Dimensione del GIF loader */
+    height: auto;
+  }
+  
