@@ -12,7 +12,7 @@
 
 /* Stile per la Card */
 .card {
-    background: linear-gradient(135deg, #F3BC9F 0%, #F7D9C4 100%);
+    background: #ffcfb5;
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
@@ -66,9 +66,9 @@
 /* Categoria del prodotto */
 .category {
     font-size: 1.2rem;
-    color: #ffffff;
+    color: #3A405A;
     font-weight: 700;
-    background-color: #21b8d0;
+    background-color: #ffcfb5;
     padding: 0.25rem 0.75rem;
     border-radius: 6px;
     display: inline-block;

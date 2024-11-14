@@ -1,6 +1,6 @@
 'use client';
-import {useEffect, useState} from 'react';
-import {Button, Modal, Form} from 'react-bootstrap';
+import { useEffect, useState } from 'react';
+import { Button, Modal, Form } from 'react-bootstrap';
 import ProdottiGrid from "@/components/prodotti/prodotti-grid";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Cookies from "js-cookie";
@@ -29,7 +29,7 @@ export default function PrenotazioniPage() {
         const authToken = Cookies.get('SESSION_COOKIE');
         if (authToken) {
             setIsLoggedIn(true);
-            fetch('http://localhost:8080/api/auth/profile', {credentials: 'include'})
+            fetch('http://localhost:8080/api/auth/profile', { credentials: 'include' })
                 .then(response => response.json())
                 .then(userData => {
                     setUserEmail(userData.email);
@@ -47,7 +47,7 @@ export default function PrenotazioniPage() {
                 const response = await fetch('http://localhost:8080/api/prodotti', {
                     credentials: 'include',
                     method: 'GET',
-                    headers: {'Content-Type': 'application/json'}
+                    headers: { 'Content-Type': 'application/json' }
                 });
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -85,7 +85,7 @@ export default function PrenotazioniPage() {
             const response = await fetch('http://localhost:8080/api/ordini', {
                 credentials: 'include',
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(orderRequest)
             });
 
@@ -105,8 +105,8 @@ export default function PrenotazioniPage() {
     };
 
     return (
-        <div>
-            <h1>Gestione del Magazzino</h1>
+        <div class="d-flex flex-column align-items-center justify-content-center p-3 mb-4">
+            <h1>Prenota</h1>
             <ProdottiGrid prodotti={products} onQuantityChange={handleQuantityChange} />
             <div className="d-flex justify-content-center mb-5">
                 <Button
