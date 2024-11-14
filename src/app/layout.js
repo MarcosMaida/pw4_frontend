@@ -1,5 +1,3 @@
-// src/app/layout.js
-
 "use client";
 import React, { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
@@ -14,14 +12,12 @@ export default function RootLayout({ children }) {
   const pathname = usePathname();
 
   useEffect(() => {
-    // Activa el Loader al cambiar de ruta
     setLoading(true);
 
-    // Simula un breve retardo para mostrar el Loader
     const timeout = setTimeout(() => setLoading(false), 500);
 
     return () => clearTimeout(timeout);
-  }, [pathname]); // El efecto se ejecuta cada vez que cambia la ruta
+  }, [pathname]);
 
   return (
     <html lang="it">
@@ -31,8 +27,8 @@ export default function RootLayout({ children }) {
       </Head>
       <body>
         <Header />
-        {loading && <Loader />} {/* Asegúrate de mostrar el Loader mientras `loading` es true */}
-        <main>{children}</main>
+        {loading && <Loader />}
+        {!loading && <main>{children}</main>}
         <Footer />
       </body>
     </html>
