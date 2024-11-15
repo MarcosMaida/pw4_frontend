@@ -154,7 +154,6 @@ export default function RegisterPage() {
                         name="email"
                         value={formData.email}
                         onChange={handleInputChange}
-                        required
                         className={styles.formInput}
                     />
                 </label>
@@ -166,7 +165,6 @@ export default function RegisterPage() {
                         name="telefono"
                         value={formData.telefono}
                         onChange={handleInputChange}
-                        required
                         className={styles.formInput}
                     />
                 </label>
