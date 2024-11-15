@@ -150,29 +150,11 @@ export default function PrenotazioniPage() {
                 </button>
             </div>
 
-            <div>
-                <div className={styles.box3}>
-                    <div className={styles.comment_box}>
-                        <h2>Lascia un commento</h2>
-                        <form onSubmit={handleCommentSubmit}>
-                            <label htmlFor="comment">Commento:</label>
-                            <textarea
-                                id="comment"
-                                name="comment"
-                                placeholder="Scrivi qui il tuo commento..."
-                                value={commento}
-                                onChange={(e) => setCommento(e.target.value)}
-                                required
-                            ></textarea>
-                        </form>
-                    </div>
-                </div>
-            </div>
 
             {isLoading ? (
                 <p>Caricamento...</p>
             ) : (
-                <ProdottiGrid prodotti={currentProducts} onQuantityChange={handleQuantityChange} />
+                <ProdottiGrid prodotti={currentProducts} onQuantityChange={handleQuantityChange}/>
             )}
 
             <div className="d-flex justify-content-between mt-3 mb-5">
@@ -193,6 +175,24 @@ export default function PrenotazioniPage() {
                 </Button>
             </div>
 
+            <div>
+                <div className={styles.box3}>
+                    <div className={styles.comment_box}>
+                        <h2>Lascia un commento</h2>
+                        <form onSubmit={handleCommentSubmit}>
+                            <label htmlFor="comment">Commento:</label>
+                            <textarea
+                                id="comment"
+                                name="comment"
+                                placeholder="Scrivi qui il tuo commento..."
+                                value={commento}
+                                onChange={(e) => setCommento(e.target.value)}
+                                required
+                            ></textarea>
+                        </form>
+                    </div>
+                </div>
+            </div>
 
 
             <Modal show={showAddModal} onHide={() => setShowAddModal(false)}>

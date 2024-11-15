@@ -1,6 +1,7 @@
 
 .container {
-  margin-top: 150px;
+  margin-top: 20vh;
+  margin-bottom: 10vh;
   font-family: 'Open Sans', sans-serif;
   padding: 2rem;
   background-color: #ffe5d5;
