@@ -10,7 +10,7 @@
 .hero {
   position: relative;
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -75,12 +75,13 @@
 }
 
 .ctaContent {
+  height: 100vh;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   max-width: 1200px;
-  width: 100%;
+  width: 90%;
   gap: 2rem;
 }
 
@@ -91,20 +92,21 @@
 }
 
 .ctaText h2 {
-  font-size: 2.5rem;
+  font-size: 2rem;
   margin-bottom: 1rem;
   color: #333;
 }
 
 .ctaText p {
-  font-size: 1.2rem;
+  font-size: 1rem;
   margin-bottom: 1rem;
   line-height: 1.6;
 }
 
 .ctaButton {
   padding: 0.75rem 1.5rem;
-  font-size: 1.2rem;
+  font-size: 1rem;
+
   color: #fff;
   background-color: #0070f3;
   border: none;
@@ -193,6 +195,7 @@
 
 
 .openingHours {
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -276,13 +279,13 @@
 }
 
 .locations h2 {
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   color: #8c6450;
   margin-bottom: 1rem;
 }
 
 .locations p {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #555;
   margin-bottom: 0.5rem;
 }
