@@ -49,14 +49,13 @@ export default function RegisterPage() {
 
             if (response.ok) {
                 const { id } = await response.json();
-                setSubscriptionStatus("Registrazione riuscita! Verifica la tua email.");
                 setUtenteId(id);
                 setIsValidationPopupOpen(true);
             } else if (response.status === 400) {
                 setSubscriptionStatus("Email già registrata.");
             } else {
                 const errorMessage = await response.text();
-                setSubscriptionStatus(`Iscrizione fallita: ${errorMessage}`);
+                setSubscriptionStatus(`Iscrizione fallita`);
             }
         } catch (error) {
             setSubscriptionStatus("Iscrizione fallita. Riprova.");
@@ -76,7 +75,6 @@ export default function RegisterPage() {
             });
 
             if (response.ok) {
-                setSubscriptionStatus("Email verificata con successo! Puoi ora accedere.");
                 setIsValidationPopupOpen(false);
                 setShowEmailVerifiedModal(true); // Open the modal on successful verification
                 setIsValidationPopupClosed(true); // Mark popup as closed
