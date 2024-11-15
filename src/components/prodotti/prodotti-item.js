@@ -21,7 +21,7 @@ export default function ProdottiItem({ prodotto, onQuantityChange }) {
                 </div>
                 <div className={styles.cardContent}>
                     <div className={styles.cardTitle}>{prodotto.nome}</div>
-                    <p className={styles.cardText}>{prodotto.descrizione}</p>
+                    <p className={styles.cardText}>{prodotto.descrizione}</p> {/* Stile con scroll */}
                     <span className={styles.category}>Prezzo: €{prodotto.prezzo}</span>
                     <input
                         type="number"

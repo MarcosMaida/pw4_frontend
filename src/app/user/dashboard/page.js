@@ -39,7 +39,7 @@ export default function UserDashboardPage() {
     return (
         <div className={styles.sfondo}>
             <div className={styles.mainContainer}>
-                <h1 className={styles.title}>Ciao Utente</h1>
+                <h1 className={styles.title}>Dashboard Utente</h1>
                 <div className={styles.subContainer1}>
                     <div className={styles.box1}>
                         <h2 className={styles.h2}>Cronologia degli Ordini</h2>
@@ -68,7 +68,7 @@ export default function UserDashboardPage() {
                                                 <td>
                                                     {Array.isArray(order.prodotti) ? (
                                                         order.prodotti.map((prodotto, index) => (
-                                                            <div key={index} className="d-flex flex-column" style={{ maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                            <div key={index}>
                                                                 <strong>{prodotto.nome}</strong>:
                                                                 {prodotto.descrizione} - {prodotto.quantita} pcs
                                                             </div>
