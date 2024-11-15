@@ -1,6 +1,6 @@
 /* Contenitore principale delle informazioni con l'immagine di sfondo */
 .infoContainer {
-  margin-top: 80px;
+ 
   display: flex;
   justify-content: space-between;
   background-image: url('/images/11.webp');

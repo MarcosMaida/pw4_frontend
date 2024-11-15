@@ -118,14 +118,16 @@
   text-align: center;
 }
 
-.sfondo{
-  background-image: url('C:\Users\NicholasOliverio\pw4_frontend\pw4_frontend\public\images\background.svg');
+.sfondo {
+  background-image: url('/images/background.svg'); /* Percorso dal root */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   width: 100%;
   height: 100%;
+  min-height: 100vh; /* Estende lo sfondo all'intera altezza */
 }
+
 
 
 

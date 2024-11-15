@@ -9,6 +9,7 @@ export default function UserDashboardPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [ordini, setOrdini] = useState([]);
     const [ordiniStorico, setOrdiniStorico] = useState([]);
+    const [scrollY, setScrollY] = useState(0);
 
     useEffect(() => {
         const fetchOrdini = async () => {
@@ -36,9 +37,19 @@ export default function UserDashboardPage() {
         fetchOrdini();
     }, []);
 
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrollPosition = window.scrollY;
+            setScrollY(scrollPosition);
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
     return (
-        <div className={styles.sfondo}>
-            <div className={styles.mainContainer}>
+        <div className={styles.sfondo} style={{ backgroundPositionY: `${scrollY * 0.5}px` }}>
+            <div className={styles.mainContainer} style={{ transform: `translateY(${scrollY * 0.1}px)` }}>
                 <h1 className={styles.title}>Dashboard Utente</h1>
                 <div className={styles.subContainer1}>
                     <div className={styles.box1}>
