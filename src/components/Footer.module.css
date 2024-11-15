@@ -1,6 +1,6 @@
 /* Contenitore principale delle informazioni con l'immagine di sfondo */
 .infoContainer {
- 
+  font-family: 'Montserrat', sans-serif;
   display: flex;
   justify-content: space-between;
   background-image: url('/images/11.webp');

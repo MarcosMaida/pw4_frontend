@@ -11,6 +11,8 @@
     align-items: center;
     justify-content: center;
     z-index: 1000;
+    font-family: 'Montserrat', sans-serif;
+
 }
 
 .modalContent {
