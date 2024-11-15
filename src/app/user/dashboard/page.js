@@ -3,6 +3,7 @@ import React, {useState, useEffect} from 'react';
 import {useRouter} from 'next/navigation';
 import styles from './dashboard.module.css';
 import {Button, Table} from 'react-bootstrap';
+import Cookies from "js-cookie";
 
 export default function UserDashboardPage() {
     const router = useRouter();
@@ -10,6 +11,10 @@ export default function UserDashboardPage() {
     const [ordini, setOrdini] = useState([]);
     const [ordiniStorico, setOrdiniStorico] = useState([]);
     const [scrollY, setScrollY] = useState(0);
+    const [userName, setUserName] = useState(null);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+
 
     useEffect(() => {
         const fetchOrdini = async () => {
@@ -38,6 +43,22 @@ export default function UserDashboardPage() {
     }, []);
 
     useEffect(() => {
+        const authToken = Cookies.get('SESSION_COOKIE');
+        if (authToken) {
+            setIsLoggedIn(true);
+            fetch('http://localhost:8080/api/auth/profile', { credentials: 'include' })
+                .then(response => response.json())
+                .then(userData => {
+                    setUserName(userData.nomeUtente);
+                })
+                .catch(error => {
+                    console.error('Error fetching user profile:', error);
+                });
+        }
+    }, []);
+
+
+    useEffect(() => {
         const handleScroll = () => {
             const scrollPosition = window.scrollY;
             setScrollY(scrollPosition);
@@ -50,11 +71,11 @@ export default function UserDashboardPage() {
     return (
         <div className={styles.sfondo} style={{backgroundPositionY: `${scrollY * 0.5}px`}}>
             <div className={styles.mainContainer} style={{transform: `translateY(${scrollY * 0.1}px)`}}>
-                <h1 className={styles.title}>Dashboard Utente</h1>
+                <h1> Benvenuto {userName}</h1>
                 <div className={styles.subContainer1}>
                     <div className={styles.box1}>
                         <div className={styles.headerContainer}>
-                            <h2>Cronologia degli Ordini</h2>
+                            <h2>Storico Ordini</h2>
                         </div>
                         <ul className={styles.order_list}>
                             {ordiniStorico.map(order => (

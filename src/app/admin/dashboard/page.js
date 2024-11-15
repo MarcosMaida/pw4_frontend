@@ -1,9 +1,13 @@
 "use client";
 import { useState, useEffect } from 'react';
 import styles from './adminDashboard.module.css';
+import Cookies from "js-cookie";
 
 export default function AdminDashboardPage() {
     const [showCards, setShowCards] = useState(false);
+    const [userName, setUserName] = useState(null);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
 
     useEffect(() => {
         setShowCards(false);
@@ -11,11 +15,27 @@ export default function AdminDashboardPage() {
         return () => clearTimeout(timer);
     }, []);
 
+    useEffect(() => {
+        const authToken = Cookies.get('SESSION_COOKIE');
+        if (authToken) {
+            setIsLoggedIn(true);
+            fetch('http://localhost:8080/api/auth/profile', { credentials: 'include' })
+                .then(response => response.json())
+                .then(userData => {
+                    setUserName(userData.nomeUtente);
+                })
+                .catch(error => {
+                    console.error('Error fetching user profile:', error);
+                });
+        }
+    }, []);
+
+
     return (
         <div className={styles.container}>
-            <h1 className={styles.heading}>Dashboard Amministratore</h1>
+            <h1 className={styles.heading}>Benvenuto {userName}</h1>
             <p className={styles.description}>
-                Benvenuto nella dashboard admin. Qui puoi gestire ordini e inventario.
+                Questa è la tua dashboard admin. Qui puoi gestire ordini e inventario.
             </p>
             {showCards && (
                 <div className={styles.cardContainer}>
