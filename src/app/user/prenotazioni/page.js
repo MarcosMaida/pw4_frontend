@@ -150,7 +150,7 @@ export default function PrenotazioniPage() {
                 </button>
             </div>
 
-            <div className={styles.subContainer2}>
+            <div>
                 <div className={styles.box3}>
                     <div className={styles.comment_box}>
                         <h2>Lascia un commento</h2>
