@@ -1,13 +1,24 @@
-// src/app/layout.js
-
 "use client";
-
-import Header from '../components/Header';
+import React, { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
+import Header from '../components/header';
 import Footer from '../components/Footer';
+import Loader from '../components/loader/loader';
 import './globals.css';
 import Head from 'next/head';
 
 export default function RootLayout({ children }) {
+  const [loading, setLoading] = useState(false);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    setLoading(true);
+
+    const timeout = setTimeout(() => setLoading(false), 500);
+
+    return () => clearTimeout(timeout);
+  }, [pathname]);
+
   return (
     <html lang="it">
       <Head>
@@ -16,7 +27,8 @@ export default function RootLayout({ children }) {
       </Head>
       <body>
         <Header />
-        <main>{children}</main>
+        {loading && <Loader />}
+        {!loading && <main>{children}</main>}
         <Footer />
       </body>
     </html>

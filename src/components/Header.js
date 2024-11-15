@@ -1,18 +1,34 @@
-// src/app/Header.js
-
 "use client";
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import styles from './Header.module.css';
+import styles from './header.module.css';
 import Cookies from 'js-cookie';
 
 export default function Header() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [notifications, setNotifications] = useState([]);
+    const [unreadCount, setUnreadCount] = useState(0);
     const [userRole, setUserRole] = useState(null);
-    const [isMenuOpen, setIsMenuOpen] = useState(false); // Nuovo stato per il menu
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const router = useRouter();
+
+    const fetchUnreadOrders = async () => {
+        try {
+            const response = await fetch('http://localhost:8080/api/ordini', { credentials: 'include' });
+            if (response.ok) {
+                const orders = await response.json();
+                const newOrders = orders.filter(order => order.stato === 'non_gestito');
+                setNotifications(newOrders);
+                setUnreadCount(newOrders.length);
+            } else {
+                throw new Error('Failed to fetch orders');
+            }
+        } catch (error) {
+            console.error('Error fetching orders:', error);
+        }
+    };
 
     useEffect(() => {
         const authToken = Cookies.get('SESSION_COOKIE');
@@ -22,6 +38,12 @@ export default function Header() {
                 .then(response => response.json())
                 .then(userData => {
                     setUserRole(userData.ruolo);
+                    if (userData.ruolo === 'amministratore') {
+                        fetchUnreadOrders();
+                        // Set up a polling interval for new orders if the user is an admin
+                        const intervalId = setInterval(fetchUnreadOrders, 15000); // Every 15 seconds
+                        return () => clearInterval(intervalId); // Clear interval on component unmount
+                    }
                 })
                 .catch(error => {
                     console.error('Error fetching user profile:', error);
@@ -52,7 +74,7 @@ export default function Header() {
     };
 
     const handleLinkClick = () => {
-        setIsMenuOpen(false); // Chiude il menu quando si clicca su un link
+        setIsMenuOpen(false);
     };
 
     return (
@@ -71,7 +93,6 @@ export default function Header() {
                         <Link href="/auth/login" className={styles.link} onClick={handleLinkClick}>Login</Link>
                     </>
                 )}
-
                 {userRole === 'amministratore' && (
                     <>
                         <Link href="../admin/inventory" className={styles.link} onClick={handleLinkClick}>Gestione magazzino</Link>
@@ -83,16 +104,24 @@ export default function Header() {
                     <>
                         <Link href="/" className={styles.link} onClick={handleLinkClick}>Home</Link>
                         <Link href="/contact" className={styles.link} onClick={handleLinkClick}>Contatti</Link>
-                        <Link href="/user/prenotazioni" className={styles.link} onClick={handleLinkClick}>Prenotare</Link>
+                        <Link href="/user/prenotazioni" className={styles.link} onClick={handleLinkClick}>Prenotazione</Link>
                         <Link href="/user/dashboard" className={styles.link} onClick={handleLinkClick}>Profilo</Link>
                     </>
                 )}
                 {isLoggedIn ? (
-                    <a onClick={() => { handleLogout(); handleLinkClick(); }} className={styles.link}>Logout</a>
+                    <a onClick={() => {
+                        handleLogout();
+                        handleLinkClick();
+                    }} className={styles.link}>Logout</a>
                 ) : (
                     <Link href="/contact" className={styles.link} onClick={handleLinkClick}>Contatti</Link>
                 )}
             </nav>
+
+
         </header>
+
+
     );
+
 }

@@ -1,5 +1,3 @@
-/* src/app/page.module.css */
-
 .container {
   display: flex;
   flex-direction: column;
@@ -8,11 +6,11 @@
   overflow: hidden;
 }
 
-/* Sezione Hero */
+
 .hero {
   position: relative;
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -23,7 +21,6 @@
 }
 
 
-/* Background per l'effetto parallax */
 .background {
   position: absolute;
   top: 0;
@@ -36,7 +33,7 @@
   background-repeat: no-repeat;
   background-attachment: fixed;
   z-index: 1;
-  transition: transform 0.3s ease-out; /* Transizione per un effetto più fluido */
+  transition: transform 0.3s ease-out;
 }
 
 
@@ -67,7 +64,6 @@
 }
 
 
-/* Call-to-Action Section */
 .callToAction {
   display: flex;
   justify-content: center;
@@ -79,12 +75,13 @@
 }
 
 .ctaContent {
+  height: 100vh;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   max-width: 1200px;
-  width: 100%;
+  width: 90%;
   gap: 2rem;
 }
 
@@ -95,20 +92,21 @@
 }
 
 .ctaText h2 {
-  font-size: 2.5rem;
+  font-size: 2rem;
   margin-bottom: 1rem;
   color: #333;
 }
 
 .ctaText p {
-  font-size: 1.2rem;
+  font-size: 1rem;
   margin-bottom: 1rem;
   line-height: 1.6;
 }
 
 .ctaButton {
   padding: 0.75rem 1.5rem;
-  font-size: 1.2rem;
+  font-size: 1rem;
+
   color: #fff;
   background-color: #0070f3;
   border: none;
@@ -136,7 +134,7 @@
   border-radius: 10px;
 }
 
-/* About e Featured Products */
+
 .about, .featuredProducts {
   padding: 4rem 2rem;
   background-color: #ffffff;
@@ -155,7 +153,7 @@
   gap: 2rem;
 }
 
-/* Responsive styling */
+
 @media (max-width: 768px) {
   .callToAction,
   .ctaContent {
@@ -177,7 +175,7 @@
   }
 }
 
-/* --- Container Principale --- */
+
 .container {
   display: flex;
   flex-direction: column;
@@ -186,7 +184,7 @@
   overflow: hidden;
 }
 
-/* --- Layout Principale con Flexbox --- */
+
 .layout {
   display: flex;
   justify-content: space-between;
@@ -195,8 +193,9 @@
   gap: 2rem;
 }
 
-/* --- Sezione Orari di apertura (sinistra) --- */
+
 .openingHours {
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -204,10 +203,10 @@
   background-color: #ffffff;
   padding: 0.4rem;
   border-radius: 8px;
-  margin-bottom: 1.5rem; /* Spazio sotto la sezione */
+  margin-bottom: 1.5rem; 
 }
 
-/* Tabella degli orari */
+
 .hoursTable {
   width: 100%;
   max-width: 300px;
@@ -220,50 +219,42 @@
 .hoursTable td {
   padding: 0.5rem 1rem;
   border-bottom: 1px solid #e0e0e0;
-  white-space: normal; /* Permette il ritorno a capo */
-  line-height: 1.4; /* Aumenta leggermente l'interlinea per una migliore leggibilità */
+  white-space: normal; 
+  line-height: 1.4; 
 }
 
 
 .hoursTable tr:last-child td {
-  border-bottom: none; /* Rimuove il bordo sotto l'ultima riga */
+  border-bottom: none; 
 }
 
 .hoursTable td:first-child {
   text-align: left;
   font-weight: bold;
-  color: #8c6450; /* Colore per il giorno della settimana */
+  color: #8c6450; 
 }
 
 .hoursTable td:last-child {
   text-align: right;
-  color: #333; /* Colore per l'orario */
+  color: #333; 
 }
 
-/* Stili responsive per dispositivi mobili */
-@media (max-width: 768px) {
-  .hoursTable {
-    font-size: 0.9rem;
-  }
-}
-
-/* --- Sezione Immagine Sotto Orari --- */
 
 .imageDownHours {
-  width: auto; /* Mantiene l'immagine al suo contenitore senza cambiare layout */
-  margin-top: 4rem; /* Aggiunge spazio sopra l'immagine */
-  display: block; /* Assicura che l'immagine stia sotto il contenuto */
+  width: auto; 
+  margin-top: 4rem; 
+  display: block; 
   text-align: center;
 }
 
 .imageDownHours img {
-  width: 100%; /* Ridimensionamento dell'immagine per adattarla */
-  max-width: 400px; /* Limite massimo di larghezza */
+  width: 100%; 
+  max-width: 400px; 
   height: auto;
-  border-radius: 8px; /* Bordo arrotondato per eleganza */
+  border-radius: 8px; 
 }
 
-/* --- Sezione Immagine centrale --- */
+
 .centerImage {
   flex: 2;
   display: flex;
@@ -278,7 +269,7 @@
   max-width: 500px;
 }
 
-/* --- Sezione Sedi (destra) --- */
+
 .locations {
   flex: 1;
   text-align: left;
@@ -288,23 +279,23 @@
 }
 
 .locations h2 {
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   color: #8c6450;
   margin-bottom: 1rem;
 }
 
 .locations p {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #555;
   margin-bottom: 0.5rem;
 }
 
-/* --- Pulsante di Azione --- */
+
 .ctaButton {
   padding: 0.75rem 1.5rem;
   font-size: 1.2rem;
   color: #ffffff;
-  background-color: #d8a48f; /* Colore pastello per pulsante */
+  background-color: #d8a48f; 
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -313,32 +304,32 @@
 }
 
 .ctaButton:hover {
-  background-color: #c4897e; /* Hover più scuro per effetto elegante */
+  background-color: #c4897e;
 }
 
-/* --- Icone Social Media --- */
+
 .socialIcons {
   display: flex;
-  gap: 1rem; /* Spazio tra le icone */
+  gap: 1rem; 
   margin-top: 1.5rem;
 }
 
 .socialIcons img {
   width: 60px;
   height: auto;
-  transition: transform 0.3s ease, filter 0.3s ease; /* Effetto al passaggio del mouse */
+  transition: transform 0.3s ease, filter 0.3s ease; 
   
-  /* Applica un filtro marroncino chiaro */
+  
   filter: sepia(1) saturate(0.6) hue-rotate(-20deg) opacity(0.8);
 }
 
 .socialIcons img:hover {
-  transform: scale(1.2); /* Ingrandisce leggermente l'icona al passaggio del mouse */
-  filter: none; /* Rimuove il filtro per mostrare il colore originale */
+  transform: scale(1.2); 
+  filter: none; 
 }
 
 
-/* --- Responsive Styling --- */
+
 @media (max-width: 768px) {
   .layout {
     flex-direction: column;
@@ -349,61 +340,73 @@
   .locations {
     text-align: center;
   }
+
+  .socialIcons {
+    margin-left: 4.0rem;
+    flex-direction: row; 
+    align-items: center;
+    gap: 1.5rem; 
+    margin-top: 2.5rem;
+  }
+
+  .socialIcons img {
+    width: 80px; 
+    filter: none; 
+    transform: scale(1); 
+  }
 }
 
-/* Sezione Prodotti in Evidenza */
+
 .featuredProducts {
   position: relative;
-  padding: 5rem 0; /* Spazio verticale per il contenuto */
-  min-height: 400px; /* Altezza minima per assicurare che l'immagine parallax sia visibile */
+  padding: 5rem 0; 
+  min-height: 400px; 
   overflow: hidden;
   text-align: center;
-  background-image: url('/images/9.webp'); /* Immagine centrale */
+  background-image: url('/images/9.webp'); 
   background-size: cover;
   background-position: center;
-  background-attachment: fixed; /* Effetto parallax */
+  background-attachment: fixed; 
 }
 
-/* Bordo superiore */
+
 .featuredProducts::before {
   content: '';
   position: absolute;
-  top: 0; /* Allinea il bordo in cima */
+  top: 0; 
   left: 0;
   width: 100%;
-  height: 100px; /* Altezza del bordo superiore */
-  background-image: url('/images/13.webp'); /* Immagine del bordo superiore */
-  background-size: 100% 100%; /* Assicurati che copra tutta la larghezza */
+  height: 100px; 
+  background-image: url('/images/13.webp'); 
+  background-size: 100% 100%; 
   background-repeat: no-repeat;
-  background-position: center; /* Allinea l'immagine */
+  background-position: center; 
   z-index: 2;
 }
 
-/* Bordo inferiore */
+
 .featuredProducts::after {
   content: '';
   position: absolute;
-  bottom: 0; /* Posiziona il bordo inferiore in fondo alla sezione */
+  bottom: 0; 
   left: 0;
   width: 100%;
-  height: 100px; /* Altezza del bordo inferiore */
-  background-image: url('/images/12.webp'); /* Immagine del bordo inferiore */
-  background-size: 100% 100%; /* Copre tutta la larghezza */
+  height: 100px; 
+  background-image: url('/images/12.webp'); 
+  background-size: 100% 100%; 
   background-repeat: no-repeat;
-  background-position: center; /* Allinea l'immagine */
+  background-position: center; 
   z-index: 2;
 }
 
-/* Stile per il contenuto della sezione */
+
 .featuredProductsContent {
   position: relative;
-  z-index: 3; /* Porta il contenuto sopra i bordi */
+  z-index: 3; 
   color: #333;
 }
 
 
-
-/* Sezione Prodotti Aggiuntivi */
 .additionalProducts {
   display: flex;
   flex-direction: column;
@@ -418,7 +421,7 @@
   display: flex;
   align-items: center;
   gap: 2rem;
-  flex-direction: row; /* Assicura che l'ordine sia immagine a sinistra, testo a destra */
+  flex-direction: row;
 }
 
 .productText {
@@ -432,31 +435,55 @@
   border-radius: 8px;
 }
 
+.productTitle {
+  font-size: 1.5rem;
+  margin-bottom: 30px;
+}
 
-/* Stile responsive per dispositivi mobili */
+
 @media (max-width: 768px) {
   .productSection {
-    flex-direction: column; /* Dispone gli elementi verticalmente su schermi più piccoli */
+    flex-direction: column;
     text-align: center;
+    padding: 1rem;
   }
 
   .reversed {
-    flex-direction: column; /* Annulla l'inversione sui dispositivi mobili */
+    display: flex;
+    flex-direction: column-reverse;
   }
 
   .productTitle {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
   }
   
   .productDescription {
-    font-size: 0.9rem;
+    font-size: 1.1rem;
+    line-height: 1.5;
     text-align: center;
+    padding: 0 1rem;
   }
   
   .productImage {
     max-width: 100%;
+    margin-bottom: 1rem;
   }
+
+
+
+   .featuredProducts::before,
+  .featuredProducts::after {
+    height: 0;
+    width: auto;
+    background-size: contain;
+  }
+  
+ 
+
 }
+
+
 
 
 

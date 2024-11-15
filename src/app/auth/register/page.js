@@ -1,8 +1,10 @@
-"use client";
+'use client';
 
 import { useState } from "react";
+import { Button, Modal } from "react-bootstrap";
 import styles from "./register.module.css";
 import ValidationEmailPopup from "@/app/auth/validation/validation-popup";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function RegisterPage() {
     const [formData, setFormData] = useState({
@@ -18,7 +20,9 @@ export default function RegisterPage() {
     const [passwordError, setPasswordError] = useState("");
     const [isValidationPopupOpen, setIsValidationPopupOpen] = useState(false);
     const [utenteId, setUtenteId] = useState();
-    const [isRegistering, setIsRegistering] = useState(false); // New loading state
+    const [isRegistering, setIsRegistering] = useState(false);
+    const [showEmailVerifiedModal, setShowEmailVerifiedModal] = useState(false);
+    const [isValidationPopupClosed, setIsValidationPopupClosed] = useState(false);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -34,7 +38,7 @@ export default function RegisterPage() {
     };
 
     const registerUser = async (userData) => {
-        setIsRegistering(true); // Start loading
+        setIsRegistering(true);
         try {
             const response = await fetch("http://localhost:8080/api/auth/register", {
                 method: "POST",
@@ -45,20 +49,19 @@ export default function RegisterPage() {
 
             if (response.ok) {
                 const { id } = await response.json();
-                setSubscriptionStatus(message);
                 setUtenteId(id);
                 setIsValidationPopupOpen(true);
             } else if (response.status === 400) {
                 setSubscriptionStatus("Email già registrata.");
             } else {
                 const errorMessage = await response.text();
-                setSubscriptionStatus(`Iscrizione fallita: ${errorMessage}`);
+                setSubscriptionStatus(`Iscrizione fallita`);
             }
         } catch (error) {
             setSubscriptionStatus("Iscrizione fallita. Riprova.");
             console.error("Error during registration:", error);
         } finally {
-            setIsRegistering(false); // Stop loading
+            setIsRegistering(false);
         }
     };
 
@@ -72,8 +75,9 @@ export default function RegisterPage() {
             });
 
             if (response.ok) {
-                setSubscriptionStatus("Email verified successfully! You can now log in.");
                 setIsValidationPopupOpen(false);
+                setShowEmailVerifiedModal(true); // Open the modal on successful verification
+                setIsValidationPopupClosed(true); // Mark popup as closed
             } else {
                 const errorMessage = await response.text();
                 setSubscriptionStatus(`OTP validation failed: ${errorMessage}`);
@@ -117,8 +121,16 @@ export default function RegisterPage() {
         });
     };
 
+    const handlePopupReopen = () => {
+        setIsValidationPopupOpen(true);
+        setIsValidationPopupClosed(false); // Reset so the button doesn't show again
+    };
+
     return (
         <div className={styles.container}>
+            <div className={styles.logoContainer}>
+                <img src="/images/logo.webp" alt="Logo C'est la Vie" className={styles.logo} />
+            </div>
             <h1 className={styles.heading}>Registrazione</h1>
             {message && <p className={styles.message}>{message}</p>}
             {subscriptionStatus && <p className={styles.subscriptionStatus}>{subscriptionStatus}</p>}
@@ -134,6 +146,7 @@ export default function RegisterPage() {
                         className={styles.formInput}
                     />
                 </label>
+
                 <label className={styles.formLabel}>
                     Email:
                     <input
@@ -145,6 +158,7 @@ export default function RegisterPage() {
                         className={styles.formInput}
                     />
                 </label>
+
                 <label className={styles.formLabel}>
                     Telefono:
                     <input
@@ -156,6 +170,7 @@ export default function RegisterPage() {
                         className={styles.formInput}
                     />
                 </label>
+
                 <label className={styles.formLabel}>
                     Password:
                     <input
@@ -167,6 +182,7 @@ export default function RegisterPage() {
                         className={styles.formInput}
                     />
                 </label>
+
                 <label className={styles.formLabel}>
                     Conferma Password:
                     <input
@@ -182,13 +198,38 @@ export default function RegisterPage() {
                     {isRegistering ? "Registrazione in corso..." : "Registrati"}
                 </button>
             </form>
+
             {isValidationPopupOpen && (
                 <ValidationEmailPopup
-                    userId={utenteId} // Pass userId to the popup
+                    userId={utenteId}
                     onValidateOTP={handleOTPSubmit}
-                    onClose={() => setIsValidationPopupOpen(false)}
+                    onClose={() => {
+                        setIsValidationPopupOpen(false);
+                        setIsValidationPopupClosed(true);
+                    }}
                 />
             )}
+
+            {isValidationPopupClosed && (
+                <button onClick={handlePopupReopen} className={styles.reopenButton}>
+                    Riapri popup di validazione
+                </button>
+            )}
+
+            {/* Email Verified Modal */}
+            <Modal show={showEmailVerifiedModal} onHide={() => setShowEmailVerifiedModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Verifica completata</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    La tua email è stata verificata con successo! Puoi ora accedere.
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="success" onClick={() => setShowEmailVerifiedModal(false)}>
+                        Chiudi
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 }

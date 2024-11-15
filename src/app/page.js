@@ -1,5 +1,3 @@
-// src/app/page.js
-
 "use client";
 import { useEffect } from 'react';
 import Image from 'next/image';
@@ -12,7 +10,7 @@ export default function HomePage() {
 
     <div className={`${styles.container} ${styles.homePage}`}>
       <main>
-        {/* Hero Section with parallax background */}
+
         <section className={styles.hero}>
           <div className={styles.background}></div>
           <div className={styles.logoContainer}>
@@ -26,7 +24,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Call-to-Action Section */}
+
         <section className={styles.callToAction}>
           <div className={styles.ctaContent}>
             <div className={styles.ctaText}>
@@ -64,10 +62,9 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* --- Sezione Orari di apertura, Immagine centrale, e Sedi --- */}
         <section className={styles.layout}>
 
-          {/* Orari di apertura */}
+
           <div className={styles.openingHours}>
             <h2>Orari di apertura</h2>
             <table className={styles.hoursTable}>
@@ -86,7 +83,7 @@ export default function HomePage() {
                 </tr>
               </tbody>
             </table>
-            {/* Immagine sotto l'orario */}
+
             <div className={styles.imageDownHours}>
               <Image
                 src="/images/5.webp"
@@ -98,7 +95,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Immagine centrale */}
+
           <div className={styles.centerImage}>
             <Image
               src="/images/1.webp"
@@ -109,10 +106,10 @@ export default function HomePage() {
             />
           </div>
 
-          {/* Sedi */}
+
           <div className={styles.locations}>
 
-            {/* Immagine sopra le sedi */}
+
             <div className={styles.centerImage}>
               <Image
                 src="/images/torta.png"
@@ -128,7 +125,7 @@ export default function HomePage() {
             <p>Boutique: Via Carlo Croce, 4 - Varese</p>
             <button className={styles.ctaButton}>Scopri di più</button>
             <div className={styles.socialIcons}>
-              {/* Icone social media */}
+
               <a href="https://www.facebook.com/pasticceriacestlavie" target="_blank" rel="noopener noreferrer">
                 <img src="/images/social1.webp" alt="Facebook" />
               </a>
@@ -140,10 +137,10 @@ export default function HomePage() {
 
         </section>
 
-        {/* Prodotti in evidenza */}
+
         <section className={styles.featuredProducts}>
           <div className={styles.featuredProductsContent}>
-            {/* Bordo superiore */}
+
             <div className={styles.topBorder}>
               <Image
                 src="/images/13.webp"
@@ -153,7 +150,7 @@ export default function HomePage() {
               />
             </div>
 
-            {/* Immagine centrale con parallax */}
+
             <div className={styles.backgroundImageContainer}>
               <Image
                 src="/images/9.webp"
@@ -163,7 +160,7 @@ export default function HomePage() {
               />
             </div>
 
-            {/* Bordo inferiore */}
+
             <div className={styles.bottomBorder}>
               <Image
                 src="/images/12.webp"
@@ -176,16 +173,17 @@ export default function HomePage() {
 
         </section>
 
-        {/* Sezione Informazioni Aggiuntive */}
+
         <section className={styles.additionalProducts}>
 
-          <div className={styles.productSection}><h2 className={styles.productTitle}>Macarons</h2>
+          <div className={styles.productSection}><h2>Macarons</h2>
             Macarons = un’esplosione di sapore racchiusa tra due gusci morbidi e un cremoso ripieno. Dolcetti piccoli, rotondi e coloratissimi. Semplicemente deliziosi! Impossibile non innamorarsi a prima vista di questi dolci unici nel loro genere che ti travolgeranno con il loro sapore. Da C’est la Vie abbiamo sempre disponibili una grande varietà di gusti differenti tra cui scegliere. Sono inoltre l’ideale per un regalo elegante e raffinato.</div>
 
-          {/* Sezione Macarons */}
+
           <div className={styles.productSection}>
             <div className={styles.productText}>
-              <p>Confetture e Marmellate
+              <h2 className={styles.productTitle}>Confetture e Marmellate</h2>
+              <p>
                 Nella nostra bellissima Boutique troverete ad aspettarvi anche le buonissime marmellate e confetture homemade.
 
                 Dai gusti audaci, le nostre marmellate sono uniche e irresistibili, ma soprattutto buone!

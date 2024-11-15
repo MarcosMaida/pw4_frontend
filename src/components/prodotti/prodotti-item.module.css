@@ -1,143 +1,137 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap');
 
-/* Generale per i font e struttura */
-.cardsItem {
-    list-style: none;
-    margin-bottom: 1.5rem;
-    font-family: 'Montserrat', sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* Stile per la Card */
-.card {
-    background: linear-gradient(135deg, #F3BC9F 0%, #F7D9C4 100%);
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    max-width: 100%;
-    width: 300px;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-}
-
-/* Immagine della Card */
-.cardImage {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: auto;
-    background-color: #f4e1d2;
-    overflow: hidden;
-}
-
-.cardImage img {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-}
-
-/* Contenuto della Card */
-.cardContent {
-    padding: 1.5rem;
-    text-align: center;
-}
-
-.cardTitle {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    color: #3a405a;
-}
-
-.cardText {
-    font-size: 1rem;
-    margin-bottom: 1rem;
-    color: #56607d;
-    line-height: 1.4;
-}
-
-/* Categoria del prodotto */
-.category {
-    font-size: 1.2rem;
-    color: #ffffff;
-    font-weight: 700;
-    background-color: #21b8d0;
-    padding: 0.25rem 0.75rem;
-    border-radius: 6px;
-    display: inline-block;
-    margin-bottom: 1rem;
-}
-
-/* Bottone Azione */
-.iscrivitiButton {
-    display: inline-block;
-    text-transform: uppercase;
-    font-weight: bold;
-    font-size: 1rem;
-    padding: 0.75rem 1.5rem;
-    margin-top: 15px;
-    background-color: #fd0a7a;
-    color: #ffffff;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.iscrivitiButton:hover {
-    background-color: #e3096e;
-    transform: translateY(-3px) scale(1.05);
-}
-
-/* Input Quantità */
-.quantityInput {
-    margin-top: 1rem;
-    width: 100%;
-    padding: 0.5rem;
-    font-size: 1rem;
-    border: 1px solid #de9067;
-    border-radius: 4px;
-    text-align: center;
-    color: #333;
-    outline: none;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.quantityInput:focus {
-    border-color: #21b8d0;
-    box-shadow: 0 0 5px rgba(33, 184, 208, 0.4);
-}
-
-/* Responsività */
-@media (max-width: 768px) {
-    .card {
-        width: 100%;
-        margin-bottom: 2rem;
+    /* Generale per i font e struttura */
+    .cardsItem {
+        list-style: none;
+        margin-bottom: 1.5rem;
+        font-family: 'Montserrat', sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
-}
 
-@media (max-width: 480px) {
+    /* Stile per la Card */
+    .card {
+        background: #ffcfb5;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        max-width: 100%;
+        width: 300px;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Immagine della Card */
+    .cardImage {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: auto;
+        background-color: #f4e1d2;
+        overflow: hidden;
+    }
+
+    .cardImage img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+
+    /* Contenuto della Card */
     .cardContent {
-        padding: 1rem;
+        padding: 1.5rem;
+        text-align: center;
     }
 
     .cardTitle {
-        font-size: 1.25rem;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: #3a405a;
     }
 
     .cardText {
-        font-size: 0.9rem;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+        color: #56607d;
+        line-height: 1.4;
+        max-height: 4.5rem; /* Limita l'altezza della descrizione */
+        overflow-y: auto; /* Aggiunge lo scorrimento verticale se il testo è troppo lungo */
     }
 
-    .iscrivitiButton {
-        font-size: 0.9rem;
-        padding: 0.5rem 1.25rem;
+
+    /* Stile della scrollbar per la descrizione (opzionale) */
+    .cardText::-webkit-scrollbar {
+    width: 6px;
     }
-}
+
+    .cardText::-webkit-scrollbar-thumb {
+        background-color: #ccc;
+        border-radius: 3px;
+    }
+    
+    /* Categoria del prodotto */
+    .category {
+        font-size: 1.2rem;
+        color: #3A405A;
+        font-weight: 700;
+        background-color: #ffcfb5;
+        padding: 0.25rem 0.75rem;
+        border-radius: 6px;
+        display: inline-block;
+        margin-bottom: 1rem;
+    }
+
+    /* Bottone Azione */
+    .iscrivitiButton {
+        display: inline-block;
+        text-transform: uppercase;
+        font-weight: bold;
+        font-size: 1rem;
+        padding: 0.75rem 1.5rem;
+        margin-top: 15px;
+        background-color: #fd0a7a;
+        color: #ffffff;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .iscrivitiButton:hover {
+        background-color: #e3096e;
+        transform: translateY(-3px) scale(1.05);
+    }
+
+    /* Input Quantità */
+    .quantityInput {
+        margin-top: 1rem;
+        width: 100%;
+        padding: 0.5rem;
+        font-size: 1rem;
+        border: 1px solid #de9067;
+        border-radius: 4px;
+        text-align: center;
+        color: #333;
+        outline: none;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .quantityInput:focus {
+        border-color: #21b8d0;
+        box-shadow: 0 0 5px rgba(33, 184, 208, 0.4);
+    }
+
+    /* Responsività */
+    @media (max-width: 768px) {
+        .card {
+            width: 100%;
+            margin-bottom: 2rem;
+        }
+    }
